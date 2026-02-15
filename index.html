@@ -10,254 +10,112 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
-        
         :root { --ios-bg: #F2F2F7; }
-
-        body, html { 
-            font-family: 'Inter', sans-serif; 
-            background-color: black; 
-            color: #1c1c1e;
-            margin: 0; padding: 0; 
-            height: 100%; width: 100%;
+        body, html { font-family: 'Inter', sans-serif; background-color: black; color: #1c1c1e; margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+        .app-shell { width: 100%; max-width: 500px; height: 100dvh; margin: 0 auto; background: var(--ios-bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        
+        /* Компактна хвиляста шапка з прозорістю */
+        .state-header {
+            position: relative;
+            background: rgba(0, 87, 183, 0.85);
+            padding: 35px 15px 10px;
+            z-index: 2000;
             overflow: hidden;
         }
-
-        .app-shell {
-            width: 100%; max-width: 500px; height: 100dvh; margin: 0 auto;
-            background: var(--ios-bg); display: flex; flex-direction: column; position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: -1;
         }
-
-        .state-header {
-            background: linear-gradient(180deg, #0057B7 50%, #FFD700 50%);
-            padding: 45px 15px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 2000;
+        .wave-container svg {
             position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 40px;
+        }
+        .wave-fill {
+            fill: rgba(255, 215, 0, 0.85);
+        }
+        .state-header-content {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         .state-header-text {
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-            font-weight: 800;
-            font-size: 10px;
-            line-height: 1.3;
-            text-transform: uppercase;
-            text-align: center;
-            flex: 1;
+            color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-weight: 900; font-size: 9px; line-height: 1.2;
+            text-transform: uppercase; text-align: center; flex: 1;
         }
-        .state-header-text span.accent {
-            color: #003a7c;
-            text-shadow: none;
-        }
-        .emblem-img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
+        .emblem-img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 
-        .glass-card {
-            background: white; border-radius: 28px;
-            border: 1px solid rgba(0,0,0,0.03);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            transition: all 0.2s ease;
-        }
-
-        .army-dark { 
-            background: linear-gradient(145deg, #121212 0%, #2a2a2a 100%); 
-            position: relative; overflow: hidden;
-        }
-        
-        .army-dark::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 100%);
-            background-size: 200% 200%; animation: holo 4s infinite linear;
-        }
+        .glass-card { background: white; border-radius: 28px; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: all 0.2s ease; }
+        .army-dark { background: linear-gradient(145deg, #121212 0%, #2a2a2a 100%); position: relative; overflow: hidden; }
+        .army-dark::after { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 100%); background-size: 200% 200%; animation: holo 4s infinite linear; }
         @keyframes holo { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-
-        .doc-overlay {
-            position: absolute; inset: 0; z-index: 1000;
-            background: var(--ios-bg); display: flex; flex-direction: column;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            overflow-y: auto;
-        }
-
+        .doc-overlay { position: absolute; inset: 0; z-index: 1000; background: var(--ios-bg); display: flex; flex-direction: column; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; overflow-y: auto; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 24px 4px; font-size: 14px; font-weight: 700;
-            position: absolute; top: 0; left: 0; right: 0; z-index: 3000;
-        }
-
-        .input-field {
-            width: 100%; background: #f2f2f7; border: 2px solid transparent;
-            padding: 18px; border-radius: 20px; font-weight: 700;
-            transition: all 0.2s; outline: none;
-        }
-        .input-field:focus { border-color: #000; background: #fff; }
-
-        .loader {
-            border: 3px solid #f3f3f3; border-top: 3px solid #000;
-            border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;
-        }
+        .input-field { width: 100%; background: #f2f2f7; border: 2px solid transparent; padding: 18px; border-radius: 20px; font-weight: 700; outline: none; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .qr-overlay, .payment-modal-overlay, .notification-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4);
-            z-index: 5000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 40px;
-            backdrop-filter: blur(10px);
-        }
-
-        .marquee-container {
-            background: #e11d48;
-            color: #ffffff;
-            padding: 10px 0;
-            margin: 5px 0 0 0;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-style: italic;
-            font-size: 14px;
-            border-top: 2px solid rgba(255,255,255,0.2);
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-            overflow: hidden;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
-            display: flex;
-            align-items: center;
-        }
-
-        .oschad-header {
-            background: #004a32; color: white; padding: 40px 20px 10px;
-            text-align: center; font-weight: 900; font-size: 24px;
-        }
-        .oschad-sub {
-            background: #004a32; color: #78a394; padding-bottom: 20px;
-            text-align: center; font-weight: 700;
-        }
-
-        .payment-link-container {
-            background: white;
-            padding: 12px 24px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .ubd-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .switch {
-            position: relative; display: inline-block; width: 44px; height: 24px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; inset: 0; background-color: #ccc;
-            transition: .4s; border-radius: 24px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-            background-color: white; transition: .4s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: #2563eb; }
-        input:checked + .slider:before { transform: translateX(20px); }
-
-        .back-btn {
-            width: 100%; background: #000; color: #fff; padding: 20px;
-            border-radius: 28px; font-weight: 900; text-transform: uppercase;
-            font-style: italic; margin-top: 30px; letter-spacing: 1px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .bell-container {
-            position: relative;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .bell-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #ef4444;
-            color: white;
-            font-size: 10px;
-            font-weight: 900;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-        }
-
+        .qr-overlay, .payment-modal-overlay, .notification-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
+        .marquee-container { background: #e11d48; color: #ffffff; padding: 10px 0; margin: 5px 0 0 0; font-weight: 900; text-transform: uppercase; font-style: italic; font-size: 14px; overflow: hidden; white-space: nowrap; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3); display: flex; align-items: center; }
+        .payment-link-container { background: white; padding: 12px 24px; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .ubd-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); position: relative; overflow: hidden; }
+        .back-btn { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .nr-card { width: 100%; background: white; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #ddd; }
+        .nr-header { background: #004a32; color: white; text-align: center; padding: 12px 0; font-weight: 900; font-size: 20px; text-transform: uppercase; }
+        .nr-sub { background: #e2e873; color: #000; text-align: center; font-size: 8px; font-weight: 700; padding: 3px 0; text-transform: uppercase; }
+        .nr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; font-size: 11px; }
+        .nr-label { font-size: 8px; font-weight: 700; color: #777; text-transform: uppercase; }
+        .nr-val { font-weight: 600; line-height: 1.2; }
+        .nr-purpose { background: #f9f9f9; border: 1px solid #eee; padding: 8px; font-style: italic; margin: 0 15px; font-size: 10px; }
+        .nr-footer { border-top: 2px solid #000; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .nr-stamp { width: 85px; height: 85px; border: 2px solid #004a32; border-radius: 50%; transform: rotate(-10deg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #004a32; font-weight: 800; font-size: 10px; text-align: center; line-height: 1; }
+        .bell-container { position: relative; cursor: pointer; }
+        .bell-dot { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: #ef4444; border-radius: 50%; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid white; }
         * { user-select: none; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
         const { useState, useEffect } = React;
-
         const App = () => {
             const [authState, setAuthState] = useState('welcome'); 
             const [loading, setLoading] = useState(false);
+            const [view, setView] = useState('home'); 
+            const [time, setTime] = useState(new Date());
+            const [rnokpp, setRnokpp] = useState('');
+            const [password, setPassword] = useState('');
             const [paymentLoading, setPaymentLoading] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
             const [showNotification, setShowNotification] = useState(false);
-            const [view, setView] = useState('home'); 
             const [showQR, setShowQR] = useState(false);
-            const [time, setTime] = useState(new Date());
-            const [rememberMe, setRememberMe] = useState(false);
-            
-            const [rnokpp, setRnokpp] = useState('');
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
 
-            useEffect(() => {
-                const timer = setInterval(() => setTime(new Date()), 1000);
-                return () => clearInterval(timer);
-            }, []);
+            useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
 
             const userData = {
                 name: "Аврахов Максим Олександрович",
                 photo: "https://i.postimg.cc/qM8Y8xDh/IMG-3640.jpg",
+                vityag: "https://i.postimg.cc/FRZ6fs73/IMG-3672.jpg",
                 dob: "1987 р.н.",
                 rnokpp: "3185200217",
-                unit: "в/ч 3052• ОЧІКУЄ ЕВАКУАЦІЇ",
+                unit: "в/ч 3052",
                 rank: "Солдат",
                 position: "Електрозварник 1-ї майстерні ремонту артилерійського озброєння ремонтного взводу артилерійського озброєння роти з ремонту озброєння автотранспортного батальйону.",
                 vos: "Г-131264",
                 passport: "EP 119988",
                 passportOrg: "Жовтоводським МВГУМВС України в Дніпропетровській області",
                 address: "м. Жовті Води, вул. Кропоткіна 7, кв. 79",
-                regDate: "26.10.2016",
                 blood: "O(I) Rh+",
+                regDate: "26.10.2016",
                 mobilization: "02.04.2022 р. за мобілізацією",
                 oath: "07.04.2022 р. у в/ч 3052",
                 commander: "полковник А. Галущак",
                 evacuationDate: "16.02.2026",
                 adminFee: "2251,80 ₴",
-                ubdNum: "636331",
+                ubdNum: "АБ № 492015",
                 ubdOrg: "Головне Управління Національної Гвардії України",
                 ubdSign: "Командувач Національної Гвардії України генерал Ю.Лебідь"
             };
@@ -271,60 +129,32 @@
 
             const handleLogin = (e) => {
                 e.preventDefault();
-                setError('');
                 if (rnokpp === '3185200217' && password === 'QazPlm1002') {
                     setLoading(true);
-                    setTimeout(() => {
-                        setAuthState('app');
-                        setLoading(false);
+                    setTimeout(() => { 
+                        setAuthState('app'); 
+                        setLoading(false); 
+                        setShowNotification(true);
                     }, 1500);
-                } else {
-                    setError('Невірний РНОКПП або пароль');
                 }
             };
 
-            const startPaymentProcess = () => {
-                setPaymentLoading(true);
-                setTimeout(() => {
-                    setPaymentLoading(false);
-                    setShowPaymentModal(true);
-                }, 2500);
-            };
-
-            const StatusBar = ({dark = false}) => (
-                <div className={`status-bar ${dark ? 'text-white' : 'text-black'}`}>
-                    <span>{time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                    <div className="flex gap-1.5 items-center italic">
-                        <span>LTE</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8-8 3.58-8 8 3.58 8 8 8z"/></svg>
-                    </div>
-                </div>
-            );
-
             const Header = ({ title }) => (
-                <div className="flex items-center justify-between p-6 pt-12 bg-white/90 backdrop-blur-xl sticky top-0 z-[1001] border-b border-gray-100">
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => setView('home')} className="p-2 bg-gray-50 rounded-full active:scale-75 transition-all">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                        </button>
-                        <h2 className="text-xl font-black tracking-tighter uppercase italic">{title}</h2>
-                    </div>
+                <div className="flex items-center gap-4 p-6 pt-12 bg-white/90 backdrop-blur-xl border-b sticky top-0 z-[1001]">
+                    <button onClick={() => setView('home')} className="p-2 bg-gray-50 rounded-full active:scale-75 transition-all">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <h2 className="text-xl font-black tracking-tighter uppercase italic">{title}</h2>
                 </div>
             );
 
             if (authState === 'welcome') {
                 return (
                     <div className="app-shell flex flex-col items-center justify-center p-10 bg-white">
-                        <StatusBar />
                         <img src="https://i.postimg.cc/CxTqtsKk/photo-output.png" className="w-28 h-28 mb-8 shadow-2xl rounded-[35px]" />
-                        <h1 className="text-5xl font-black italic tracking-tighter mb-2 text-center uppercase">ОБЕРІГ</h1>
-                        <p className="text-gray-400 font-bold text-xs mb-12 uppercase tracking-[0.2em] text-center">Система верифікації ГШ ЗСУ</p>
-                        <button 
-                            onClick={() => setAuthState('login')} 
-                            className="w-full bg-black text-white py-6 rounded-[32px] font-black text-lg active:scale-95 transition-all shadow-2xl uppercase italic"
-                        >
-                            Підтвердити особу
-                        </button>
+                        <h1 className="text-5xl font-black italic tracking-tighter uppercase">ОБЕРІГ</h1>
+                        <p className="text-gray-400 font-bold text-xs mb-12 uppercase tracking-[0.2em]">Система верифікації ГШ ЗСУ</p>
+                        <button onClick={() => setAuthState('login')} className="w-full bg-black text-white py-6 rounded-[32px] font-black text-lg active:scale-95 transition-all shadow-2xl uppercase italic">Підтвердити особу</button>
                     </div>
                 );
             }
@@ -332,54 +162,13 @@
             if (authState === 'login') {
                 return (
                     <div className="app-shell p-8 bg-white">
-                        <StatusBar />
-                        <button onClick={() => setAuthState('welcome')} className="mt-12 p-2 bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                        </button>
-                        
+                        <button onClick={() => setAuthState('welcome')} className="mt-12 p-2 bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
                         <div className="mt-10">
-                            <h2 className="text-3xl font-black italic tracking-tighter uppercase mb-2">Авторизація</h2>
-                            <p className="text-gray-400 font-bold text-xs uppercase mb-10 italic">Введіть дані для доступу до реєстру</p>
-                            
+                            <h2 className="text-3xl font-black italic tracking-tighter uppercase mb-8">Авторизація</h2>
                             <form onSubmit={handleLogin} className="space-y-4">
-                                <div>
-                                    <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block">РНОКПП</label>
-                                    <input 
-                                        type="number" 
-                                        placeholder="10 цифр" 
-                                        className="input-field" 
-                                        value={rnokpp} 
-                                        onChange={(e) => setRnokpp(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block">Пароль доступу</label>
-                                    <input 
-                                        type="password" 
-                                        placeholder="••••••••" 
-                                        className="input-field" 
-                                        value={password} 
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="flex items-center justify-between px-2 pt-2">
-                                    <span className="text-xs font-bold text-gray-500 uppercase italic">Запам'ятати мене</span>
-                                    <label className="switch">
-                                        <input type="checkbox" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
-                                        <span className="slider"></span>
-                                    </label>
-                                </div>
-                                
-                                {error && <p className="text-red-500 text-xs font-black text-center uppercase">{error}</p>}
-                                
-                                <button 
-                                    disabled={loading}
-                                    type="submit"
-                                    className="w-full bg-blue-600 text-white py-6 rounded-[32px] font-black text-lg active:scale-95 transition-all shadow-xl shadow-blue-200 mt-6 flex items-center justify-center gap-3 italic"
-                                >
+                                <input type="number" placeholder="РНОКПП" className="input-field" value={rnokpp} onChange={(e)=>setRnokpp(e.target.value)} required />
+                                <input type="password" placeholder="Пароль" className="input-field" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+                                <button disabled={loading} type="submit" className="w-full bg-blue-600 text-white py-6 rounded-[32px] font-black text-lg shadow-xl shadow-blue-200 flex items-center justify-center gap-3">
                                     {loading ? <div className="loader !border-t-white"></div> : "УВІЙТИ В КАБІНЕТ"}
                                 </button>
                             </form>
@@ -391,315 +180,145 @@
             return (
                 <div className="app-shell">
                     <div className="state-header">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="emblem-img" alt="Герб" />
-                        <div className="state-header-text">
-                            ЄДИНИЙ ДЕРЖАВНИЙ РЕЄСТР ВІЙСЬКОВОСЛУЖБОВЦІВ,<br/>
-                            ПРИЗОВНИКІВ, РЕЗЕРВІСТІВ <span className="accent">"ОБЕРІГ"</span>
+                        <div className="state-header-content">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="emblem-img" />
+                            <div className="state-header-text">ЄДИНИЙ ДЕРЖАВНИЙ РЕЄСТР ВІЙСЬКОВОСЛУЖБОВЦІВ,<br/>ПРИЗОВНИКІВ, РЕЗЕРВІСТІВ <span className="accent">"ОБЕРІГ"</span></div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="emblem-img" />
                         </div>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="emblem-img" alt="ЗСУ" />
+                        <div className="wave-container">
+                            <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                                <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" className="wave-fill"></path>
+                            </svg>
+                        </div>
                     </div>
 
-                    <StatusBar dark={false} />
-                    
-                    {view === 'home' && (
-                        <div className="flex flex-col h-full overflow-y-auto pb-32">
-                            {/* Модальное окно уведомления */}
-                            {showNotification && (
-                                <div className="notification-overlay" onClick={() => setShowNotification(false)}>
-                                    <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-blue-600" onClick={e => e.stopPropagation()}>
-                                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                        </div>
-                                        <h3 className="text-xl font-black italic uppercase mb-4 text-blue-600">Важливе повідомлення</h3>
-                                        <p className="text-sm font-bold text-gray-700 leading-relaxed mb-8 italic">
-                                            Шановний Максим Олександрович, повідомляємо що зараз йде завершальна підготовка документів з приводу Вашої евакуації з в/ч 3052 до КП "ДБКЛПД"ДОР" . Будь ласка очікуйте виклику.
-                                        </p>
-                                        <button onClick={() => setShowNotification(false)} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase italic active:scale-95 transition-all shadow-lg shadow-blue-200">
-                                            ЗРОЗУМІЛО
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
+                    <div className="status-bar px-6 py-2 bg-white flex justify-between items-center text-[12px] font-bold">
+                        <span>{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                        <div className="flex items-center gap-3">
+                            <div className="bell-container" onClick={() => setShowNotification(true)}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                <div className="bell-dot">1</div>
+                            </div>
+                            <span className="italic">LTE</span>
+                        </div>
+                    </div>
 
+                    {view === 'home' && (
+                        <div className="flex flex-col h-full overflow-y-auto pb-32 pt-4">
                             {paymentLoading && (
                                 <div className="fixed inset-0 z-[6000] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center">
                                     <div className="loader !w-12 !h-12 !border-4 !border-t-blue-600 mb-4"></div>
-                                    <p className="font-black italic uppercase text-xs tracking-widest text-blue-600">Завантаження платіжної системи...</p>
+                                    <p className="font-black italic uppercase text-xs text-blue-600">Завантаження...</p>
                                 </div>
                             )}
-
+                            {showNotification && (
+                                <div className="notification-overlay">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
+                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">Системне сповіщення</h3>
+                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
+                                            <p><span className="font-black text-black">Увага!</span> Ваші дані про лікування успішно внесені до реєстру <span className="font-bold">«Оберіг»</span>. Для активації статусу необхідно:</p>
+                                            <div className="bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-600 space-y-3">
+                                                <div className="flex gap-2"><span>•</span><span>Сплатити залишкові комісійні стяги в розмірі <span className="font-black text-black">421 грн 00 коп.</span></span></div>
+                                                <div className="flex gap-2"><span>•</span><span>Дочекатись виклику командування для отримання документів на евакуацію.</span></div>
+                                                <div className="flex gap-2"><span>•</span><span>Вибути з <span className="font-bold">в/ч 3052</span> до <span className="font-bold">КП «ДБКЛПД» ДОР»</span> (термін прибуття — 1 доба).</span></div>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
+                                    </div>
+                                </div>
+                            )}
                             {showPaymentModal && (
                                 <div className="payment-modal-overlay">
                                     <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-red-500">
-                                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                                        </div>
-                                        <h3 className="text-2xl font-black italic uppercase mb-4">Помилка транзакції</h3>
-                                        <p className="text-sm font-bold text-gray-600 leading-relaxed mb-8 italic">
-                                            На даний момент неможливо здійснити оплату карткою через систему <b>ОБЕРІГ</b>. 
-                                            Система перевантажена через надзвичайно велику кількість спроб оплат в Україні. 
-                                            <br/><br/>
-                                            Будь ласка, скористайтеся іншим платіжним сервісом або спробуйте пізніше.
-                                        </p>
-                                        <button onClick={() => setShowPaymentModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase italic active:scale-95 transition-all">
-                                            ЗРОЗУМІЛО
-                                        </button>
+                                        <h3 className="text-2xl font-black uppercase mb-4 italic">Помилка транзакції</h3>
+                                        <p className="text-sm font-bold text-gray-600 italic">Система перевантажена. Спробуйте інший сервіс.</p>
+                                        <button onClick={() => setShowPaymentModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ЗРОЗУМІЛО</button>
                                     </div>
                                 </div>
                             )}
 
-                            <div className="p-6 flex justify-between items-start mt-4">
+                            <div className="p-6 flex justify-between items-start">
                                 <div className="flex gap-4 items-center">
                                     <img src={userData.photo} className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-lg" />
-                                    <div>
-                                        <span className="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Online</span>
-                                        <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase italic">ID: {userData.rnokpp}</p>
-                                    </div>
+                                    <div><span className="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Online</span><p className="text-[10px] font-bold text-gray-400 mt-1 italic">ID: {userData.rnokpp}</p></div>
                                 </div>
-                                <div className="flex flex-col items-end gap-2">
-                                    {/* Значок колокольчика с единичкой */}
-                                    <div className="bell-container" onClick={() => setShowNotification(true)}>
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                        <div className="bell-badge">1</div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase">Оновлено</p>
-                                        <p className="text-[10px] font-black font-mono">{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
-                                    </div>
-                                </div>
+                                <div className="text-right"><p className="text-[9px] font-bold text-gray-400 uppercase">ОНОВЛЕНО</p><p className="text-[10px] font-black font-mono">{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p></div>
                             </div>
 
                             <div className="px-6 mb-4">
-                                <h1 className="text-3xl font-black tracking-tight leading-tight italic uppercase">{userData.name}</h1>
+                                <h1 className="text-3xl font-black italic uppercase leading-tight">{userData.name}</h1>
                                 <p className="text-blue-600 font-black text-xs uppercase tracking-widest mt-2">{userData.rank} • {userData.unit}</p>
                             </div>
 
                             <div className="marquee-container">
-                                <marquee scrollamount="4">
-                                    УВАГА: Аврахову Максиму Олександровичу необхідно сплатити 1788 грн 50 коп за: "внесення реєстраційних даних про психіатричне лікування від 13.07.2028 року згідно психіатричній виписці № 387001/18". Дана оплата накладена згідно чинного законодавства України (Закон №3682-IX від 12.01.2024р. "Про особливості верифікації реєстрових даних"). ——— УВАГА: Аврахову Максиму Олександровичу необхідно сплатити 1788 грн 50 коп...
-                                </marquee>
+                                <marquee scrollamount="4">«Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування від 13.07.2028 по виписці Nº387001/18 була успішно сплачена. ВАМ ЗАЛИШИЛОСЬ СПЛАТИТИ КОМІСІЙНІ СТЯГИ В РОЗМІРІ 421 грн 00 коп.»</marquee>
                             </div>
 
-                            <div className="payment-link-container active:bg-gray-50 transition-colors" onClick={startPaymentProcess}>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM2 10h20"/></svg>
-                                    </div>
-                                    <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити "Реєстраційні дані"</span>
-                                </div>
+                            <div className="payment-link-container active:bg-gray-50" onClick={() => {setPaymentLoading(true); setTimeout(()=>{setPaymentLoading(false); setShowPaymentModal(true);}, 2500)}}>
+                                <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити "Комісійні стяги"</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
                             </div>
 
                             <div className="px-6 space-y-4">
-                                <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}>
-                                    <p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p>
-                                    <h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3>
-                                    <div className="mt-2 text-[9px] font-bold opacity-70 italic">Дійсне • Перевірено</div>
-                                </div>
-
-                                <div className="bg-blue-600 p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden cursor-pointer" onClick={() => setView('decision')}>
-                                    <div className="absolute right-[-10px] top-[-10px] opacity-10"><svg width="120" height="120" fill="white" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
-                                    <p className="text-[10px] font-black opacity-60 uppercase mb-1">Статус рішення №874/SEC</p>
-                                    <h3 className="text-xl font-black italic">ОЧІКУЄ ЕВАКУАЦІЇ: {userData.evacuationDate}</h3>
-                                </div>
-
-                                <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt')}>
-                                    <p className="text-[10px] font-black text-gray-400 uppercase">Адмінзбір (ПАК "Оберіг")</p>
-                                    <p className="font-black text-xl">{userData.adminFee}</p>
-                                    <p className="text-[9px] font-bold text-green-600 uppercase mt-2 italic">Верифіковано Ощадбанк</p>
-                                </div>
-
+                                <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}><p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p><h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3></div>
+                                <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Адмінзбір (ПАК "Оберіг")</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="army-dark p-6 rounded-[32px] text-white shadow-lg cursor-pointer" onClick={() => setView('military')}>
-                                        <p className="text-[9px] font-bold opacity-50 uppercase mb-1">Військ. квиток</p>
-                                        <p className="font-black text-2xl italic tracking-tighter">AГ 042020</p>
-                                    </div>
-                                    <div className="glass-card p-6 rounded-[32px] cursor-pointer" onClick={() => setView('passport')}>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Паспорт</p>
-                                        <p className="font-black text-2xl italic text-gray-800 tracking-tighter">EP 119988</p>
-                                    </div>
+                                    <div className="army-dark p-6 rounded-[32px] text-white shadow-lg cursor-pointer" onClick={() => setView('military')}><p className="text-[9px] font-bold opacity-50 uppercase mb-1">Військ. квиток</p><p className="font-black text-2xl">AГ 042020</p></div>
+                                    <div className="glass-card p-6 rounded-[32px] cursor-pointer" onClick={() => setView('passport')}><p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Паспорт</p><p className="font-black text-2xl">EP 119988</p></div>
                                 </div>
-
-                                <div className="glass-card p-5 border-l-[10px] border-red-500 cursor-pointer flex justify-between items-center" onClick={() => setView('health')}>
-                                    <div>
-                                        <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Медична історія</p>
-                                        <p className="text-sm font-black uppercase text-red-600 italic leading-tight">G40.2 Епілепсія • ЗЧМТ</p>
-                                    </div>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
-                                </div>
-
-                                <div className="glass-card p-5 flex justify-between items-center cursor-pointer" onClick={() => setView('referral')}>
-                                    <div>
-                                        <p className="text-[10px] font-black text-gray-400 uppercase">Направлення ВЛК №017</p>
-                                        <p className="font-black text-sm uppercase italic">КП «ДБКЛПД» ДОР</p>
-                                    </div>
-                                    <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white to-transparent backdrop-blur-sm">
-                                <button onClick={() => setShowQR(true)} className="w-full bg-black text-white py-5 rounded-[30px] font-black shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 7h10v10H7z"/></svg>
-                                    ГЕНЕРУВАТИ QR-КОД
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ЭКРАН УБД */}
-                    {view === 'ubd' && (
-                        <div className="doc-overlay">
-                            <Header title="Посвідчення УБД" />
-                            <div className="p-6">
-                                <div className="ubd-gradient p-8 rounded-[40px] text-white shadow-2xl relative">
-                                    <div className="absolute top-0 right-0 p-6 opacity-10">
-                                        <svg width="150" height="150" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                                    </div>
-                                    <div className="flex justify-between items-start mb-6">
+                                <div className="glass-card p-5 border-l-[10px] border-red-500 cursor-pointer flex justify-between items-center" onClick={() => setView('health')}><div><p className="text-[10px] font-black text-gray-400 uppercase mb-1">Медична історія</p><p className="text-sm font-black uppercase text-red-600 italic leading-tight">G40.2 Епілепсія • ЗЧМТ</p></div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div>
+                                <div className="glass-card p-5 flex justify-between items-center cursor-pointer" onClick={() => setView('referral')}><div><p className="text-[10px] font-black text-gray-400 uppercase">Направлення ВЛК №017</p><p className="font-black text-sm uppercase italic">КП «ДБКЛПД» ДОР</p></div><div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div></div>
+                                <div className="bg-blue-600 p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('decision')}><h3 className="text-xl font-black italic uppercase tracking-tighter">Наказ ГШ ЗСУ (Евакуація)</h3></div>
+                                
+                                {/* НОВИЙ РОЗДІЛ ВИТЯГ */}
+                                <div className="glass-card p-6 border-t-8 border-yellow-500 cursor-pointer shadow-lg active:scale-95 transition-all" onClick={() => setView('vityag_view')}>
+                                    <div className="flex justify-between items-center">
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Україна</p>
-                                            <h2 className="text-2xl font-black italic uppercase leading-none">Посвідчення<br/>Учасника<br/>бойових дій</h2>
+                                            <p className="text-[10px] font-black text-gray-400 uppercase">Документ</p>
+                                            <h3 className="text-xl font-black italic uppercase tracking-tighter">ВИТЯГ З РЕЄСТРУ</h3>
                                         </div>
-                                        <img src={userData.photo} className="w-24 h-32 rounded-2xl object-cover border-2 border-white/20 shadow-xl" />
-                                    </div>
-                                    <div className="flex gap-4 items-start relative z-10">
-                                        <div className="space-y-3 flex-1">
-                                            <div>
-                                                <p className="text-[10px] font-bold opacity-50 uppercase tracking-tighter">Прізвище, ім'я, по батькові</p>
-                                                <p className="text-lg font-black italic uppercase leading-tight">{userData.name}</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] font-bold opacity-50 uppercase tracking-tighter">Орган видачі</p>
-                                                <p className="text-xs font-black italic uppercase leading-tight">{userData.ubdOrg}</p>
-                                            </div>
-                                            <div className="flex justify-between items-end border-t border-white/10 pt-3">
-                                                <div>
-                                                    <p className="text-[10px] font-bold opacity-50 uppercase tracking-tighter">Номер УБД</p>
-                                                    <p className="text-xl font-black italic">{userData.ubdNum}</p>
-                                                </div>
-                                            </div>
-                                            <div className="pt-2">
-                                                <p className="text-[9px] font-bold opacity-50 uppercase tracking-tighter">Ким підписане</p>
-                                                <p className="text-[10px] font-black italic uppercase opacity-90">{userData.ubdSign}</p>
-                                            </div>
+                                        <div className="bg-yellow-50 p-2 rounded-xl">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                                         </div>
-                                        <div className="bg-white p-2 rounded-xl flex flex-col items-center justify-center">
-                                            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=UBD-${userData.ubdNum}`} className="w-16 h-16" />
-                                            <span className="text-[6px] text-black font-black mt-1">VERIFIED</span>
-                                        </div>
-                                    </div>
-                                    <div className="mt-6 bg-white/10 p-3 rounded-2xl text-center">
-                                        <p className="text-[9px] font-black uppercase italic tracking-widest">Пред'явник має право на пільги,<br/>встановлені законодавством України</p>
                                     </div>
                                 </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
+                            </div>
+                            <div className="p-6 pb-12"><button onClick={() => setShowQR(true)} className="w-full bg-black text-white py-5 rounded-[30px] font-black shadow-2xl flex items-center justify-center gap-3 italic uppercase">ГЕНЕРУВАТИ QR-КОД</button></div>
+                        </div>
+                    )}
+
+                    {/* ПЕРЕГЛЯД ВИТЯГУ */}
+                    {view === 'vityag_view' && (
+                        <div className="doc-overlay bg-black">
+                            <div className="flex items-center gap-4 p-6 pt-12 bg-black text-white sticky top-0 z-[1001]">
+                                <button onClick={() => setView('home')} className="p-2 bg-white/10 rounded-full active:scale-75 transition-all">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                </button>
+                                <h2 className="text-xl font-black tracking-tighter uppercase italic">ВИТЯГ З РЕЄСТРУ</h2>
+                            </div>
+                            <div className="flex-1 flex items-center justify-center p-2 bg-black overflow-hidden">
+                                <img src={userData.vityag} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" alt="Витяг" />
+                            </div>
+                            <div className="p-6 bg-black">
+                                <button onClick={() => setView('home')} className="back-btn !bg-white !text-black !mt-0">ЗАКРИТИ</button>
                             </div>
                         </div>
                     )}
 
-                    {showQR && (
-                        <div className="qr-overlay" onClick={() => setShowQR(false)}>
-                            <div className="p-10 bg-white rounded-[50px] shadow-2xl border border-gray-50 flex flex-col items-center">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} className="w-64 h-64" />
-                            </div>
-                            <h3 className="mt-8 text-2xl font-black italic uppercase text-center">{userData.name}</h3>
-                            <p className="text-blue-600 font-black text-[10px] uppercase mt-2">Верифіковано: {time.toLocaleDateString()}</p>
-                        </div>
-                    )}
-
+                    {/* ІНШІ РОЗДІЛИ ДОКУМЕНТІВ */}
                     {view === 'passport' && (
                         <div className="doc-overlay">
                             <Header title="Паспортні дані" />
                             <div className="p-6">
-                                <div className="glass-card p-8 space-y-8 bg-white">
+                                <div className="glass-card p-8 bg-white space-y-6">
                                     <div className="flex justify-between items-start">
-                                        <div><p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Серія та номер</p><p className="text-3xl font-black italic font-mono">{userData.passport}</p></div>
-                                        <img src={userData.photo} className="w-20 h-24 rounded-xl object-cover grayscale" />
-                                    </div>
-                                    <div><p className="text-[10px] font-bold text-gray-400 uppercase">Ким виданий</p><p className="text-sm font-black uppercase italic">{userData.passportOrg}</p></div>
-                                    <div className="pt-6 border-t border-gray-100">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase">Місце реєстрації</p>
-                                        <p className="text-lg font-black italic">{userData.address}</p>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'military' && (
-                        <div className="doc-overlay bg-[#1a1a1a]">
-                            <div className="flex items-center gap-4 p-6 pt-12 bg-black/50 backdrop-blur-md border-b border-white/5">
-                                <button onClick={() => setView('home')} className="p-2 bg-white/10 rounded-full"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                                <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">Військовий квиток</h2>
-                            </div>
-                            <div className="p-6 space-y-6">
-                                <div className="army-dark p-8 rounded-[40px] text-white shadow-2xl">
-                                    <div className="flex justify-between items-start mb-10">
-                                        <div><p className="text-xs font-bold opacity-50 uppercase mb-1">Серія та Номер</p><h2 className="text-4xl font-black italic tracking-tighter">AГ 042020</h2></div>
-                                        <img src={userData.photo} className="w-20 h-24 rounded-xl object-cover border border-white/20" />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40">ВОС</p><p className="font-black text-xl font-mono">{userData.vos}</p></div>
-                                        <div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40">ГРУПА КРОВІ</p><p className="font-black text-2xl">{userData.blood}</p></div>
-                                    </div>
-                                </div>
-                                <div className="glass-card p-8 space-y-4 bg-white">
-                                    <div>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase italic">Посада</p>
-                                        <p className="font-black text-blue-600 italic uppercase text-sm leading-tight whitespace-pre-line">
-                                            {userData.position}
-                                        </p>
-                                    </div>
-                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Присяга</p><p className="font-black italic text-sm">{userData.oath}</p></div>
-                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Командир</p><p className="font-black italic uppercase text-sm">{userData.commander}</p></div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn !bg-white !text-black">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'health' && (
-                        <div className="doc-overlay">
-                            <Header title="Медична книга" />
-                            <div className="p-6 space-y-4 pb-20">
-                                {medicalRecords.map((m, i) => (
-                                    <div key={i} className="glass-card p-6 border-l-8 border-blue-600">
-                                        <div className="flex justify-between items-center mb-2 italic">
-                                            <span className="text-[10px] font-black text-blue-600 uppercase">Запис {m.code}</span>
-                                            <span className="text-[10px] font-mono text-gray-400">{m.date}</span>
+                                        <div className="space-y-6 flex-1">
+                                            <div><p className="text-[10px] text-gray-400 uppercase font-bold">Серія та номер</p><p className="text-3xl font-black italic font-mono">{userData.passport}</p></div>
+                                            <div><p className="text-[10px] text-gray-400 uppercase font-bold">Орган видачі</p><p className="text-sm font-black italic uppercase leading-relaxed">{userData.passportOrg}</p></div>
                                         </div>
-                                        <p className="font-black text-sm uppercase italic mb-2">{m.diag}</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase">{m.org}</p>
+                                        <img src={userData.photo} className="w-24 h-32 rounded-xl object-cover grayscale border-2 border-gray-100 ml-4 shadow-md" />
                                     </div>
-                                ))}
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'receipt' && (
-                        <div className="doc-overlay">
-                            <div className="oschad-header uppercase italic tracking-widest">Ощадбанк</div>
-                            <div className="oschad-sub uppercase italic text-[9px]">Мій банк. Моя країна</div>
-                            <div className="p-8 bg-white h-full">
-                                <h3 className="text-center font-black text-xl mb-10 uppercase italic">Квитанція за IBAN</h3>
-                                <div className="space-y-4 text-sm italic">
-                                    <div className="flex justify-between border-b pb-2"><span className="text-gray-400 font-bold uppercase text-[9px]">Дата</span><span className="font-black font-mono">14.02.2026 18:09:14</span></div>
-                                    <div className="flex justify-between border-b pb-2"><span className="text-gray-400 font-bold uppercase text-[9px]">Статус</span><span className="font-black text-green-700">Виконано</span></div>
-                                    <div className="flex justify-between border-b pb-2"><span className="text-gray-400 font-bold uppercase text-[9px]">Платник</span><span className="font-black uppercase">АХРЕМЕНКО Т.Г</span></div>
-                                    <div className="bg-gray-50 p-5 rounded-3xl mt-4 border border-gray-100">
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase mb-2">Призначення:</p>
-                                        <p className="text-[10px] font-extrabold leading-relaxed italic uppercase">
-                                            Оплата за закриття кадастрових реєстрів з приводу засідання комісії по утвердженню непридатності Аврахову М.О. ПАК "Оберіг". Код: {userData.rnokpp}
-                                        </p>
-                                    </div>
-                                    <div className="pt-8 border-t-4 border-black flex justify-between items-end">
-                                        <span className="font-black text-sm uppercase">Сума:</span>
-                                        <span className="text-5xl font-black italic tracking-tighter">{userData.adminFee}</span>
-                                    </div>
+                                    <div className="pt-4 border-t"><p className="text-[10px] text-gray-400 uppercase font-bold">Місце реєстрації</p><p className="text-lg font-black italic leading-tight">{userData.address}</p></div>
                                 </div>
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
                             </div>
@@ -710,27 +329,110 @@
                         <div className="doc-overlay">
                             <Header title="Направлення №017" />
                             <div className="p-6">
-                                <div className="glass-card p-10 border-t-[20px] border-red-600 bg-white">
-                                    <div className="text-center mb-8">
-                                        <h4 className="font-black text-[9px] uppercase text-gray-400 tracking-[0.2em] mb-1">Міністерство оборони</h4>
-                                        <p className="font-black text-xl italic uppercase">Електронне направлення</p>
+                                <div className="glass-card p-8 border-t-[20px] border-red-600 bg-white shadow-2xl">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="space-y-4 flex-1">
+                                            <p className="font-black text-xl italic uppercase leading-none">Електронне направлення</p>
+                                            <div><p className="text-[9px] text-gray-400 uppercase font-bold">Військовослужбовець:</p><span className="font-black uppercase text-lg italic">{userData.name}</span></div>
+                                        </div>
+                                        <img src={userData.photo} className="w-20 h-24 rounded-lg object-cover grayscale border border-gray-100 shadow-sm ml-2" />
                                     </div>
                                     <div className="space-y-6 text-sm font-bold italic">
-                                        <div className="flex gap-4 items-center mb-6">
-                                            <img src={userData.photo} className="w-16 h-20 rounded-lg object-cover grayscale" />
-                                            <div>
-                                                <p className="text-[9px] text-gray-400 uppercase">Військовослужбовець:</p>
-                                                <span className="font-black uppercase text-lg italic">{userData.name}</span>
-                                            </div>
-                                        </div>
                                         <div><p className="text-[9px] text-gray-400 uppercase italic">Направляється до:</p><span className="font-black text-lg italic">КП «ДБКЛПД» ДОР</span></div>
                                         <div><p className="text-[9px] text-gray-400 uppercase italic">Мета:</p><span className="font-black text-lg text-red-600 italic">Стаціонарне обстеження та затвердження непридатності</span></div>
-                                        <div className="pt-8 border-t border-gray-100 italic">
-                                            <p className="text-[9px] font-black uppercase text-gray-300">Начальник мед. служби</p>
-                                            <p className="font-black text-lg uppercase">полковник БАЙЦУРЕНКО А. Б.</p>
-                                        </div>
                                     </div>
                                 </div>
+                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'military' && (
+                        <div className="doc-overlay bg-[#1a1a1a]">
+                            <Header title="Військовий квиток" />
+                            <div className="p-6 space-y-6">
+                                <div className="army-dark p-8 rounded-[40px] text-white shadow-2xl">
+                                    <div className="flex justify-between items-start mb-10"><div><p className="text-xs font-bold opacity-50 uppercase mb-1">Серія та Номер</p><h2 className="text-4xl font-black italic">AГ 042020</h2></div><img src={userData.photo} className="w-20 h-24 rounded-xl object-cover border border-white/20 shadow-lg" /></div>
+                                    <div className="grid grid-cols-2 gap-4"><div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40 uppercase">ВОС</p><p className="font-black text-xl font-mono">{userData.vos}</p></div><div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40 uppercase">ГРУПА КРОВІ</p><p className="font-black text-2xl">{userData.blood}</p></div></div>
+                                </div>
+                                <div className="glass-card p-8 space-y-4 bg-white">
+                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Посада</p><p className="font-black text-blue-600 italic uppercase text-[11px] leading-tight">{userData.position}</p></div>
+                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Присяга</p><p className="font-black italic text-sm">{userData.oath}</p></div>
+                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Командир</p><p className="font-black italic uppercase text-sm">{userData.commander}</p></div>
+                                </div>
+                                <button onClick={() => setView('home')} className="back-btn !bg-white !text-black">Повернутись назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'ubd' && (
+                        <div className="doc-overlay">
+                            <Header title="Посвідчення УБД" />
+                            <div className="p-6">
+                                <div className="ubd-gradient p-8 rounded-[40px] text-white shadow-2xl relative">
+                                    <div className="absolute top-0 right-0 p-6 opacity-10"><svg width="150" height="150" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+                                    <div className="flex justify-between items-start mb-6"><div><p className="text-[10px] font-black uppercase tracking-widest opacity-60">Україна</p><h2 className="text-2xl font-black italic uppercase leading-none">Посвідчення<br/>Учасника<br/>бойових дій</h2></div><img src={userData.photo} className="w-24 h-32 rounded-2xl object-cover border-2 border-white/20 shadow-xl" /></div>
+                                    <div className="flex gap-4 items-start relative z-10">
+                                        <div className="space-y-3 flex-1">
+                                            <div><p className="text-[10px] font-bold opacity-50 uppercase">ПІБ</p><p className="text-lg font-black italic uppercase leading-tight">{userData.name}</p></div>
+                                            <div><p className="text-[10px] font-bold opacity-50 uppercase">Орган видачі</p><p className="text-[11px] font-black italic uppercase leading-tight">{userData.ubdOrg}</p></div>
+                                            <div className="border-t border-white/10 pt-3"><p className="text-[10px] font-bold opacity-50 uppercase">Серія та номер</p><p className="text-xl font-black italic">{userData.ubdNum}</p></div>
+                                            <div className="pt-2"><p className="text-[9px] font-bold opacity-50 uppercase">Ким підписане</p><p className="text-[10px] font-black italic uppercase opacity-90">{userData.ubdSign}</p></div>
+                                        </div>
+                                        <div className="bg-white p-2 rounded-xl flex flex-col items-center"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=UBD-${userData.ubdNum}`} className="w-16 h-16" /><span className="text-[6px] text-black font-black mt-1 uppercase">VERIFIED</span></div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'receipt_menu' && (
+                        <div className="doc-overlay">
+                            <Header title="Архів квитанцій" />
+                            <div className="p-6 space-y-4">
+                                <div className="glass-card p-6 border-l-8 border-blue-600 cursor-pointer" onClick={() => setView('receipt_old')}><h4 className="font-black italic uppercase">Квитанція №324368</h4><p className="text-xs text-gray-400 uppercase font-bold">Закриття реєстрів</p><p className="text-lg font-black mt-2">{userData.adminFee}</p></div>
+                                <div className="glass-card p-6 border-l-8 border-green-600 cursor-pointer" onClick={() => setView('receipt_new')}><h4 className="font-black italic uppercase text-green-700">ОПЛАЧЕНО УСПІШНО</h4><p className="text-xs text-gray-400 uppercase font-bold">Реєстрація лікування</p><p className="text-lg font-black mt-2">1788,50 ₴</p></div>
+                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'receipt_new' && (
+                        <div className="doc-overlay bg-white">
+                            <div className="nr-card m-6 shadow-xl">
+                                <div className="nr-header">Ощадбанк</div>
+                                <div className="nr-sub">Мій банк. Моя країна</div>
+                                <div className="nr-content">
+                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">На IBAN з картки</p>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата:</p><p className="nr-val">15.02.2026 18:22</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">ВИКОНАНО</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
+                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">324368994210</p></div>
+                                    </div>
+                                    <div className="nr-purpose">Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування (виписка №387001/18). За особу: Аврахов М.О. (3185200217)</div>
+                                    <div className="nr-footer">
+                                        <div><p className="nr-label">Списано з картки:</p><p className="text-2xl font-black italic">2 000,00 ₴</p></div>
+                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
+                        </div>
+                    )}
+
+                    {view === 'health' && (
+                        <div className="doc-overlay">
+                            <Header title="Медична книга" />
+                            <div className="p-6 space-y-4 pb-20">
+                                {medicalRecords.map((m, i) => (
+                                    <div key={i} className="glass-card p-6 border-l-8 border-blue-600">
+                                        <div className="flex justify-between items-center mb-2 italic"><span className="text-[10px] font-black text-blue-600 uppercase">Запис {m.code}</span><span className="text-[10px] font-mono text-gray-400">{m.date}</span></div>
+                                        <p className="font-black text-sm uppercase italic mb-2 leading-tight">{m.diag}</p>
+                                        <p className="text-[9px] font-bold text-gray-400 uppercase">{m.org}</p>
+                                    </div>
+                                ))}
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
                             </div>
                         </div>
@@ -740,24 +442,28 @@
                         <div className="doc-overlay">
                             <Header title="Рішення ГШ ЗСУ" />
                             <div className="p-6">
-                                <div className="bg-blue-600 p-10 rounded-[45px] text-white shadow-2xl relative overflow-hidden italic">
-                                    <p className="text-[10px] font-black uppercase opacity-60 mb-6 tracking-widest">№ 874/SEC-2026</p>
-                                    <h3 className="text-3xl font-black italic mb-8 uppercase">Наказ ГШ ЗСУ</h3>
-                                    <p className="text-xl font-bold leading-relaxed mb-8 italic">
-                                        Повідомляємо що військовослужбовця <span className="underline decoration-2">Аврахова Максима Олександровича</span> буде евакуйовано до КП «ДДКЛПД» ДОР» <span className="bg-white text-blue-600 px-3 py-1 rounded-xl mx-1 inline-block">{userData.evacuationDate} року</span>.
-                                    </p>
-                                    <div className="mt-4 p-5 bg-white/10 rounded-3xl text-[9px] font-black text-center uppercase tracking-[0.2em] italic">
-                                        Верифіковано системою "Оберіг"
-                                    </div>
+                                <div className="bg-blue-600 p-10 rounded-[45px] text-white shadow-2xl italic">
+                                    <h3 className="text-3xl font-black italic mb-8 uppercase tracking-tighter leading-none">Наказ ГШ ЗСУ</h3>
+                                    <p className="text-xl font-bold leading-relaxed mb-8 italic">Військовослужбовця <span className="underline decoration-2">{userData.name}</span> буде евакуйовано до КП «ДДКЛПД» ДОР» <span className="bg-white text-blue-600 px-3 py-1 rounded-xl mx-1 inline-block">{userData.evacuationDate} року</span>.</p>
+                                    <div className="mt-4 p-5 bg-white/10 rounded-3xl text-[9px] font-black text-center uppercase tracking-[0.2em] italic">Верифіковано системою "Оберіг"</div>
                                 </div>
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
                             </div>
                         </div>
                     )}
+
+                    {showQR && (
+                        <div className="qr-overlay" onClick={() => setShowQR(false)}>
+                            <div className="p-10 bg-white rounded-[50px] shadow-2xl flex flex-col items-center border border-gray-100">
+                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} className="w-64 h-64" />
+                            </div>
+                            <h3 className="mt-8 text-2xl font-black italic uppercase text-center text-white">{userData.name}</h3>
+                            <p className="text-blue-400 font-black text-[10px] uppercase mt-2">Верифіковано: {time.toLocaleDateString()}</p>
+                        </div>
+                    )}
                 </div>
             );
         };
-
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
