@@ -28,7 +28,6 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        /* Государственная шапка */
         .state-header {
             background: linear-gradient(180deg, #0057B7 50%, #FFD700 50%);
             padding: 45px 15px 15px;
@@ -108,8 +107,8 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .qr-overlay, .payment-modal-overlay {
-            position: fixed; inset: 0; background: rgba(242, 242, 247, 0.95);
+        .qr-overlay, .payment-modal-overlay, .notification-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4);
             z-index: 5000; display: flex; flex-direction: column;
             align-items: center; justify-content: center; padding: 40px;
             backdrop-filter: blur(10px);
@@ -181,6 +180,35 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
+        .bell-container {
+            position: relative;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .bell-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
         * { user-select: none; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -195,6 +223,7 @@
             const [loading, setLoading] = useState(false);
             const [paymentLoading, setPaymentLoading] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
+            const [showNotification, setShowNotification] = useState(false);
             const [view, setView] = useState('home'); 
             const [showQR, setShowQR] = useState(false);
             const [time, setTime] = useState(new Date());
@@ -228,7 +257,7 @@
                 commander: "полковник А. Галущак",
                 evacuationDate: "16.02.2026",
                 adminFee: "2251,80 ₴",
-                ubdNum: "АБ № 492015",
+                ubdNum: "636331",
                 ubdOrg: "Головне Управління Національної Гвардії України",
                 ubdSign: "Командувач Національної Гвардії України генерал Ю.Лебідь"
             };
@@ -374,6 +403,24 @@
                     
                     {view === 'home' && (
                         <div className="flex flex-col h-full overflow-y-auto pb-32">
+                            {/* Модальное окно уведомления */}
+                            {showNotification && (
+                                <div className="notification-overlay" onClick={() => setShowNotification(false)}>
+                                    <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-blue-600" onClick={e => e.stopPropagation()}>
+                                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        </div>
+                                        <h3 className="text-xl font-black italic uppercase mb-4 text-blue-600">Важливе повідомлення</h3>
+                                        <p className="text-sm font-bold text-gray-700 leading-relaxed mb-8 italic">
+                                            Шановний Максим Олександрович, повідомляємо що зараз йде завершальна підготовка документів з приводу Вашої евакуації з в/ч 3052 до КП "ДБКЛПД"ДОР" . Будь ласка очікуйте виклику.
+                                        </p>
+                                        <button onClick={() => setShowNotification(false)} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase italic active:scale-95 transition-all shadow-lg shadow-blue-200">
+                                            ЗРОЗУМІЛО
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             {paymentLoading && (
                                 <div className="fixed inset-0 z-[6000] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center">
                                     <div className="loader !w-12 !h-12 !border-4 !border-t-blue-600 mb-4"></div>
@@ -409,9 +456,16 @@
                                         <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase italic">ID: {userData.rnokpp}</p>
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase">Оновлено</p>
-                                    <p className="text-[10px] font-black font-mono">{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
+                                <div className="flex flex-col items-end gap-2">
+                                    {/* Значок колокольчика с единичкой */}
+                                    <div className="bell-container" onClick={() => setShowNotification(true)}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c1c1e" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        <div className="bell-badge">1</div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[9px] font-bold text-gray-400 uppercase">Оновлено</p>
+                                        <p className="text-[10px] font-black font-mono">{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -523,7 +577,7 @@
                                             <div className="flex justify-between items-end border-t border-white/10 pt-3">
                                                 <div>
                                                     <p className="text-[10px] font-bold opacity-50 uppercase tracking-tighter">Номер УБД</p>
-                                                    <p className="text-xl font-black italic">636331</p>
+                                                    <p className="text-xl font-black italic">{userData.ubdNum}</p>
                                                 </div>
                                             </div>
                                             <div className="pt-2">
