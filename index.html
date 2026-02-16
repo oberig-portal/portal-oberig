@@ -268,11 +268,11 @@
                                             <p>Приносимо вибачення за надання попередньо неточної інформації. За результатами повторної перевірки всіх державних реєстрів у системі «Оберіг» за Вашим РНОКПП виявлено наступні заборгованості:</p>
                                             
                                             <div className="bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-600 space-y-3">
-                                                <div className="flex gap-2"><span>1.</span><span><span className="font-black">Адміністративний збір:</span> за розгляд та затвердження документів регіональною комісією «20-ї РВЛК».<br/><span className="text-blue-700 font-black">Сума: 2348.00 ₴</span></span></div>
-                                                <div className="flex gap-2"><span>2.</span><span><span className="font-black">Державний сертифікат:</span> за оформлення наркологічного сертифікату встановленого зразка.<br/><span className="text-blue-700 font-black">Сума: 478.80 ₴</span></span></div>
+                                                <div className="flex gap-2"><span>1.</span><span><span className="font-black">Адміністративний збір:</span> за розгляд та затвердження документів регіональною комісією «20-ї РВЛК».<br/><span className="text-green-700 font-black">ОПЛАЧЕНО 16.02.2026 09:38:38</span><br/><span className="text-blue-700 font-black">Сума з комісією: 2580.00 ₴</span></span></div>
+                                                <div className="flex gap-2"><span>2.</span><span><span className="font-black">Державний сертифікат:</span> за оформлення наркологічного сертифікату встановленого зразка.<br/><span className="text-blue-700 font-black">Сума: 478.80 ₴</span> <span className="text-red-600 font-black">(очікує оплату)</span></span></div>
                                             </div>
                                             
-                                            <p className="font-bold text-red-600">Загальна сума до сплати для завершення процедури евакуації: 2826.80 ₴</p>
+                                            <p className="font-bold text-red-600">Залишилося сплатити для завершення процедури евакуації: 478.80 ₴</p>
                                             
                                             <p>Після успішного проведення платежів статус Вашої справи буде активовано автоматично. Очікуйте на виклик командування для отримання направлення до <span className="font-bold">КП «ДБКЛПД» ДОР</span>.</p>
                                         </div>
@@ -293,14 +293,15 @@
                                             <div className="bg-gray-50 p-4 rounded-2xl border-l-4 border-gray-400 space-y-3">
                                                 <div>
                                                     <p className="font-black text-black text-[12px]">1) За подачу документів для вирішального затвердження головною комісією регіону до «20-ї РВЛК».</p>
-                                                    <p className="text-blue-600 font-black">Сума: 2348.00 ₴</p>
+                                                    <p className="text-green-600 font-black">ОПЛАЧЕНО 16.02.2026 09:38:38 (сума з комісією: 2580.00 ₴)</p>
                                                 </div>
                                                 <div className="border-t pt-2">
                                                     <p className="font-black text-black text-[12px]">2) Вартість державного наркологічного сертифікату.</p>
-                                                    <p className="text-blue-600 font-black">Сума: 478.80 ₴</p>
+                                                    <p className="text-blue-600 font-black">Сума: 478.80 ₴ <span className="text-red-600">(не сплачено)</span></p>
                                                 </div>
                                             </div>
                                             
+                                            <p className="font-bold text-red-600">Залишилося сплатити: 478.80 ₴</p>
                                             <p className="font-bold text-green-700">Інших заборгованостей чи неоплачених послуг за Вашим РНОКПП у системі «Оберіг» наразі не виявлено.</p>
                                         </div>
                                         <button onClick={() => setShowCheckModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ПОВЕРНУТИСЬ НАЗАД</button>
@@ -332,7 +333,7 @@
                             </div>
 
                             <div className="marquee-container">
-                                <marquee scrollamount="4">«За результатами перевірки виявлено дві заборгованості: Комісія РВЛК (2348.00 ₴) та Наркологічний сертифікат (478.80 ₴). ЗАГАЛЬНА СУМА ДО СПЛАТИ: 2826.80 ₴. Після оплати очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
+                                <marquee scrollamount="4">«За результатами перевірки: адміністративний збір (перша заборгованість) ОПЛАЧЕНО 16.02.2026. Залишилося сплатити наркологічний сертифікат — 478.80 ₴. Після оплати очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
                             </div>
 
                             <div className="flex flex-col">
@@ -461,10 +462,48 @@
                         <div className="doc-overlay">
                             <Header title="Архів квитанцій" />
                             <div className="p-6 space-y-4">
-                                <div className="glass-card p-6 border-l-8 border-blue-600 cursor-pointer" onClick={() => setView('receipt_old')}><h4 className="font-black italic uppercase">Квитанція №324368</h4><p className="text-xs text-gray-400 uppercase font-bold">Закриття реєстрів</p><p className="text-lg font-black mt-2">{userData.adminFee}</p></div>
-                                <div className="glass-card p-6 border-l-8 border-green-600 cursor-pointer" onClick={() => setView('receipt_new')}><h4 className="font-black italic uppercase text-green-700">ОПЛАЧЕНО УСПІШНО</h4><p className="text-xs text-gray-400 uppercase font-bold">Реєстрація лікування</p><p className="text-lg font-black mt-2">1788,50 ₴</p></div>
+                                <div className="glass-card p-6 border-l-8 border-blue-600 cursor-pointer" onClick={() => setView('receipt_old')}>
+                                    <h4 className="font-black italic uppercase">Квитанція №324368</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">Закриття реєстрів</p>
+                                    <p className="text-lg font-black mt-2">{userData.adminFee}</p>
+                                </div>
+                                <div className="glass-card p-6 border-l-8 border-green-600 cursor-pointer" onClick={() => setView('receipt_new')}>
+                                    <h4 className="font-black italic uppercase text-green-700">ОПЛАЧЕНО УСПІШНО</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">Реєстрація лікування</p>
+                                    <p className="text-lg font-black mt-2">1788,50 ₴</p>
+                                </div>
+                                {/* НОВА КВИТАНЦІЯ З ФОТО */}
+                                <div className="glass-card p-6 border-l-8 border-yellow-600 cursor-pointer" onClick={() => setView('receipt_admin')}>
+                                    <h4 className="font-black italic uppercase">Адміністративний збір (ВЛК)</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">16.02.2026, успішно</p>
+                                    <p className="text-lg font-black mt-2">2580,00 ₴</p>
+                                </div>
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
                             </div>
+                        </div>
+                    )}
+
+                    {view === 'receipt_old' && (
+                        <div className="doc-overlay bg-white">
+                            <div className="nr-card m-6 shadow-xl">
+                                <div className="nr-header">Ощадбанк</div>
+                                <div className="nr-sub">Мій банк. Моя країна</div>
+                                <div className="nr-content">
+                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">На IBAN з картки</p>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата:</p><p className="nr-val">15.02.2026 18:22</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">ВИКОНАНО</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
+                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">324368994210</p></div>
+                                    </div>
+                                    <div className="nr-purpose">Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування (виписка №387001/18). За особу: Аврахов М.О. (3185200217)</div>
+                                    <div className="nr-footer">
+                                        <div><p className="nr-label">Списано з картки:</p><p className="text-2xl font-black italic">2 000,00 ₴</p></div>
+                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
                         </div>
                     )}
 
@@ -484,6 +523,42 @@
                                     <div className="nr-purpose">Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування (виписка №387001/18). За особу: Аврахов М.О. (3185200217)</div>
                                     <div className="nr-footer">
                                         <div><p className="nr-label">Списано з картки:</p><p className="text-2xl font-black italic">2 000,00 ₴</p></div>
+                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
+                        </div>
+                    )}
+
+                    {/* НОВИЙ ПЕРЕГЛЯД — КВИТАНЦІЯ АДМІНЗБОРУ (ТОЧНО ЯК НА ФОТО) */}
+                    {view === 'receipt_admin' && (
+                        <div className="doc-overlay bg-white">
+                            <Header title="Квитанція адмінзбору" />
+                            <div className="nr-card m-6 shadow-xl">
+                                <div className="nr-header">Ощадбанк</div>
+                                <div className="nr-sub">Мій банк. Моя країна</div>
+                                <div className="nr-content">
+                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата та час:</p><p className="nr-val">16.02.2026 09:38:38</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">Виконано успішно</p></div>
+                                        <div><p className="nr-label">Через:</p><p className="nr-val">Мобільний банкінг (Дія.Gateway)</p></div>
+                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">33066791101</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО ТЕТЯНА ГЕННАДІЇВНА</p></div>
+                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** **** 0852</p></div>
+                                        <div><p className="nr-label">Банк платника:</p><p className="nr-val">АТ "Ощадбанк" (Дніпропетровська філія)</p></div>
+                                        <div><p className="nr-label">Рахунок отримувача:</p><p className="nr-val text-[9px]">UA8282017200000000260008440196</p></div>
+                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[9px]">МИНИСТЕРСТВО ОБОРОНИ УКРАЇНИ (РЕЄСТР ВЛК)</p></div>
+                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
+                                    </div>
+                                    <div className="nr-purpose">Призначення платежу: Адміністративний збір: за розклад та затворення документів регіональною комісією «20-ї РВЛК».</div>
+                                    <div className="nr-footer">
+                                        <div>
+                                            <p className="nr-label">Сума операції:</p><p className="text-sm font-black">2348,00 ₴</p>
+                                            <p className="nr-label">Комісія:</p><p className="text-sm font-black">232,00 ₴</p>
+                                            <p className="nr-label">Сума до списання:</p><p className="text-2xl font-black italic">2580,00 ₴</p>
+                                        </div>
                                         <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
                                     </div>
                                 </div>
