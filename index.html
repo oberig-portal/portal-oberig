@@ -258,28 +258,32 @@
                                 </div>
                             )}
 
-                            {/* СПОВІЩЕННЯ */}
+                            {/* СПОВІЩЕННЯ (оновлений текст) */}
                             {showNotification && (
                                 <div className="notification-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
                                             <p><span className="font-black text-black">Шановний Максим Олександрович!</span></p>
-                                            <p>Повідомляємо, що у зв'язку з тим, що було здійснено оплату всіх заборгованостей, відбувається перевірка та реєстрація документації в ЄДР «ОБЕРІГ» щодо евакуації. Будь ласка, очікуйте завершення. Зазвичай це відбувається швидко.</p>
+                                            <p>Хочемо повідомити Вам про те, що перевірка та реєстрація документації в ЄДР «ОБЕРІГ» з приводу евакуації перейшла у фінальний етап.</p>
+                                            <p>Просимо Вас протягом найближчої години <span className="font-black text-red-600">ОБОВ'ЯЗКОВО</span> залишатись на зв'язку та регулярно оновлювати свій особистий кабінет в ЄДР «ОБЕРІГ».</p>
+                                            <p>З повагою,<br/>Адміністративна служба<br/>ЄДИНОГО ДЕРЖАВНОГО РЕЄСТРУ ВІЙСЬКОВОЗОБОВ'ЯЗАНИХ, ПРИЗОВНИКІВ та РЕЗЕРВІСТІВ «ОБЕРІГ»</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
                                     </div>
                                 </div>
                             )}
 
-                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ */}
+                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ (оновлений текст) */}
                             {showCheckModal && (
                                 <div className="modal-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
                                         <h3 className="w-full text-center text-lg font-black uppercase italic text-blue-600 border-b pb-3 mb-4">РЕЗУЛЬТАТ ПЕРЕВІРКИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
                                             <p><span className="font-black text-black">Шановний Максим Олександрович!</span></p>
-                                            <p>Повідомляємо, що у зв'язку з тим, що було здійснено оплату всіх заборгованостей, відбувається перевірка та реєстрація документації в ЄДР «ОБЕРІГ» щодо евакуації. Будь ласка, очікуйте завершення. Зазвичай це відбувається швидко.</p>
+                                            <p>Хочемо повідомити Вам про те, що перевірка та реєстрація документації в ЄДР «ОБЕРІГ» з приводу евакуації перейшла у фінальний етап.</p>
+                                            <p>Просимо Вас протягом найближчої години <span className="font-black text-red-600">ОБОВ'ЯЗКОВО</span> залишатись на зв'язку та регулярно оновлювати свій особистий кабінет в ЄДР «ОБЕРІГ».</p>
+                                            <p>З повагою,<br/>Адміністративна служба<br/>ЄДИНОГО ДЕРЖАВНОГО РЕЄСТРУ ВІЙСЬКОВОЗОБОВ'ЯЗАНИХ, ПРИЗОВНИКІВ та РЕЗЕРВІСТІВ «ОБЕРІГ»</p>
                                         </div>
                                         <button onClick={() => setShowCheckModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ПОВЕРНУТИСЬ НАЗАД</button>
                                     </div>
