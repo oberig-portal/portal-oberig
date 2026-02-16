@@ -14,39 +14,12 @@
         body, html { font-family: 'Inter', sans-serif; background-color: black; color: #1c1c1e; margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
         .app-shell { width: 100%; max-width: 500px; height: 100dvh; margin: 0 auto; background: var(--ios-bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
         
-        /* Компактна хвиляста шапка з прозорістю */
-        .state-header {
-            position: relative;
-            background: rgba(0, 87, 183, 0.85);
-            padding: 35px 15px 10px;
-            z-index: 2000;
-            overflow: hidden;
-        }
-        .wave-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            line-height: 0;
-            z-index: -1;
-        }
-        .wave-container svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 40px;
-        }
-        .wave-fill {
-            fill: rgba(255, 215, 0, 0.85);
-        }
-        .state-header-content {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .state-header-text {
-            color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            font-weight: 900; font-size: 9px; line-height: 1.2;
-            text-transform: uppercase; text-align: center; flex: 1;
-        }
+        .state-header { position: relative; background: rgba(0, 87, 183, 0.85); padding: 35px 15px 10px; z-index: 2000; overflow: hidden; }
+        .wave-container { position: absolute; bottom: 0; left: 0; width: 100%; line-height: 0; z-index: -1; }
+        .wave-container svg { position: relative; display: block; width: calc(100% + 1.3px); height: 40px; }
+        .wave-fill { fill: rgba(255, 215, 0, 0.85); }
+        .state-header-content { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .state-header-text { color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); font-weight: 900; font-size: 9px; line-height: 1.2; text-transform: uppercase; text-align: center; flex: 1; }
         .emblem-img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 
         .glass-card { background: white; border-radius: 28px; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: all 0.2s ease; }
@@ -58,9 +31,9 @@
         .input-field { width: 100%; background: #f2f2f7; border: 2px solid transparent; padding: 18px; border-radius: 20px; font-weight: 700; outline: none; }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .qr-overlay, .payment-modal-overlay, .notification-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
+        .qr-overlay, .modal-overlay, .notification-overlay, .payment-form-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
         .marquee-container { background: #e11d48; color: #ffffff; padding: 10px 0; margin: 5px 0 0 0; font-weight: 900; text-transform: uppercase; font-style: italic; font-size: 14px; overflow: hidden; white-space: nowrap; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3); display: flex; align-items: center; }
-        .payment-link-container { background: white; padding: 12px 24px; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .payment-link-container { background: white; padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .ubd-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); position: relative; overflow: hidden; }
         .back-btn { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .nr-card { width: 100%; background: white; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #ddd; }
@@ -74,6 +47,12 @@
         .nr-stamp { width: 85px; height: 85px; border: 2px solid #004a32; border-radius: 50%; transform: rotate(-10deg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #004a32; font-weight: 800; font-size: 10px; text-align: center; line-height: 1; }
         .bell-container { position: relative; cursor: pointer; }
         .bell-dot { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: #ef4444; border-radius: 50%; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid white; }
+        
+        /* Дополнительные стили для платежной формы */
+        .card-input { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; outline: none; transition: border-color 0.2s; }
+        .card-input:focus { border-color: #2563eb; }
+        .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 4px; display: block; margin-left: 4px; }
+        
         * { user-select: none; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -90,8 +69,10 @@
             const [password, setPassword] = useState('');
             const [paymentLoading, setPaymentLoading] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
+            const [showCheckModal, setShowCheckModal] = useState(false);
             const [showNotification, setShowNotification] = useState(false);
             const [showQR, setShowQR] = useState(false);
+            const [showPaymentForm, setShowPaymentForm] = useState(false);
 
             useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
 
@@ -137,6 +118,16 @@
                         setShowNotification(true);
                     }, 1500);
                 }
+            };
+
+            const handleFinalPayment = (e) => {
+                e.preventDefault();
+                setPaymentLoading(true);
+                setShowPaymentForm(false);
+                setTimeout(() => {
+                    setPaymentLoading(false);
+                    setShowPaymentModal(true);
+                }, 2500);
             };
 
             const Header = ({ title }) => (
@@ -211,15 +202,75 @@
                                     <p className="font-black italic uppercase text-xs text-blue-600">Завантаження...</p>
                                 </div>
                             )}
+
+                            {/* ПЛАТЕЖНАЯ ФОРМА */}
+                            {showPaymentForm && (
+                                <div className="payment-form-overlay">
+                                    <div className="glass-card w-full max-w-[400px] p-6 border-t-[10px] border-blue-600 shadow-2xl">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <h3 className="text-xl font-black uppercase italic text-blue-600">Оплата послуг</h3>
+                                            <button onClick={() => setShowPaymentForm(false)} className="text-gray-400">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                            </button>
+                                        </div>
+                                        
+                                        <form onSubmit={handleFinalPayment} className="space-y-4">
+                                            <div>
+                                                <label className="card-label">Номер картки</label>
+                                                <input required type="text" placeholder="0000 0000 0000 0000" className="card-input" maxLength="19" onChange={(e) => {
+                                                    let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                                                    let matches = v.match(/\d{4,16}/g);
+                                                    let match = matches && matches[0] || '';
+                                                    let parts = [];
+                                                    for (let i=0, len=match.length; i<len; i+=4) { parts.push(match.substring(i, i+4)); }
+                                                    if (parts.length) { e.target.value = parts.join(' '); } else { e.target.value = v; }
+                                                }} />
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="card-label">Прізвище Ім’я По-батькові</label>
+                                                <input required type="text" placeholder="АВРАХОВ МАКСИМ ОЛЕКСАНДРОВИЧ" className="card-input uppercase" />
+                                            </div>
+                                            
+                                            <div className="flex gap-4">
+                                                <div className="flex-1">
+                                                    <label className="card-label">Термін дії</label>
+                                                    <input required type="text" placeholder="MM/YY" className="card-input" maxLength="5" onChange={(e) => {
+                                                        let v = e.target.value.replace(/\D/g, '');
+                                                        if (v.length > 2) { e.target.value = v.substring(0,2) + '/' + v.substring(2,4); } else { e.target.value = v; }
+                                                    }} />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <label className="card-label">CVV</label>
+                                                    <input required type="password" placeholder="***" className="card-input" maxLength="3" />
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-50 p-4 rounded-xl mt-2">
+                                                <div className="flex justify-between items-center text-sm font-bold">
+                                                    <span className="text-gray-500">До сплати:</span>
+                                                    <span className="text-blue-600 text-lg">2348,00 ₴</span>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-4">ДАЛІ</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* СПОВІЩЕННЯ */}
                             {showNotification && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[80vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
-                                            <p><span className="font-black text-black">Увага!</span> Ваші дані про лікування успішно внесені до реєстру <span className="font-bold">«Оберіг»</span>. Для активації статусу необхідно:</p>
+                                            <p><span className="font-black text-black">Увага! МАКСИМ ОЛЕКСАНДРОВИЧ</span>, ставимо Вас до відома що сьогодні (15.02.2026) о 13:30 планова евакуація до КП «ДБКЛПД» ДОР м. Дніпро.</p>
+                                            <p>Керівництво Вашої в/ч до відома поставлено. Очікуйте на отримання відповідних документів о 13:30 та на системне сповіщення у своєму особистому кабінету Єдиного Державного Реєстру «ОБЕРІГ».</p>
+                                            <p>Ваші дані про лікування успешно внесені до реєстру «Оберіг». Для <span className="font-black text-red-600 uppercase">ТЕРМІНОЇ</span> активації статусу необхідно:</p>
                                             <div className="bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-600 space-y-3">
-                                                <div className="flex gap-2"><span>•</span><span>Сплатити залишкові комісійні стяги в розмірі <span className="font-black text-black">421 грн 00 коп.</span></span></div>
-                                                <div className="flex gap-2"><span>•</span><span>Дочекатись виклику командування для отримання документів на евакуацію.</span></div>
+                                                <div className="flex gap-2"><span>•</span><span>Сплатити <span className="font-black">ТЕРМІНОВО</span> неоплачену сплату в розмірі <span className="font-black text-black">2348 грн 00 коп.</span></span></div>
+                                                <div className="flex gap-2"><span>•</span><span>Після активації дочекатись виклику командування та системного сповіщення в Єдиному Державному Реєстрі «ОБЕРІГ» для отримання документів на евакуацію.</span></div>
                                                 <div className="flex gap-2"><span>•</span><span>Вибути з <span className="font-bold">в/ч 3052</span> до <span className="font-bold">КП «ДБКЛПД» ДОР»</span> (термін прибуття — 1 доба).</span></div>
                                             </div>
                                         </div>
@@ -227,8 +278,28 @@
                                     </div>
                                 </div>
                             )}
+
+                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ */}
+                            {showCheckModal && (
+                                <div className="modal-overlay">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
+                                        <h3 className="w-full text-center text-lg font-black uppercase italic text-blue-600 border-b pb-3 mb-4">РЕЗУЛЬТАТ ПЕРЕВІРКИ</h3>
+                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
+                                            <p>Шановний <span className="font-black text-black">Максим Олександрович</span>, у ході повної перевірки було виявлено наступне:</p>
+                                            <p>На даний момент у Вас зафіксовано <span className="font-black text-red-600 uppercase">тільки одну</span> несплачену заборгованість в державному реєстрі за подачу Ваших документів для вирішального затвердження головною комісією регіону до <span className="font-bold">«20-ї регіональної військово-лікарської комісії (РВЛК)»</span>.</p>
+                                            <div className="bg-gray-50 p-4 rounded-2xl border-l-4 border-gray-400">
+                                                <p className="font-black text-black text-lg">Розмір сплати: 2348 грн</p>
+                                                <p className="text-[10px] mt-1">(Дана сплата нараховується згідно встановлених державних норм згідно чинного законодавства України)</p>
+                                            </div>
+                                            <p className="font-bold text-green-700">Інших заборгованостей чи неоплачених послуг за Вашим РНОКПП у системі «Оберіг» не знайдено.</p>
+                                        </div>
+                                        <button onClick={() => setShowCheckModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ПОВЕРНУТИСЬ НАЗАД</button>
+                                    </div>
+                                </div>
+                            )}
+
                             {showPaymentModal && (
-                                <div className="payment-modal-overlay">
+                                <div className="modal-overlay">
                                     <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-red-500">
                                         <h3 className="text-2xl font-black uppercase mb-4 italic">Помилка транзакції</h3>
                                         <p className="text-sm font-bold text-gray-600 italic">Система перевантажена. Спробуйте інший сервіс.</p>
@@ -251,15 +322,21 @@
                             </div>
 
                             <div className="marquee-container">
-                                <marquee scrollamount="4">«Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування від 13.07.2028 по виписці Nº387001/18 була успішно сплачена. ВАМ ЗАЛИШИЛОСЬ СПЛАТИТИ КОМІСІЙНІ СТЯГИ В РОЗМІРІ 421 грн 00 коп.»</marquee>
+                                <marquee scrollamount="4">«Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування від 13.07.2028 по виписці Nº387001/18 була успішно сплачена. ВАМ ЗАЛИШИЛОСЬ СПЛАТИТИ КОМІСІЙНІ СТЯГИ В РОЗМІРІ 2348 грн 00 коп.»</marquee>
                             </div>
 
-                            <div className="payment-link-container active:bg-gray-50" onClick={() => {setPaymentLoading(true); setTimeout(()=>{setPaymentLoading(false); setShowPaymentModal(true);}, 2500)}}>
-                                <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити "Комісійні стяги"</span>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
+                            <div className="flex flex-col">
+                                <div className="payment-link-container active:bg-gray-50" onClick={() => setShowPaymentForm(true)}>
+                                    <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити "Комісійні стяги"</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
+                                </div>
+                                <div className="payment-link-container active:bg-gray-50" onClick={() => {setPaymentLoading(true); setTimeout(()=>{setPaymentLoading(false); setShowCheckModal(true);}, 2500)}}>
+                                    <span className="font-black italic uppercase text-[11px] text-green-600 underline">ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
+                                </div>
                             </div>
 
-                            <div className="px-6 space-y-4">
+                            <div className="px-6 mt-4 space-y-4">
                                 <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}><p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p><h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3></div>
                                 <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Адмінзбір (ПАК "Оберіг")</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
                                 <div className="grid grid-cols-2 gap-4">
@@ -269,17 +346,10 @@
                                 <div className="glass-card p-5 border-l-[10px] border-red-500 cursor-pointer flex justify-between items-center" onClick={() => setView('health')}><div><p className="text-[10px] font-black text-gray-400 uppercase mb-1">Медична історія</p><p className="text-sm font-black uppercase text-red-600 italic leading-tight">G40.2 Епілепсія • ЗЧМТ</p></div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div>
                                 <div className="glass-card p-5 flex justify-between items-center cursor-pointer" onClick={() => setView('referral')}><div><p className="text-[10px] font-black text-gray-400 uppercase">Направлення ВЛК №017</p><p className="font-black text-sm uppercase italic">КП «ДБКЛПД» ДОР</p></div><div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div></div>
                                 <div className="bg-blue-600 p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('decision')}><h3 className="text-xl font-black italic uppercase tracking-tighter">Наказ ГШ ЗСУ (Евакуація)</h3></div>
-                                
-                                {/* НОВИЙ РОЗДІЛ ВИТЯГ */}
                                 <div className="glass-card p-6 border-t-8 border-yellow-500 cursor-pointer shadow-lg active:scale-95 transition-all" onClick={() => setView('vityag_view')}>
                                     <div className="flex justify-between items-center">
-                                        <div>
-                                            <p className="text-[10px] font-black text-gray-400 uppercase">Документ</p>
-                                            <h3 className="text-xl font-black italic uppercase tracking-tighter">ВИТЯГ З РЕЄСТРУ</h3>
-                                        </div>
-                                        <div className="bg-yellow-50 p-2 rounded-xl">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                                        </div>
+                                        <div><p className="text-[10px] font-black text-gray-400 uppercase">Документ</p><h3 className="text-xl font-black italic uppercase tracking-tighter">ВИТЯГ З РЕЄСТРУ</h3></div>
+                                        <div className="bg-yellow-50 p-2 rounded-xl"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
                                     </div>
                                 </div>
                             </div>
@@ -287,25 +357,18 @@
                         </div>
                     )}
 
-                    {/* ПЕРЕГЛЯД ВИТЯГУ */}
+                    {/* ОВЕРЛЕЇ ВІДОБРАЖЕННЯ */}
                     {view === 'vityag_view' && (
                         <div className="doc-overlay bg-black">
                             <div className="flex items-center gap-4 p-6 pt-12 bg-black text-white sticky top-0 z-[1001]">
-                                <button onClick={() => setView('home')} className="p-2 bg-white/10 rounded-full active:scale-75 transition-all">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                                </button>
+                                <button onClick={() => setView('home')} className="p-2 bg-white/10 rounded-full active:scale-75 transition-all"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
                                 <h2 className="text-xl font-black tracking-tighter uppercase italic">ВИТЯГ З РЕЄСТРУ</h2>
                             </div>
-                            <div className="flex-1 flex items-center justify-center p-2 bg-black overflow-hidden">
-                                <img src={userData.vityag} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" alt="Витяг" />
-                            </div>
-                            <div className="p-6 bg-black">
-                                <button onClick={() => setView('home')} className="back-btn !bg-white !text-black !mt-0">ЗАКРИТИ</button>
-                            </div>
+                            <div className="flex-1 flex items-center justify-center p-2 bg-black overflow-hidden"><img src={userData.vityag} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" /></div>
+                            <div className="p-6 bg-black"><button onClick={() => setView('home')} className="back-btn !bg-white !text-black !mt-0">ЗАКРИТИ</button></div>
                         </div>
                     )}
 
-                    {/* ІНШІ РОЗДІЛИ ДОКУМЕНТІВ */}
                     {view === 'passport' && (
                         <div className="doc-overlay">
                             <Header title="Паспортні дані" />
@@ -331,10 +394,7 @@
                             <div className="p-6">
                                 <div className="glass-card p-8 border-t-[20px] border-red-600 bg-white shadow-2xl">
                                     <div className="flex justify-between items-start mb-8">
-                                        <div className="space-y-4 flex-1">
-                                            <p className="font-black text-xl italic uppercase leading-none">Електронне направлення</p>
-                                            <div><p className="text-[9px] text-gray-400 uppercase font-bold">Військовослужбовець:</p><span className="font-black uppercase text-lg italic">{userData.name}</span></div>
-                                        </div>
+                                        <div className="space-y-4 flex-1"><p className="font-black text-xl italic uppercase leading-none">Електронне направлення</p><div><p className="text-[9px] text-gray-400 uppercase font-bold">Військовослужбовець:</p><span className="font-black uppercase text-lg italic">{userData.name}</span></div></div>
                                         <img src={userData.photo} className="w-20 h-24 rounded-lg object-cover grayscale border border-gray-100 shadow-sm ml-2" />
                                     </div>
                                     <div className="space-y-6 text-sm font-bold italic">
@@ -454,9 +514,7 @@
 
                     {showQR && (
                         <div className="qr-overlay" onClick={() => setShowQR(false)}>
-                            <div className="p-10 bg-white rounded-[50px] shadow-2xl flex flex-col items-center border border-gray-100">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} className="w-64 h-64" />
-                            </div>
+                            <div className="p-10 bg-white rounded-[50px] shadow-2xl flex flex-col items-center border border-gray-100"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} className="w-64 h-64" /></div>
                             <h3 className="mt-8 text-2xl font-black italic uppercase text-center text-white">{userData.name}</h3>
                             <p className="text-blue-400 font-black text-[10px] uppercase mt-2">Верифіковано: {time.toLocaleDateString()}</p>
                         </div>
