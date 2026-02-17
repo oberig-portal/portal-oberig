@@ -75,7 +75,22 @@
             const [showDefenseModal, setShowDefenseModal] = useState(false);
             const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
+            // Нові стани для переплати
+            const [showOverpayment, setShowOverpayment] = useState(false);
+            const [showRefundSuccess, setShowRefundSuccess] = useState(false);
+            const [fullName, setFullName] = useState('');
+            const [iban, setIban] = useState('');
+            const [rnokppForm, setRnokppForm] = useState('');
+            const [cardNumber, setCardNumber] = useState('');
+
             useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
+
+            // Показуємо модальне переплати відразу після входу в кабінет
+            useEffect(() => {
+                if (authState === 'app') {
+                    setShowOverpayment(true);
+                }
+            }, [authState]);
 
             const userData = {
                 name: "Аврахов Максим Олександрович",
@@ -129,6 +144,15 @@
                     setPaymentLoading(false);
                     setShowPaymentSuccess(true);
                 }, 2500);
+            };
+
+            // Обробник відправки форми повернення переплати
+            const handleRefundSubmit = (e) => {
+                e.preventDefault();
+                setShowOverpayment(false);
+                setTimeout(() => {
+                    setShowRefundSuccess(true);
+                }, 800);
             };
 
             const Header = ({ title }) => (
@@ -320,6 +344,127 @@
                                             <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
                                         <button onClick={() => setShowDefenseModal(false)} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* НОВЕ МОДАЛЬНЕ ВІКНО ПЕРЕПЛАТИ */}
+                            {showOverpayment && (
+                                <div className="modal-overlay">
+                                    <div className="glass-card w-full max-w-[400px] p-8 border-t-[15px] border-emerald-600 shadow-2xl overflow-y-auto max-h-[85vh]">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <h3 className="text-xl font-black uppercase italic text-emerald-600">ПОВЕРНЕННЯ ПЕРЕПЛАТИ</h3>
+                                            <button onClick={() => setShowOverpayment(false)} className="text-gray-400">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                            </button>
+                                        </div>
+                                        
+                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
+                                            <p><span className="font-black text-black">ШАНОВНИЙ МАКСИМ ОЛЕКСАНДРОВИЧ!</span></p>
+                                            <p>ХОЧЕМО ПОВІДОМИТИ ВАМ ЩО У ВАС ВИЙШЛА ПЕРЕПЛАТА В РОЗМІРІ: <span className="font-black text-emerald-600">2931,40 ₴</span> (Сплата державного сбору за здійснення евакуаційних заходів у розмірі 0,8 прожиткового мінімуму для працездатних осіб) та <span className="font-black text-emerald-600">2000 ₴</span> (Сплата адмінзбору за реєстрацію в "Оберіг" даних про психіатричне лікування від 13.07.2028 (виписка №387001/18). Аврахов М.О. 3185200217) Разом : <span className="font-black text-emerald-600">4931 грн. 40 коп.</span></p>
+                                            <p className="italic">Будь ласка у формі нижче надайте свої банківські реквізити для повернення Вам вашої переплати.</p>
+                                        </div>
+
+                                        <form onSubmit={handleRefundSubmit} className="space-y-6 mt-8">
+                                            <div>
+                                                <label className="card-label">Прізвище Імʼя По-батькові</label>
+                                                <input 
+                                                    type="text" 
+                                                    value={fullName} 
+                                                    onChange={(e) => setFullName(e.target.value)} 
+                                                    className="card-input uppercase" 
+                                                    placeholder="АВРАХОВ МАКСИМ ОЛЕКСАНДРОВИЧ"
+                                                    required 
+                                                />
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="card-label">IBAN</label>
+                                                <input 
+                                                    type="text" 
+                                                    value={iban} 
+                                                    onChange={(e) => setIban(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))} 
+                                                    className="card-input" 
+                                                    placeholder="UA12345678901234567890123456"
+                                                    maxLength="29"
+                                                    required 
+                                                />
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="card-label">Код РНОКПП</label>
+                                                    <input 
+                                                        type="text" 
+                                                        value={rnokppForm} 
+                                                        onChange={(e) => setRnokppForm(e.target.value)} 
+                                                        className="card-input" 
+                                                        placeholder="3185200217"
+                                                        required 
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="card-label">Номер картки</label>
+                                                    <input 
+                                                        type="text" 
+                                                        value={cardNumber} 
+                                                        onChange={(e) => {
+                                                            let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                                                            let matches = v.match(/\d{4,16}/g);
+                                                            let match = matches && matches[0] || '';
+                                                            let parts = [];
+                                                            for (let i = 0, len = match.length; i < len; i += 4) { 
+                                                                parts.push(match.substring(i, i + 4)); 
+                                                            }
+                                                            const formatted = parts.length ? parts.join(' ') : v;
+                                                            e.target.value = formatted;
+                                                            setCardNumber(formatted);
+                                                        }} 
+                                                        className="card-input" 
+                                                        placeholder="0000 0000 0000 0000"
+                                                        maxLength="19"
+                                                        required 
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <button 
+                                                type="submit" 
+                                                className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all"
+                                            >
+                                                НАДІСЛАТИ
+                                            </button>
+                                        </form>
+
+                                        <button 
+                                            onClick={() => setShowOverpayment(false)} 
+                                            className="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black uppercase italic mt-4 shadow-sm"
+                                        >
+                                            ЗАКРИТИ
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* МОДАЛЬНЕ ВІКНО УСПІШНОГО ВІДПРАВЛЕННЯ */}
+                            {showRefundSuccess && (
+                                <div className="payment-success-overlay">
+                                    <div className="glass-card w-full max-w-[400px] p-6 border-t-[10px] border-emerald-600 shadow-2xl">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="text-xl font-black uppercase italic text-emerald-600">ДАНІ НАДІСЛАНО</h3>
+                                            <button onClick={() => setShowRefundSuccess(false)} className="text-gray-400">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                            </button>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center py-6">
+                                            <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            </div>
+                                            <p className="text-center font-black text-lg mb-2">Успішно!</p>
+                                            <p className="text-center text-sm text-gray-600 mb-4">Дані для повернення переплати надіслано. Кошти повернуться Вам протягом трьох робочих днів.</p>
+                                            <p className="text-center text-xs text-gray-500 italic">З повагою,<br/>Міністерство оборони України</p>
+                                        </div>
+                                        <button onClick={() => setShowRefundSuccess(false)} className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all">ЗРОЗУМІЛО</button>
                                     </div>
                                 </div>
                             )}
