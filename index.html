@@ -299,8 +299,7 @@
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black text-base">{shortName}</p>
-                                            <p>Повідомляємо, що усі Ваші сплати було завершено (перегляньте розділ «Квитанції»).</p>
-                                            <p><span className="font-black text-red-600">Терміново!</span> Згідно з документами, поданими від в/ч 3052 до КП «ДБКЛПД» ДОР», о 19:50 Вам буде виділено супровід, який доставить Вас до КП «ДБКЛПД» ДОР» на стаціонарне обстеження та затвердження непридатності.</p>
+                                            <p className="font-bold">СТАВИМО ВАС ДО ВІДОМА ПРО ТЕ, ЩО ЗАРАЗ ПОЧИНАЄТЬСЯ ЕВАКУАЦІЙНИЙ ПРОЦЕС З В/Ч 3052 ДО КП «ДБКЛПД» ДОР». БУДЬ ЛАСКА, ОЧІКУЙТЕ.</p>
                                             <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
@@ -315,8 +314,7 @@
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black text-base">{shortName}</p>
-                                            <p>Повідомляємо, що усі Ваші сплати було завершено (перегляньте розділ «Квитанції»).</p>
-                                            <p><span className="font-black text-red-600">Терміново!</span> Згідно з документами, поданими від в/ч 3052 до КП «ДБКЛПД» ДОР», о 19:50 Вам буде виділено супровід, який доставить Вас до КП «ДБКЛПД» ДОР» на стаціонарне обстеження та затвердження непридатності.</p>
+                                            <p className="font-bold">СТАВИМО ВАС ДО ВІДОМА ПРО ТЕ, ЩО ЗАРАЗ ПОЧИНАЄТЬСЯ ЕВАКУАЦІЙНИЙ ПРОЦЕС З В/Ч 3052 ДО КП «ДБКЛПД» ДОР». БУДЬ ЛАСКА, ОЧІКУЙТЕ.</p>
                                             <p>З повагою,<br/>Міністерство оборони України</p>
                                         </div>
                                         <button onClick={() => setShowDefenseModal(false)} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО</button>
@@ -602,6 +600,7 @@
 
                     {view === 'receipt_old' && (
                         <div className="doc-overlay bg-white">
+                            <Header title="Квитанція №324368" />
                             <div className="nr-card m-6 shadow-xl">
                                 <div className="nr-header">Ощадбанк</div>
                                 <div className="nr-sub">Мій банк. Моя країна</div>
@@ -626,6 +625,7 @@
 
                     {view === 'receipt_new' && (
                         <div className="doc-overlay bg-white">
+                            <Header title="Квитанція №324368" />
                             <div className="nr-card m-6 shadow-xl">
                                 <div className="nr-header">Ощадбанк</div>
                                 <div className="nr-sub">Мій банк. Моя країна</div>
