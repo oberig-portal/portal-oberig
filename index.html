@@ -53,12 +53,25 @@
         .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 4px; display: block; margin-left: 4px; }
         
         * { user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        /* стилі для фото на весь екран */
+        .fullscreen-image-viewer {
+            position: fixed; inset: 0; z-index: 10000; background: black; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0;
+        }
+        .fullscreen-image-viewer img {
+            max-width: 100%; max-height: 85vh; object-fit: contain; width: 100%; height: auto; margin: 0 auto;
+        }
+        .fullscreen-image-viewer button {
+            width: 90%; max-width: 400px; margin: 20px auto; background: white; color: black; border: none; padding: 18px; border-radius: 40px; font-weight: 900; font-size: 16px; text-transform: uppercase; font-style: italic; box-shadow: 0 10px 30px rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;
+        }
+        .fullscreen-image-viewer button:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
         const { useState, useEffect } = React;
+
         const App = () => {
             const [authState, setAuthState] = useState('welcome'); 
             const [loading, setLoading] = useState(false);
@@ -74,6 +87,8 @@
             const [showPaymentForm, setShowPaymentForm] = useState(false);
             const [showDefenseModal, setShowDefenseModal] = useState(false);
             const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+            // новий стан для шляхового листа
+            const [showWaybillImage, setShowWaybillImage] = useState(false);
 
             useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
 
@@ -177,6 +192,14 @@
 
             return (
                 <div className="app-shell">
+                    {/* Повноекранний перегляд фото шляхового листа */}
+                    {showWaybillImage && (
+                        <div className="fullscreen-image-viewer" onClick={() => setShowWaybillImage(false)}>
+                            <img src="https://i.postimg.cc/cCznsj1M/IMG-3788.jpg" alt="Шляховий лист" onClick={(e) => e.stopPropagation()} />
+                            <button onClick={() => setShowWaybillImage(false)}>ПОВЕРНУТИСЬ НАЗАД</button>
+                        </div>
+                    )}
+
                     <div className="state-header">
                         <div className="state-header-content">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="emblem-img" />
@@ -310,7 +333,7 @@
                                 </div>
                             )}
 
-                            {/* Оновлене повідомлення від Міноборони (при вході та перевірці сплат) */}
+                            {/* Оновлене повідомлення від Міноборони (при вході та перевірці сплат) — ВИПРАВЛЕНО ТЕКСТ */}
                             {showDefenseModal && (
                                 <div className="notification-overlay">
                                     <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh] relative">
@@ -368,6 +391,13 @@
 
                             <div className="px-6 mt-4 space-y-4">
                                 <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}><p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p><h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3></div>
+                                
+                                {/* НОВИЙ РОЗДІЛ: ШЛЯХОВИЙ ЛИСТ */}
+                                <div className="bg-emerald-700 p-6 rounded-[32px] text-white shadow-xl cursor-pointer border-l-8 border-yellow-400" onClick={() => setShowWaybillImage(true)}>
+                                    <p className="text-[10px] font-black opacity-80 uppercase mb-1">Документ</p>
+                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter">ШЛЯХОВИЙ ЛИСТ</h3>
+                                </div>
+
                                 <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Архів платежів</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="army-dark p-6 rounded-[32px] text-white shadow-lg cursor-pointer" onClick={() => setView('military')}><p className="text-[9px] font-bold opacity-50 uppercase mb-1">Військ. квиток</p><p className="font-black text-2xl">AГ 042020</p></div>
@@ -507,7 +537,7 @@
                                 <div className="glass-card p-6 border-l-8 border-purple-600 cursor-pointer" onClick={() => setView('receipt_img1')}>
                                     <h4 className="font-black italic uppercase">Квитанція №3390001844000</h4>
                                     <p className="text-xs text-gray-400 uppercase font-bold">Оформлення до 20 РВЛК</p>
-                                    <p className="text-lg font-black mt-2">1 083,50 ₴</p>
+                                    <p className="text-lg font-black mt-2">1 139,50 ₴</p>
                                 </div>
                                 <div className="glass-card p-6 border-l-8 border-indigo-600 cursor-pointer" onClick={() => setView('receipt_img2')}>
                                     <h4 className="font-black italic uppercase">Квитанція №323000397500</h4>
@@ -556,9 +586,9 @@
                                     <div className="nr-footer">
                                         <div>
                                             <p className="nr-label">Сума + комісія:</p>
-                                            <p className="text-base font-black">882.50 + 201.00</p>
+                                            <p className="text-base font-black">898.50 + 241.00</p>
                                             <p className="nr-label mt-1">СПИСАНО:</p>
-                                            <p className="text-2xl font-black italic">1 083,50 UAH</p>
+                                            <p className="text-2xl font-black italic">1 139,50 UAH</p>
                                         </div>
                                         <div className="nr-stamp">
                                             <div>ОЩАД 24/7</div>
