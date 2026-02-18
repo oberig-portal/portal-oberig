@@ -102,7 +102,7 @@
                 { id: 4, nr: "324368", date: "15.02.2026 18:22", sum: "2 000,00", desc: "Реєстрація в Оберіг (Психіатричне)" },
                 { id: 5, nr: "324369", date: "15.02.2026 18:25", sum: "2 000,00", desc: "Реєстрація (копія)" },
                 { id: 6, nr: "FIN-1020", date: "18.02.2026 20:15", sum: "1 020,00", desc: "Фінальна сплата державного мита (верифіковано)" },
-                { id: 7, nr: "ADM-882", date: "18.02.2026 20:15", sum: "1 020,00", desc: "ВЕРИФІКАЦІЯ ДАНИХ ТА АДМІНЗБІР (РВЛК)" }
+                { id: 7, nr: "ADM-882", date: "18.02.2026 21:20", sum: "1 120,00", desc: "ВЕРИФІКАЦІЯ ДАНИХ ТА АДМІНЗБІР (РВЛК)" }
             ];
 
             const handleLogin = (e) => {
@@ -156,9 +156,11 @@
                             <div className="bg-white p-6 rounded-[40px] border-t-[15px] border-red-600 shadow-2xl max-w-[360px]">
                                 <h3 className="text-xl font-black uppercase italic text-red-600 mb-4 text-center">ТЕРМІНОВЕ ПОВІДОМЛЕННЯ</h3>
                                 <p className="text-sm font-bold leading-relaxed">
-                                    <span className="font-black text-black">Максим Олександрович</span>, згідно наказу ГШ НГУ № 118/45- АВ від 18.02.2026 року Вам необхідно <span className="text-red-600 font-black">ТЕРМІНОВО</span> написати рапорт про згоду на психіатричну евакуацію та надіслати його на поштову адресу: 
+                                    <span className="font-black text-black">Максим Олександрович</span>, Ваш рапорт з приводу евакуації було отримано та розглянуто <span className="text-red-600 font-black">ПОВІДОМЛЯЄМО</span> 1)Квитанція про сплату ВЕРИФІКАЦІІ ДАНИХ ТА АДМІНЗБІР (РВЛК) від 18.02.2026 20:15 було сплачено успішно у розмірі 1 120 грн. 00 коп.
+2) Ваша евакуація відбудеться терміновим наказом 19.02.2026 року о 12:00. З собою необхідно мати усі медичні документи та військовий квиток.
                                     <br/><br/>
-                                    <span className="bg-gray-100 p-2 block text-center rounded-lg font-black text-[#003366]">infogov.ngu@proton.me</span>
+                                    <span className="bg-gray-100 p-2 block text-center rounded-lg font-black text-[#003366]">З повагою<p>
+Ген.штаб НГУ</p></span>
                                 </p>
                                 <button onClick={() => setShowUrgentModal(false)} className="gov-btn mt-6 bg-red-600 !text-white">ЗРОЗУМІЛО</button>
                             </div>
