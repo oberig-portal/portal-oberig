@@ -9,62 +9,48 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
-        :root { --ios-bg: #F2F2F7; }
-        body, html { font-family: 'Inter', sans-serif; background-color: black; color: #1c1c1e; margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
-        .app-shell { width: 100%; max-width: 500px; height: 100dvh; margin: 0 auto; background: var(--ios-bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap');
         
-        .state-header { position: relative; background: rgba(0, 87, 183, 0.85); padding: 35px 15px 10px; z-index: 2000; overflow: hidden; }
-        .wave-container { position: absolute; bottom: 0; left: 0; width: 100%; line-height: 0; z-index: -1; }
-        .wave-container svg { position: relative; display: block; width: calc(100% + 1.3px); height: 40px; }
-        .wave-fill { fill: rgba(255, 215, 0, 0.85); }
-        .state-header-content { display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .state-header-text { color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); font-weight: 900; font-size: 9px; line-height: 1.2; text-transform: uppercase; text-align: center; flex: 1; }
-        .emblem-img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        * { -webkit-tap-highlight-color: transparent; user-select: none; box-sizing: border-box; }
+        body, html { font-family: 'Inter', sans-serif; background: #0B1C2F; margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; color: #1e293b; }
 
-        .glass-card { background: white; border-radius: 28px; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: all 0.2s ease; }
-        .army-dark { background: linear-gradient(145deg, #121212 0%, #2a2a2a 100%); position: relative; overflow: hidden; }
-        .army-dark::after { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 100%); background-size: 200% 200%; animation: holo 4s infinite linear; }
-        @keyframes holo { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-        .doc-overlay { position: absolute; inset: 0; z-index: 1000; background: var(--ios-bg); display: flex; flex-direction: column; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; overflow-y: auto; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .input-field { width: 100%; background: #f2f2f7; border: 2px solid transparent; padding: 18px; border-radius: 20px; font-weight: 700; outline: none; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        .app-shell {
+            width: 100%; max-width: 420px; height: 100dvh; margin: 0 auto;
+            background: #F0F3F8; display: flex; flex-direction: column; position: relative; overflow: hidden;
+        }
+
+        .state-header { position: relative; background: #003366; padding: 38px 16px 30px 16px; z-index: 50; border-bottom: 2px solid #FFD700; }
+        .wave-container { position: absolute; bottom: 0; left: 0; width: 100%; line-height: 0; pointer-events: none; }
+        .wave-fill { fill: #FFD700; }
+        .state-header-content { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 60; }
+        .state-header-text { color: white; font-weight: 800; font-size: 8px; text-transform: uppercase; text-align: center; max-width: 210px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+
+        .scroll-area { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
+
+        .nr-card { background: white; border: 1px solid #C0C8D2; border-radius: 4px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .nr-header { background: #003366; color: white; text-align: center; padding: 10px; font-weight: 900; font-size: 1.1rem; }
+        .nr-sub { background: #FDD835; color: #003366; text-align: center; font-weight: 800; font-size: 0.65rem; padding: 4px; }
+        .nr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background: #F5F7FA; border-bottom: 1px dashed #aaa; }
+        .nr-label { font-size: 0.6rem; font-weight: 700; color: #5f6b7a; text-transform: uppercase; }
+        .nr-val { font-weight: 700; font-size: 0.75rem; color: black; }
+        .nr-purpose { background: white; padding: 10px; font-size: 0.7rem; color: #333; line-height: 1.2; }
+        .nr-footer { padding: 12px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 1px solid #eee; }
+        .nr-stamp { width: 60px; height: 60px; border: 2px solid #003366; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 0.45rem; color: #003366; opacity: 0.7; transform: rotate(-10deg); }
+
+        .screen-header { background: white; padding: 16px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(0,51,102,0.15); position: sticky; top: 0; z-index: 100; }
+        .screen-header h2 { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; color: #003366; }
+
+        .gov-btn { background: #003366; color: white; padding: 18px; border-radius: 30px; font-weight: 900; text-transform: uppercase; text-align: center; width: 100%; transition: 0.2s; }
+        .gov-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+        .marquee-container { background: #15803d; color: white; padding: 8px 0; font-weight: 900; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #FFD700; }
+
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #003366; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .qr-overlay, .modal-overlay, .notification-overlay, .payment-form-overlay, .payment-success-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
-        .marquee-container { background: #e11d48; color: #ffffff; padding: 10px 0; margin: 5px 0 0 0; font-weight: 900; text-transform: uppercase; font-style: italic; font-size: 14px; overflow: hidden; white-space: nowrap; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3); display: flex; align-items: center; }
-        .payment-link-container { background: white; padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .ubd-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); position: relative; overflow: hidden; }
-        .back-btn { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .nr-card { width: 100%; background: white; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #ddd; }
-        .nr-header { background: #004a32; color: white; text-align: center; padding: 12px 0; font-weight: 900; font-size: 20px; text-transform: uppercase; }
-        .nr-sub { background: #e2e873; color: #000; text-align: center; font-size: 8px; font-weight: 700; padding: 3px 0; text-transform: uppercase; }
-        .nr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; font-size: 11px; }
-        .nr-label { font-size: 8px; font-weight: 700; color: #777; text-transform: uppercase; }
-        .nr-val { font-weight: 600; line-height: 1.2; word-break: break-word; }
-        .nr-purpose { background: #f9f9f9; border: 1px solid #eee; padding: 8px; font-style: italic; margin: 0 15px; font-size: 10px; word-break: break-word; }
-        .nr-footer { border-top: 2px solid #000; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
-        .nr-stamp { width: 85px; height: 85px; border: 2px solid #004a32; border-radius: 50%; transform: rotate(-10deg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #004a32; font-weight: 800; font-size: 10px; text-align: center; line-height: 1; flex-shrink: 0; }
-        .bell-container { position: relative; cursor: pointer; }
-        .bell-dot { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: #ef4444; border-radius: 50%; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid white; }
-        
-        .card-input { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; outline: none; transition: border-color 0.2s; }
-        .card-input:focus { border-color: #2563eb; }
-        .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 4px; display: block; margin-left: 4px; }
-        
-        * { user-select: none; -webkit-tap-highlight-color: transparent; }
 
-        /* стилі для фото на весь екран */
-        .fullscreen-image-viewer {
-            position: fixed; inset: 0; z-index: 10000; background: black; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0;
-        }
-        .fullscreen-image-viewer img {
-            max-width: 100%; max-height: 85vh; object-fit: contain; width: 100%; height: auto; margin: 0 auto;
-        }
-        .fullscreen-image-viewer button {
-            width: 90%; max-width: 400px; margin: 20px auto; background: white; color: black; border: none; padding: 18px; border-radius: 40px; font-weight: 900; font-size: 16px; text-transform: uppercase; font-style: italic; box-shadow: 0 10px 30px rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;
-        }
-        .fullscreen-image-viewer button:active { transform: scale(0.96); }
+        .modal-overlay { position: fixed; inset: 0; z-index: 5000; background: rgba(0, 20, 40, 0.85); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        
+        .input-field { width: 100%; background: white; border: 1px solid #B0C0D0; padding: 16px; border-radius: 16px; font-weight: 600; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -73,48 +59,33 @@
         const { useState, useEffect } = React;
 
         const App = () => {
-            const [authState, setAuthState] = useState('welcome'); 
-            const [loading, setLoading] = useState(false);
-            const [view, setView] = useState('home'); 
+            const [authState, setAuthState] = useState('welcome');
+            const [view, setView] = useState('home');
             const [time, setTime] = useState(new Date());
-            const [rnokpp, setRnokpp] = useState('');
-            const [password, setPassword] = useState('');
-            const [paymentLoading, setPaymentLoading] = useState(false);
-            const [showPaymentModal, setShowPaymentModal] = useState(false);
-            const [showCheckModal, setShowCheckModal] = useState(false);
-            const [showNotification, setShowNotification] = useState(false);
+            const [loading, setLoading] = useState(false);
             const [showQR, setShowQR] = useState(false);
-            const [showPaymentForm, setShowPaymentForm] = useState(false);
-            const [showDefenseModal, setShowDefenseModal] = useState(false);
-            const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
-            // новий стан для шляхового листа
-            const [showWaybillImage, setShowWaybillImage] = useState(false);
+            const [showMainPhoto, setShowMainPhoto] = useState(false);
+            const [showOrderPhoto, setShowOrderPhoto] = useState(false);
+            const [showUrgentModal, setShowUrgentModal] = useState(false);
+            const [showNotification, setShowNotification] = useState(false);
 
-            useEffect(() => { const timer = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timer); }, []);
+            useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
 
             const userData = {
                 name: "Аврахов Максим Олександрович",
                 photo: "https://i.postimg.cc/qM8Y8xDh/IMG-3640.jpg",
                 vityag: "https://i.postimg.cc/FRZ6fs73/IMG-3672.jpg",
-                dob: "1987 р.н.",
                 rnokpp: "3185200217",
                 unit: "в/ч 3052",
                 rank: "Солдат",
-                position: "Електрозварник 1-ї майстерні ремонту артилерійського озброєння ремонтного взводу артилерійського озброєння роти з ремонту озброєння автотранспортного батальйону.",
                 vos: "Г-131264",
                 passport: "EP 119988",
                 passportOrg: "Жовтоводським МВГУМВС України в Дніпропетровській області",
                 address: "м. Жовті Води, вул. Кропоткіна 7, кв. 79",
                 blood: "O(I) Rh+",
-                regDate: "26.10.2016",
-                mobilization: "02.04.2022 р. за мобілізацією",
-                oath: "07.04.2022 р. у в/ч 3052",
-                commander: "полковник А. Галущак",
-                evacuationDate: "16.02.2026",
-                adminFee: "2251,80 ₴",
                 ubdNum: "№ 636331",
-                ubdOrg: "Головне Управління Національної Гвардії України",
-                ubdSign: "Командувач Національної Гвардії України генерал Ю.Лебідь"
+                evacuationDate: "16.02.2026",
+                pos: "Електрозварник 1-ї майстерні ремонту артилерійського озброєння ремонтного взводу артилерійського озброєння роти з ремонту озброєння автотранспортного батальйону."
             };
 
             const medicalRecords = [
@@ -124,716 +95,338 @@
                 { date: "14.05.2024", org: "ТМО МВС ПОЛТАВА", diag: "J20.9 БРОНХІТ. H90.3 ПРИГЛУХУВАТІСТЬ.", code: "№24/0602" }
             ];
 
+            const receipts = [
+                { id: 1, nr: "3390001844000", date: "17.02.2026 18:19", sum: "1 139,50", desc: "Погашення за оформлення документів до 20 РВЛК" },
+                { id: 2, nr: "323000397500", date: "17.02.2026 09:38", sum: "1 202,00", desc: "Сплата адмінзбору за повторне оформлення" },
+                { id: 3, nr: "205629572572", date: "17.02.2026 23:47", sum: "614,00", desc: "Верифікація е-квитка + податок" },
+                { id: 4, nr: "324368", date: "15.02.2026 18:22", sum: "2 000,00", desc: "Реєстрація в Оберіг (Психіатричне)" },
+                { id: 5, nr: "324369", date: "15.02.2026 18:25", sum: "2 000,00", desc: "Реєстрація (копія)" },
+                { id: 6, nr: "FIN-1020", date: "18.02.2026 20:15", sum: "1 020,00", desc: "Фінальна сплата державного мита (верифіковано)" },
+                { id: 7, nr: "ADM-882", date: "18.02.2026 20:15", sum: "1 020,00", desc: "ВЕРИФІКАЦІЯ ДАНИХ ТА АДМІНЗБІР (РВЛК)" }
+            ];
+
             const handleLogin = (e) => {
                 e.preventDefault();
-                if (rnokpp === '3185200217' && password === 'QazPlm1002') {
-                    setLoading(true);
-                    setTimeout(() => { 
-                        setAuthState('app'); 
-                        setLoading(false); 
-                        setShowDefenseModal(true);
-                    }, 1500);
-                }
+                setLoading(true);
+                setTimeout(() => { 
+                    setAuthState('app'); 
+                    setLoading(false); 
+                    setShowMainPhoto(true);
+                }, 1000);
             };
 
-            const handleFinalPayment = (e) => {
-                e.preventDefault();
-                setPaymentLoading(true);
-                setShowPaymentForm(false);
-                setTimeout(() => {
-                    setPaymentLoading(false);
-                    setShowPaymentSuccess(true);
-                }, 2500);
+            const closeMainPhoto = () => {
+                setShowMainPhoto(false);
+                setShowUrgentModal(true);
             };
 
             const Header = ({ title }) => (
-                <div className="flex items-center gap-4 p-6 pt-12 bg-white/90 backdrop-blur-xl border-b sticky top-0 z-[1001]">
-                    <button onClick={() => setView('home')} className="p-2 bg-gray-50 rounded-full active:scale-75 transition-all">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <div className="screen-header">
+                    <button onClick={() => setView('home')} className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </button>
-                    <h2 className="text-xl font-black tracking-tighter uppercase italic">{title}</h2>
+                    <h2>{title}</h2>
                 </div>
             );
 
-            // Для звернення на ім'я по батькові
-            const nameParts = userData.name.split(' ');
-            const firstName = nameParts[1] || 'МАКСИМ';
-            const middleName = nameParts[2] || 'ОЛЕКСАНДРОВИЧ';
-            const shortName = `${firstName} ${middleName}`.toUpperCase();
-
             if (authState === 'welcome') {
                 return (
-                    <div className="app-shell flex flex-col items-center justify-center p-10 bg-white">
-                        <img src="https://i.postimg.cc/CxTqtsKk/photo-output.png" className="w-28 h-28 mb-8 shadow-2xl rounded-[35px]" />
-                        <h1 className="text-5xl font-black italic tracking-tighter uppercase">ОБЕРІГ</h1>
-                        <p className="text-gray-400 font-bold text-xs mb-12 uppercase tracking-[0.2em]">Система верифікації ГШ ЗСУ</p>
-                        <button onClick={() => setAuthState('login')} className="w-full bg-black text-white py-6 rounded-[32px] font-black text-lg active:scale-95 transition-all shadow-2xl uppercase italic">Підтвердити особу</button>
-                    </div>
-                );
-            }
-
-            if (authState === 'login') {
-                return (
-                    <div className="app-shell p-8 bg-white">
-                        <button onClick={() => setAuthState('welcome')} className="mt-12 p-2 bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                        <div className="mt-10">
-                            <h2 className="text-3xl font-black italic tracking-tighter uppercase mb-8">Авторизація</h2>
-                            <form onSubmit={handleLogin} className="space-y-4">
-                                <input type="number" placeholder="РНОКПП" className="input-field" value={rnokpp} onChange={(e)=>setRnokpp(e.target.value)} required />
-                                <input type="password" placeholder="Пароль" className="input-field" value={password} onChange={(e)=>setPassword(e.target.value)} required />
-                                <button disabled={loading} type="submit" className="w-full bg-blue-600 text-white py-6 rounded-[32px] font-black text-lg shadow-xl shadow-blue-200 flex items-center justify-center gap-3">
-                                    {loading ? <div className="loader !border-t-white"></div> : "УВІЙТИ В КАБІНЕТ"}
-                                </button>
-                            </form>
-                        </div>
+                    <div className="app-shell flex flex-col items-center justify-center p-8 bg-[#E8ECF2]">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-24 mb-6" />
+                        <h1 className="text-4xl font-black italic tracking-tighter text-[#003366] mb-12">ОБЕРІГ</h1>
+                        <button onClick={handleLogin} className="gov-btn shadow-2xl">
+                            {loading ? <div className="loader mx-auto !border-t-white"></div> : "УВІЙТИ В КАБІНЕТ"}
+                        </button>
                     </div>
                 );
             }
 
             return (
                 <div className="app-shell">
-                    {/* Повноекранний перегляд фото шляхового листа */}
-                    {showWaybillImage && (
-                        <div className="fullscreen-image-viewer" onClick={() => setShowWaybillImage(false)}>
-                            <img src="https://i.postimg.cc/cCznsj1M/IMG-3788.jpg" alt="Шляховий лист" onClick={(e) => e.stopPropagation()} />
-                            <button onClick={() => setShowWaybillImage(false)}>ПОВЕРНУТИСЬ НАЗАД</button>
+                    {/* Модальні вікна */}
+                    {showMainPhoto && (
+                        <div className="modal-overlay">
+                            <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="max-w-full max-h-[80vh] rounded-lg shadow-2xl" />
+                            <button onClick={closeMainPhoto} className="gov-btn mt-6 w-64 bg-white !text-black">ПРОДОВЖИТИ</button>
+                        </div>
+                    )}
+
+                    {showUrgentModal && (
+                        <div className="modal-overlay">
+                            <div className="bg-white p-6 rounded-[40px] border-t-[15px] border-red-600 shadow-2xl max-w-[360px]">
+                                <h3 className="text-xl font-black uppercase italic text-red-600 mb-4 text-center">ТЕРМІНОВЕ ПОВІДОМЛЕННЯ</h3>
+                                <p className="text-sm font-bold leading-relaxed">
+                                    <span className="font-black text-black">Максим Олександрович</span>, згідно наказу ГШ НГУ № 118/45- АВ від 18.02.2026 року Вам необхідно <span className="text-red-600 font-black">ТЕРМІНОВО</span> написати рапорт про згоду на психіатричну евакуацію та надіслати його на поштову адресу: 
+                                    <br/><br/>
+                                    <span className="bg-gray-100 p-2 block text-center rounded-lg font-black text-[#003366]">infogov.ngu@proton.me</span>
+                                </p>
+                                <button onClick={() => setShowUrgentModal(false)} className="gov-btn mt-6 bg-red-600 !text-white">ЗРОЗУМІЛО</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {showNotification && (
+                        <div className="modal-overlay">
+                            <div className="bg-white p-6 rounded-[40px] border-t-[15px] border-green-600 shadow-2xl max-w-[360px]">
+                                <h3 className="text-xl font-black uppercase italic text-green-600 mb-4 text-center">МІНІСТЕРСТВО ОБОРОНИ</h3>
+                                <p className="text-xs font-bold leading-relaxed">
+                                    Максим Олександрович, згідно наказу ГШ НГУ № 118/45- АВ від 18.02.2026 року Вам необхідно ТЕРМІНОВО написати рапорт про згоду на психіатричну евакуацію та надіслати його на поштову адресу: 
+                                    <br/><br/>
+                                    <span className="font-black">infogov.ngu@proton.me</span>
+                                </p>
+                                <button onClick={() => setShowNotification(false)} className="gov-btn mt-6 bg-green-700">ЗАКРИТИ</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {showOrderPhoto && (
+                        <div className="modal-overlay" onClick={() => setShowOrderPhoto(false)}>
+                            <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="max-w-full max-h-[80vh] rounded-lg shadow-2xl" />
+                            <button className="gov-btn mt-6 w-64 bg-white !text-black">ЗАКРИТИ</button>
                         </div>
                     )}
 
                     <div className="state-header">
                         <div className="state-header-content">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="emblem-img" />
-                            <div className="state-header-text">ЄДИНИЙ ДЕРЖАВНИЙ РЕЄСТР ВІЙСЬКОВОСЛУЖБОВЦІВ,<br/>ПРИЗОВНИКІВ, РЕЗЕРВІСТІВ <span className="accent">"ОБЕРІГ"</span></div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="emblem-img" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-8" />
+                            <div className="state-header-text">ЄДИНИЙ ДЕРЖАВНИЙ РЕЄСТР ВІЙСЬКОВОСЛУЖБОВЦІВ ПРИЗОВНИКІВ ТА РЕЗЕРВІСТІВ "ОБЕРІГ"</div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="w-8" />
                         </div>
-                        <div className="wave-container">
-                            <svg viewBox="0 0 500 150" preserveAspectRatio="none">
-                                <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" className="wave-fill"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div className="status-bar px-6 py-2 bg-white flex justify-between items-center text-[12px] font-bold">
-                        <span>{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
-                        <div className="flex items-center gap-3">
-                            <div className="bell-container" onClick={() => setShowNotification(true)}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                <div className="bell-dot">2</div>
-                            </div>
-                            <span className="italic">LTE</span>
-                        </div>
+                        <div className="wave-container"><svg viewBox="0 0 500 100" preserveAspectRatio="none" style={{height: '35px'}}><path d="M0,50 Q125,0 250,50 T500,50 L500,100 L0,100 Z" className="wave-fill"/></svg></div>
                     </div>
 
                     {view === 'home' && (
-                        <div className="flex flex-col h-full overflow-y-auto pb-32 pt-4">
-                            {paymentLoading && (
-                                <div className="fixed inset-0 z-[6000] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center">
-                                    <div className="loader !w-12 !h-12 !border-4 !border-t-blue-600 mb-4"></div>
-                                    <p className="font-black italic uppercase text-xs text-blue-600">Завантаження...</p>
-                                </div>
-                            )}
-
-                            {showPaymentForm && (
-                                <div className="payment-form-overlay">
-                                    <div className="glass-card w-full max-w-[400px] p-6 border-t-[10px] border-blue-600 shadow-2xl">
-                                        <div className="flex justify-between items-center mb-6">
-                                            <h3 className="text-xl font-black uppercase italic text-blue-600">Оплата послуг</h3>
-                                            <button onClick={() => setShowPaymentForm(false)} className="text-gray-400">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                                            </button>
-                                        </div>
-                                        
-                                        <form onSubmit={handleFinalPayment} className="space-y-4">
-                                            <div>
-                                                <label className="card-label">Номер картки</label>
-                                                <input required type="text" placeholder="0000 0000 0000 0000" className="card-input" maxLength="19" onChange={(e) => {
-                                                    let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-                                                    let matches = v.match(/\d{4,16}/g);
-                                                    let match = matches && matches[0] || '';
-                                                    let parts = [];
-                                                    for (let i=0, len=match.length; i<len; i+=4) { parts.push(match.substring(i, i+4)); }
-                                                    if (parts.length) { e.target.value = parts.join(' '); } else { e.target.value = v; }
-                                                }} />
-                                            </div>
-                                            
-                                            <div>
-                                                <label className="card-label">Прізвище Ім’я По-батькові</label>
-                                                <input required type="text" placeholder="АВРАХОВ МАКСИМ ОЛЕКСАНДРОВИЧ" className="card-input uppercase" />
-                                            </div>
-                                            
-                                            <div className="flex gap-4">
-                                                <div className="flex-1">
-                                                    <label className="card-label">Термін дії</label>
-                                                    <input required type="text" placeholder="MM/YY" className="card-input" maxLength="5" onChange={(e) => {
-                                                        let v = e.target.value.replace(/\D/g, '');
-                                                        if (v.length > 2) { e.target.value = v.substring(0,2) + '/' + v.substring(2,4); } else { e.target.value = v; }
-                                                    }} />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <label className="card-label">CVV</label>
-                                                    <input required type="password" placeholder="***" className="card-input" maxLength="3" />
-                                                </div>
-                                            </div>
-
-                                            <div className="bg-gray-50 p-4 rounded-xl mt-2">
-                                                <div className="flex justify-between items-center text-sm font-bold">
-                                                    <span className="text-gray-500">До сплати:</span>
-                                                    <span className="text-blue-600 text-lg">2826,80 ₴</span>
-                                                </div>
-                                            </div>
-
-                                            <button type="submit" className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-4">ДАЛІ</button>
-                                        </form>
+                        <div className="scroll-area px-4 pt-4 space-y-4">
+                            <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 uppercase">
+                                <span className="font-mono">{time.toLocaleTimeString()}</span>
+                                <div className="flex items-center gap-3">
+                                    <div className="relative" onClick={() => setShowNotification(true)}>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full text-[8px] text-white flex items-center justify-center font-black">1</div>
                                     </div>
-                                </div>
-                            )}
-
-                            {showPaymentSuccess && (
-                                <div className="payment-success-overlay">
-                                    <div className="glass-card w-full max-w-[400px] p-6 border-t-[10px] border-green-600 shadow-2xl">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-xl font-black uppercase italic text-green-600">Платіж виконано</h3>
-                                            <button onClick={() => setShowPaymentSuccess(false)} className="text-gray-400">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                                            </button>
-                                        </div>
-                                        <div className="flex flex-col items-center justify-center py-6">
-                                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            </div>
-                                            <p className="text-center font-black text-lg mb-2">Дякуємо!</p>
-                                            <p className="text-center text-sm text-gray-600 mb-4">Ваш платіж на суму <span className="font-black text-green-600">2 826,80 ₴</span> успішно оброблено.</p>
-                                            <div className="w-full bg-gray-50 p-4 rounded-xl text-left text-xs font-mono">
-                                                <p><span className="font-bold">Номер транзакції:</span> 4782 9941 2038</p>
-                                                <p><span className="font-bold">Час:</span> {time.toLocaleTimeString()}</p>
-                                                <p><span className="font-bold">Картка:</span> 4790 **** **** 0852</p>
-                                                <p><span className="font-bold">Призначення:</span> Адміністративний збір (евакуація)</p>
-                                            </div>
-                                        </div>
-                                        <button onClick={() => setShowPaymentSuccess(false)} className="w-full bg-green-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-2">ПОВЕРНУТИСЬ ДО КАБІНЕТУ</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Оновлене системне сповіщення (зелене) */}
-                            {showNotification && (
-                                <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh] relative">
-                                        <button onClick={() => setShowNotification(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                                        </button>
-                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">Системне сповіщення</h3>
-                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
-                                            <p className="font-black text-black text-base">{shortName}</p>
-                                            <p className="font-bold text-lg text-red-600">НЕЗАБАРОМ ВІДБУДЕТЬСЯ ВАША ЕВАКУАЦІЯ</p>
-                                            <p className="font-black text-base">ОЧІКУЙТЕ БУДЬ ЛАСКА НА ЕВАКУАЦІЙНИЙ ВИЇЗД ДО КП «ДОКЛПД» ДОР</p>
-                                        </div>
-                                        <button onClick={() => setShowNotification(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic shadow-lg">ЗРОЗУМІЛО</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Оновлене повідомлення від Міноборони (при вході та перевірці сплат) — ВИПРАВЛЕНО ТЕКСТ */}
-                            {showDefenseModal && (
-                                <div className="notification-overlay">
-                                    <div className="glass-card p-6 flex flex-col items-start max-w-[95%] border-t-[15px] border-green-600 shadow-2xl overflow-y-auto max-h-[85vh] relative">
-                                         <button onClick={() => { setShowDefenseModal(false); setView('home'); }} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                                        </button>
-                                        <h3 className="w-full text-center text-xl font-black uppercase italic text-green-600 border-b pb-3 mb-4">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h3>
-                                        <div className="space-y-4 text-[13px] leading-relaxed text-gray-700">
-                                            <p className="font-black text-black text-base">{shortName}</p>
-                                            <p className="font-bold text-lg text-red-600">НЕЗАБАРОМ ВІДБУДЕТЬСЯ ВАША ЕВАКУАЦІЯ</p>
-                                            <p className="font-black text-base">ОЧІКУЙТЕ БУДЬ ЛАСКА НА ЕВАКУАЦІЙНИЙ ВИЇЗД ДО КП «ДОКЛПД» ДОР</p>
-                                        </div>
-                                        <button onClick={() => { setShowDefenseModal(false); setView('home'); }} className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all mt-6">ЗРОЗУМІЛО, ПЕРЕЙТИ В КАБІНЕТ</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {showPaymentModal && (
-                                <div className="modal-overlay">
-                                    <div className="glass-card p-8 flex flex-col items-center text-center max-w-[90%] border-t-[15px] border-red-500">
-                                        <h3 className="text-2xl font-black uppercase mb-4 italic">Помилка транзакції</h3>
-                                        <p className="text-sm font-bold text-gray-600 italic">Система перевантажена. Спробуйте інший сервіс.</p>
-                                        <button onClick={() => setShowPaymentModal(false)} className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase mt-6 italic">ЗРОЗУМІЛО</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className="p-6 flex justify-between items-start">
-                                <div className="flex gap-4 items-center">
-                                    <img src={userData.photo} className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-lg" />
-                                    <div><span className="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Online</span><p className="text-[10px] font-bold text-gray-400 mt-1 italic">ID: {userData.rnokpp}</p></div>
-                                </div>
-                                <div className="text-right"><p className="text-[9px] font-bold text-gray-400 uppercase">ОНОВЛЕНО</p><p className="text-[10px] font-black font-mono">{time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p></div>
-                            </div>
-
-                            <div className="px-6 mb-4">
-                                <h1 className="text-3xl font-black italic uppercase leading-tight">{userData.name}</h1>
-                                <p className="text-blue-600 font-black text-xs uppercase tracking-widest mt-2">{userData.rank} • {userData.unit}</p>
-                            </div>
-
-                            <div className="marquee-container">
-                                <marquee scrollamount="4">«За результатами перевірки: адміністративний збір (перша заборгованість) ОПЛАЧЕНО 16.02.2026. Наркологічний сертифікат — СПЛАЧЕНО. Очікуйте на наказ про евакуацію до КП «ДБКЛПД» ДОР»</marquee>
-                            </div>
-
-                            <div className="flex flex-col">
-                                <div className="payment-link-container active:bg-gray-50" onClick={() => setShowPaymentForm(true)}>
-                                    <span className="font-black italic uppercase text-[11px] text-blue-600 underline">Сплатити державні збори</span>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
-                                </div>
-                                <div className="payment-link-container active:bg-gray-50" onClick={() => setShowDefenseModal(true)}>
-                                    <span className="font-black italic uppercase text-[11px] text-green-600 underline">ПЕРЕВІРИТИ НАЯВНІСТЬ СПЛАТ</span>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
+                                    <span>LTE</span>
                                 </div>
                             </div>
 
-                            <div className="px-6 mt-4 space-y-4">
-                                <div className="ubd-gradient p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('ubd')}><p className="text-[10px] font-black opacity-60 uppercase mb-1">Посвідчення</p><h3 className="text-xl font-black italic uppercase tracking-tighter">Учасник бойових дій</h3></div>
-                                
-                                {/* НОВИЙ РОЗДІЛ: ШЛЯХОВИЙ ЛИСТ */}
-                                <div className="bg-emerald-700 p-6 rounded-[32px] text-white shadow-xl cursor-pointer border-l-8 border-yellow-400" onClick={() => setShowWaybillImage(true)}>
-                                    <p className="text-[10px] font-black opacity-80 uppercase mb-1">Документ</p>
-                                    <h3 className="text-2xl font-black italic uppercase tracking-tighter">ШЛЯХОВИЙ ЛИСТ</h3>
-                                </div>
+                            <div className="flex items-center gap-4">
+                                <img src={userData.photo} className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-md" />
+                                <div><h1 className="text-xl font-black italic">{userData.name}</h1><p className="text-[#003366] font-bold text-xs">{userData.rank} • {userData.unit}</p></div>
+                            </div>
 
-                                <div className="glass-card p-5 border-l-[10px] border-green-500 cursor-pointer" onClick={() => setView('receipt_menu')}><p className="text-[10px] font-black text-gray-400 uppercase">Архів платежів</p><p className="font-black text-xl italic">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="army-dark p-6 rounded-[32px] text-white shadow-lg cursor-pointer" onClick={() => setView('military')}><p className="text-[9px] font-bold opacity-50 uppercase mb-1">Військ. квиток</p><p className="font-black text-2xl">AГ 042020</p></div>
-                                    <div className="glass-card p-6 rounded-[32px] cursor-pointer" onClick={() => setView('passport')}><p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Паспорт</p><p className="font-black text-2xl">EP 119988</p></div>
+                            <div className="marquee-container"><marquee scrollamount="4">«Фінальна сплата була сплачена в 18.02.2026 року о 20:15:31 в розмірі 1020 грн»</marquee></div>
+
+                            <div className="space-y-2">
+                                <div onClick={() => setView('receipts')} className="bg-white p-5 rounded-3xl border-l-8 border-green-500 shadow-sm flex justify-between items-center">
+                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Архів платежів</p><p className="font-black text-lg">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></span>
+                                    <svg width="24" height="24" stroke="green" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
-                                <div className="glass-card p-5 border-l-[10px] border-red-500 cursor-pointer flex justify-between items-center" onClick={() => setView('health')}><div><p className="text-[10px] font-black text-gray-400 uppercase mb-1">Медична історія</p><p className="text-sm font-black uppercase text-red-600 italic leading-tight">G40.2 Епілепсія • ЗЧМТ</p></div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div>
-                                <div className="glass-card p-5 flex justify-between items-center cursor-pointer" onClick={() => setView('referral')}><div><p className="text-[10px] font-black text-gray-400 uppercase">Направлення ВЛК №017</p><p className="font-black text-sm uppercase italic">КП «ДБКЛПД» ДОР</p></div><div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg></div></div>
-                                <div className="bg-blue-600 p-6 rounded-[32px] text-white shadow-xl cursor-pointer" onClick={() => setView('decision')}><h3 className="text-xl font-black italic uppercase tracking-tighter">Наказ ГШ ЗСУ (Евакуація)</h3></div>
-                                <div className="glass-card p-6 border-t-8 border-yellow-500 cursor-pointer shadow-lg active:scale-95 transition-all" onClick={() => setView('vityag_view')}>
-                                    <div className="flex justify-between items-center">
-                                        <div><p className="text-[10px] font-black text-gray-400 uppercase">Документ</p><h3 className="text-xl font-black italic uppercase tracking-tighter">ВИТЯГ З РЕЄСТРУ</h3></div>
-                                        <div className="bg-yellow-50 p-2 rounded-xl"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-                                    </div>
-                                </div>
-                                <div className="glass-card p-6 border-t-8 border-blue-500 cursor-pointer shadow-lg active:scale-95 transition-all" onClick={() => setView('support')}>
-                                    <div className="flex justify-between items-center">
-                                        <div><p className="text-[10px] font-black text-gray-400 uppercase">Підтримка</p><h3 className="text-xl font-black italic uppercase tracking-tighter">СЛУЖБА ПІДТРИМКИ</h3></div>
-                                        <div className="bg-blue-50 p-2 rounded-xl"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-                                    </div>
+                                <div onClick={() => setView('decision')} className="bg-[#003366] p-5 rounded-3xl text-white shadow-lg flex justify-between items-center">
+                                    <span className="font-black uppercase italic text-lg">Наказ ГШ ЗСУ (ЕВАКУАЦІЯ)</span>
+                                    <svg width="24" height="24" stroke="white" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
                             </div>
-                            <div className="p-6 pb-12"><button onClick={() => setShowQR(true)} className="w-full bg-black text-white py-5 rounded-[30px] font-black shadow-2xl flex items-center justify-center gap-3 italic uppercase">ГЕНЕРУВАТИ QR-КОД</button></div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div onClick={() => setView('military')} className="bg-gray-900 p-5 rounded-3xl text-white shadow-md"><p className="text-[10px] opacity-60">Військовий квиток</p><p className="font-black text-lg">АГ 042020</p></div>
+                                <div onClick={() => setView('passport')} className="bg-white p-5 rounded-3xl shadow-sm"><p className="text-[10px] text-gray-500 font-bold uppercase">Паспорт</p><p className="font-black text-lg">ЕР 119988</p></div>
+                                <div onClick={() => setView('ubd')} className="bg-[#002856] p-5 rounded-3xl text-white shadow-md"><p className="text-[10px] opacity-60">Посвідчення</p><p className="font-black text-lg italic uppercase">УБД</p></div>
+                                <div onClick={() => setView('vityag')} className="bg-white p-5 rounded-3xl border-t-4 border-yellow-600 shadow-sm flex items-center justify-between">
+                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Витяг</p><p className="font-black text-lg text-yellow-700 italic">РЕЄСТР</p></span>
+                                </div>
+                                <div onClick={() => setView('referral')} className="bg-white p-5 rounded-3xl border-l-8 border-red-600 col-span-2 shadow-sm flex justify-between items-center">
+                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Направлення</p><p className="font-black">На стаціонар №017</p></span>
+                                    <svg width="20" height="20" stroke="red" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
+                                </div>
+                                <div onClick={() => setView('health')} className="bg-white p-5 rounded-3xl border-l-8 border-blue-500 col-span-2 shadow-sm flex justify-between items-center">
+                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Медична історія</p><p className="font-black text-sm">Всі записи (Епілепсія, ЗЧМТ)</p></span>
+                                    <svg width="20" height="20" stroke="blue" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
+                                </div>
+                                <div onClick={() => setView('pay_form')} className="bg-white p-5 rounded-3xl border-l-8 border-orange-500 col-span-1 shadow-sm active:scale-95 transition-transform"><p className="font-black text-[10px] text-orange-700 uppercase">Сплатити збори</p></div>
+                                <div onClick={() => setView('check_pay')} className="bg-white p-5 rounded-3xl border-l-8 border-indigo-500 col-span-1 shadow-sm active:scale-95 transition-transform"><p className="font-black text-[10px] text-indigo-700 uppercase">Перевірити сплату</p></div>
+                            </div>
+
+                            <button onClick={() => setView('support')} className="w-full bg-white p-5 rounded-3xl text-center font-bold text-gray-500 border-2 border-dashed border-gray-300">СЛУЖБА ПІДТРИМКИ</button>
+                            <button onClick={() => setShowQR(true)} className="gov-btn shadow-xl mt-4">ГЕНЕРУВАТИ QR-КОД</button>
                         </div>
                     )}
 
-                    {view === 'vityag_view' && (
-                        <div className="doc-overlay bg-black">
-                            <div className="flex items-center gap-4 p-6 pt-12 bg-black text-white sticky top-0 z-[1001]">
-                                <button onClick={() => setView('home')} className="p-2 bg-white/10 rounded-full active:scale-75 transition-all"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                                <h2 className="text-xl font-black tracking-tighter uppercase italic">ВИТЯГ З РЕЄСТРУ</h2>
+                    {/* РОЗДІЛ СПЛАТИТИ ЗБОРИ */}
+                    {view === 'pay_form' && (
+                        <div className="flex flex-col h-full bg-gray-50">
+                            <Header title="Сплата зборів" />
+                            <div className="scroll-area px-6 pt-6">
+                                <div className="bg-white p-6 rounded-[32px] shadow-md mb-6">
+                                    <h3 className="font-black text-[#003366] uppercase italic mb-4">Оплата послуг</h3>
+                                    <div className="space-y-4">
+                                        <input type="text" placeholder="0000 0000 0000 0000" className="input-field" />
+                                        <div className="flex gap-3">
+                                            <input type="text" placeholder="ММ/РР" className="input-field flex-1" />
+                                            <input type="password" placeholder="CVV" className="input-field flex-1" />
+                                        </div>
+                                        <div className="bg-[#F0F3F8] p-4 rounded-2xl flex justify-between font-black">
+                                            <span>До сплати:</span>
+                                            <span className="text-[#003366]">1 020,00 ₴</span>
+                                        </div>
+                                        <button className="gov-btn">ПІДТВЕРДИТИ ОПЛАТУ</button>
+                                    </div>
+                                </div>
+                                <p className="text-[10px] text-gray-400 text-center font-bold uppercase">Всі транзакції захищені державним стандартом шифрування</p>
                             </div>
-                            <div className="flex-1 flex items-center justify-center p-2 bg-black overflow-hidden"><img src={userData.vityag} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" /></div>
-                            <div className="p-6 bg-black"><button onClick={() => setView('home')} className="back-btn !bg-white !text-black !mt-0">ЗАКРИТИ</button></div>
                         </div>
                     )}
 
+                    {/* РОЗДІЛ ПЕРЕВІРИТИ СПЛАТУ */}
+                    {view === 'check_pay' && (
+                        <div className="flex flex-col h-full bg-gray-50">
+                            <Header title="Статус оплат" />
+                            <div className="scroll-area px-6 pt-6 space-y-4">
+                                <div className="bg-green-100 p-6 rounded-[32px] border-2 border-green-500 text-center">
+                                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <svg width="24" height="24" stroke="white" strokeWidth="4" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
+                                    <h3 className="font-black text-green-700 uppercase italic">ВСІ ЗБОРИ СПЛАЧЕНО</h3>
+                                    <p className="text-xs font-bold text-green-600 mt-2">Заборгованостей за РНОКПП {userData.rnokpp} не знайдено</p>
+                                </div>
+                                <div className="bg-white p-5 rounded-2xl shadow-sm">
+                                    <div className="flex justify-between items-center border-b pb-3 mb-3">
+                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Адмінзбір (РВЛК)</span>
+                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
+                                    </div>
+                                    <div className="flex justify-between items-center border-b pb-3 mb-3">
+                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Державне мито</span>
+                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Верифікація даних</span>
+                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('home')} className="gov-btn">НАЗАД</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Медична історія */}
+                    {view === 'health' && (
+                        <div className="flex flex-col h-full bg-gray-50">
+                            <Header title="Медична історія" />
+                            <div className="scroll-area px-4 py-4 space-y-4">
+                                {medicalRecords.map((m, i) => (
+                                    <div key={i} className="bg-white p-5 rounded-2xl border-l-8 border-blue-600 shadow-sm">
+                                        <p className="font-black text-sm uppercase">{m.diag}</p>
+                                        <div className="flex justify-between mt-3 text-[10px] font-bold text-gray-500">
+                                            <span>{m.org}</span>
+                                            <span>{m.date}</span>
+                                        </div>
+                                        <p className="text-[9px] mt-1 text-blue-700 font-black">Код: {m.code}</p>
+                                    </div>
+                                ))}
+                                <button onClick={() => setView('home')} className="gov-btn mt-6 mb-10">НАЗАД</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Архів квитанцій */}
+                    {view === 'receipts' && (
+                        <div className="flex flex-col h-full bg-gray-100">
+                            <Header title="Архів квитанцій" />
+                            <div className="scroll-area px-4 py-4">
+                                {receipts.map(r => (
+                                    <div key={r.id} className="nr-card">
+                                        <div className="nr-header">ОЩАДБАНК</div>
+                                        <div className="nr-sub">ДЕРЖАВНИЙ БАНК УКРАЇНИ</div>
+                                        <div className="nr-grid">
+                                            <div><p className="nr-label">Дата:</p><p className="nr-val">{r.date}</p></div>
+                                            <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
+                                            <div><p className="nr-label">Квитанція:</p><p className="nr-val">#{r.nr}</p></div>
+                                            <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
+                                        </div>
+                                        <div className="nr-purpose">{r.desc}</div>
+                                        <div className="nr-footer">
+                                            <div><p className="nr-label">Сума:</p><p className="text-xl font-black italic">{r.sum} ₴</p></div>
+                                            <div className="nr-stamp"><div>ОЩАД 24/7</div></div>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button onClick={() => setView('home')} className="gov-btn mt-6 mb-10">ПОВЕРНУТИСЬ</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Решта розділів (без змін) */}
                     {view === 'passport' && (
-                        <div className="doc-overlay">
-                            <Header title="Паспортні дані" />
-                            <div className="p-6">
-                                <div className="glass-card p-8 bg-white space-y-6">
-                                    <div className="flex justify-between items-start">
-                                        <div className="space-y-6 flex-1">
-                                            <div><p className="text-[10px] text-gray-400 uppercase font-bold">Серія та номер</p><p className="text-3xl font-black italic font-mono">{userData.passport}</p></div>
-                                            <div><p className="text-[10px] text-gray-400 uppercase font-bold">Орган видачі</p><p className="text-sm font-black italic uppercase leading-relaxed">{userData.passportOrg}</p></div>
-                                        </div>
-                                        <img src={userData.photo} className="w-24 h-32 rounded-xl object-cover grayscale border-2 border-gray-100 ml-4 shadow-md" />
-                                    </div>
-                                    <div className="pt-4 border-t"><p className="text-[10px] text-gray-400 uppercase font-bold">Місце реєстрації</p><p className="text-lg font-black italic leading-tight">{userData.address}</p></div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'referral' && (
-                        <div className="doc-overlay">
-                            <Header title="Направлення №017" />
-                            <div className="p-6">
-                                <div className="glass-card p-8 border-t-[20px] border-red-600 bg-white shadow-2xl">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="space-y-4 flex-1"><p className="font-black text-xl italic uppercase leading-none">Електронне направлення</p><div><p className="text-[9px] text-gray-400 uppercase font-bold">Військовослужбовець:</p><span className="font-black uppercase text-lg italic">{userData.name}</span></div></div>
-                                        <img src={userData.photo} className="w-20 h-24 rounded-lg object-cover grayscale border border-gray-100 shadow-sm ml-2" />
-                                    </div>
-                                    <div className="space-y-6 text-sm font-bold italic">
-                                        <div><p className="text-[9px] text-gray-400 uppercase italic">Направляється до:</p><span className="font-black text-lg italic">КП «ДБКЛПД» ДОР</span></div>
-                                        <div><p className="text-[9px] text-gray-400 uppercase italic">Мета:</p><span className="font-black text-lg text-red-600 italic">Стаціонарне обстеження та затвердження непридатності</span></div>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
+                        <div className="flex-1 bg-gray-50"><Header title="Паспорт" />
+                            <div className="p-6"><div className="bg-white p-6 rounded-3xl shadow-md space-y-4">
+                                <div><p className="text-xs text-gray-500 uppercase font-bold">Номер</p><p className="text-2xl font-black">{userData.passport}</p></div>
+                                <div><p className="text-xs text-gray-500 uppercase font-bold">Орган</p><p className="font-bold text-sm">{userData.passportOrg}</p></div>
+                                <div><p className="text-xs text-gray-500 uppercase font-bold">Адреса</p><p className="font-bold text-sm">{userData.address}</p></div>
+                            </div><button onClick={() => setView('home')} className="gov-btn mt-4">НАЗАД</button></div>
                         </div>
                     )}
 
                     {view === 'military' && (
-                        <div className="doc-overlay bg-[#1a1a1a]">
-                            <Header title="Військовий квиток" />
-                            <div className="p-6 space-y-6">
-                                <div className="army-dark p-8 rounded-[40px] text-white shadow-2xl">
-                                    <div className="flex justify-between items-start mb-10"><div><p className="text-xs font-bold opacity-50 uppercase mb-1">Серія та Номер</p><h2 className="text-4xl font-black italic">AГ 042020</h2></div><img src={userData.photo} className="w-20 h-24 rounded-xl object-cover border border-white/20 shadow-lg" /></div>
-                                    <div className="grid grid-cols-2 gap-4"><div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40 uppercase">ВОС</p><p className="font-black text-xl font-mono">{userData.vos}</p></div><div className="bg-white/5 p-4 rounded-2xl"><p className="text-[10px] opacity-40 uppercase">ГРУПА КРОВІ</p><p className="font-black text-2xl">{userData.blood}</p></div></div>
+                        <div className="flex-1 bg-gray-900 text-white"><Header title="Військовий квиток" />
+                            <div className="p-6"><div className="bg-gray-800 p-6 rounded-3xl border border-white/10">
+                                <p className="text-xs opacity-50 uppercase">Серія та номер</p><p className="text-3xl font-black italic">АГ 042020</p>
+                                <div className="grid grid-cols-2 gap-4 mt-6">
+                                    <div><p className="text-xs opacity-50 uppercase">ВОС</p><p className="text-xl font-black">{userData.vos}</p></div>
+                                    <div><p className="text-xs opacity-50 uppercase">Група крові</p><p className="text-xl font-black">{userData.blood}</p></div>
                                 </div>
-                                <div className="glass-card p-8 space-y-4 bg-white">
-                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Посада</p><p className="font-black text-blue-600 italic uppercase text-[11px] leading-tight">{userData.position}</p></div>
-                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Присяга</p><p className="font-black italic text-sm">{userData.oath}</p></div>
-                                    <div><p className="text-[9px] font-bold text-gray-400 uppercase italic">Командир</p><p className="font-black italic uppercase text-sm">{userData.commander}</p></div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn !bg-white !text-black">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'ubd' && (
-                        <div className="doc-overlay">
-                            <Header title="Посвідчення УБД" />
-                            <div className="p-6">
-                                <div className="ubd-gradient p-8 rounded-[40px] text-white shadow-2xl relative">
-                                    <div className="absolute top-0 right-0 p-6 opacity-10"><svg width="150" height="150" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
-                                    <div className="flex justify-between items-start mb-6"><div><p className="text-[10px] font-black uppercase tracking-widest opacity-60">Україна</p><h2 className="text-2xl font-black italic uppercase leading-none">Посвідчення<br/>Учасника<br/>бойових дій</h2></div><img src={userData.photo} className="w-24 h-32 rounded-2xl object-cover border-2 border-white/20 shadow-xl" /></div>
-                                    <div className="flex gap-4 items-start relative z-10">
-                                        <div className="space-y-3 flex-1">
-                                            <div><p className="text-[10px] font-bold opacity-50 uppercase">ПІБ</p><p className="text-lg font-black italic uppercase leading-tight">{userData.name}</p></div>
-                                            <div><p className="text-[10px] font-bold opacity-50 uppercase">Орган видачі</p><p className="text-[11px] font-black italic uppercase leading-tight">{userData.ubdOrg}</p></div>
-                                            <div className="border-t border-white/10 pt-3"><p className="text-[10px] font-bold opacity-50 uppercase">Серія та номер</p><p className="text-xl font-black italic">{userData.ubdNum}</p></div>
-                                            <div className="pt-2"><p className="text-[9px] font-bold opacity-50 uppercase">Ким підписане</p><p className="text-[10px] font-black italic uppercase opacity-90">{userData.ubdSign}</p></div>
-                                        </div>
-                                        <div className="bg-white p-2 rounded-xl flex flex-col items-center"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=UBD-${userData.ubdNum}`} className="w-16 h-16" /><span className="text-[6px] text-black font-black mt-1 uppercase">VERIFIED</span></div>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'receipt_menu' && (
-                        <div className="doc-overlay">
-                            <Header title="Архів квитанцій" />
-                            <div className="p-6 space-y-4">
-                                {/* Існуючі квитанції */}
-                                <div className="glass-card p-6 border-l-8 border-blue-600 cursor-pointer" onClick={() => setView('receipt_old')}>
-                                    <h4 className="font-black italic uppercase">Квитанція №324368</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">Закриття реєстрів</p>
-                                    <p className="text-lg font-black mt-2">{userData.adminFee}</p>
-                                </div>
-                                <div className="glass-card p-6 border-l-8 border-green-600 cursor-pointer" onClick={() => setView('receipt_new')}>
-                                    <h4 className="font-black italic uppercase text-green-700">ОПЛАЧЕНО УСПІШНО</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">Реєстрація лікування</p>
-                                    <p className="text-lg font-black mt-2">1788,50 ₴</p>
-                                </div>
-                                <div className="glass-card p-6 border-l-8 border-yellow-600 cursor-pointer" onClick={() => setView('receipt_admin')}>
-                                    <h4 className="font-black italic uppercase">Адміністративний збір (ВЛК)</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">16.02.2026, успішно</p>
-                                    <p className="text-lg font-black mt-2">2580,00 ₴</p>
-                                </div>
-
-                                {/* Дві нові квитанції з фото */}
-                                <div className="glass-card p-6 border-l-8 border-purple-600 cursor-pointer" onClick={() => setView('receipt_img1')}>
-                                    <h4 className="font-black italic uppercase">Квитанція №3390001844000</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">Оформлення до 20 РВЛК</p>
-                                    <p className="text-lg font-black mt-2">1 139,50 ₴</p>
-                                </div>
-                                <div className="glass-card p-6 border-l-8 border-indigo-600 cursor-pointer" onClick={() => setView('receipt_img2')}>
-                                    <h4 className="font-black italic uppercase">Квитанція №323000397500</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">Адмінзбір (повторне)</p>
-                                    <p className="text-lg font-black mt-2">1 202,00 ₴</p>
-                                </div>
-
-                                {/* Нова квитанція з фото IMG_3784.jpeg */}
-                                <div className="glass-card p-6 border-l-8 border-amber-700 cursor-pointer" onClick={() => setView('receipt_img3')}>
-                                    <h4 className="font-black italic uppercase">Квитанція №205629572572</h4>
-                                    <p className="text-xs text-gray-400 uppercase font-bold">Верифікація е-квитка + податок</p>
-                                    <p className="text-lg font-black mt-2">614,00 ₴</p>
-                                </div>
-
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Детальний перегляд квитанції з IMG_3755.jpeg */}
-                    {view === 'receipt_img1' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція №3390001844000" />
-                            <div className="p-4">
-                                <div className="nr-card shadow-xl">
-                                    <div className="nr-header">ОЩАДБАНК</div>
-                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
-                                    <div className="p-4 border-b">
-                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
-                                    </div>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17.02.2026 18:19:01</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
-                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">3390001844000</p></div>
-                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО Т.Г.</p></div>
-                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** 0852</p></div>
-                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
-                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">UA82820172000000260008440196</p></div>
-                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
-                                    </div>
-                                    <div className="nr-purpose whitespace-normal">
-                                        <p className="font-bold mb-1">Призначення:</p>
-                                        «Погашення за оформлення документів до «20 РЕГІОНАЛЬНА ВІЙСЬКОВО-ЛІКАРСЬКА КОМІСІЯ» (20 РВЛК) м. Дніпро. Код: 26637746 Дані за кого сплачено: ПІБ: Аврахов Максим Олександрович Дата народження: 17.03.1987 РНОКПП: 3185200217 Звання: Солдат Місце служби: В/Ч 3052 Номер посвідчення УБД: 636331 Номер та серія військового квитка: АГ 042020
-                                    </div>
-                                    <div className="nr-footer">
-                                        <div>
-                                            <p className="nr-label">Сума + комісія:</p>
-                                            <p className="text-base font-black">898.50 + 241.00</p>
-                                            <p className="nr-label mt-1">СПИСАНО:</p>
-                                            <p className="text-2xl font-black italic">1 139,50 UAH</p>
-                                        </div>
-                                        <div className="nr-stamp">
-                                            <div>ОЩАД 24/7</div>
-                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
-                                            <div>ЕЛ. ЧЕК</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Детальний перегляд квитанції з IMG_3754.jpeg */}
-                    {view === 'receipt_img2' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція №323000397500" />
-                            <div className="p-4">
-                                <div className="nr-card shadow-xl">
-                                    <div className="nr-header">ОЩАДБАНК</div>
-                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
-                                    <div className="p-4 border-b">
-                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
-                                    </div>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17.02.2026 09:38:45</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
-                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">323000397500</p></div>
-                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО Т.Г.</p></div>
-                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** 0852</p></div>
-                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
-                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">UA828201720000002600084440196</p></div>
-                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
-                                    </div>
-                                    <div className="nr-purpose">
-                                        <p className="font-bold mb-1">Призначення:</p>
-                                        Сплата адміністративного збору за повторне оформлення до КП «ДБКЛПД»ДОР», за повторну реєстрацію електронного направлення Аврахов М.О. (3185200217)
-                                    </div>
-                                    <div className="nr-footer">
-                                        <div>
-                                            <p className="nr-label">Сума + комісія:</p>
-                                            <p className="text-base font-black">980,50 + 221,50</p>
-                                            <p className="nr-label mt-1">СПИСАНО:</p>
-                                            <p className="text-2xl font-black italic">1 202,00 UAH</p>
-                                        </div>
-                                        <div className="nr-stamp">
-                                            <div>ОЩАД 24/7</div>
-                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
-                                            <div>ЕЛ. ЧЕК</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Детальний перегляд нової квитанції з фото IMG_3784.jpeg */}
-                    {view === 'receipt_img3' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція №205629572572" />
-                            <div className="p-4">
-                                <div className="nr-card shadow-xl">
-                                    <div className="nr-header">ОЩАДБАНК</div>
-                                    <div className="nr-sub">МІЙ БАНК. МОЯ КРАЇНА</div>
-                                    <div className="p-4 border-b">
-                                        <p className="text-center font-black uppercase text-sm">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
-                                    </div>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата операції:</p><p className="nr-val">17:02:2026 23:47:01</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
-                                        <div><p className="nr-label">Номер посилання:</p><p className="nr-val">205629572572</p></div>
-                                        <div><p className="nr-label">Через:</p><p className="nr-val">Дія.Gateway</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">ХОХОЛЄВ К.В.</p></div>
-                                        <div><p className="nr-label">Рахунок:</p><p className="nr-val">4148********0123</p></div>
-                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[10px]">МИНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</p></div>
-                                        <div><p className="nr-label">IBAN:</p><p className="nr-val text-[9px]">U+A828201720000002610008440196</p></div>
-                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
-                                    </div>
-                                    <div className="nr-purpose">
-                                        <p className="font-bold mb-1">Призначення:</p>
-                                        Сплата адміністративного сбору за верифікацію електронного квитка № 145/2/23-25. Та додаткова плата податкового сбору в розмірі 145грн
-                                    </div>
-                                     <div className="px-4 py-2 text-[10px] font-mono border-t border-b border-dashed border-gray-300 bg-gray-50">
-                                        <p>Термінал: POS-784512 | Банк-емітент: Ощадбанк</p>
-                                        <p className="mt-1">Цифровий підпис: A1B2C3D4E5F6</p>
-                                    </div>
-                                    <div className="nr-footer">
-                                        <div>
-                                            <p className="nr-label">Сума + комісія + податок:</p>
-                                            <p className="text-sm font-black">391 + 145 + 78</p>
-                                            <p className="nr-label mt-1">СПИСАНО:</p>
-                                            <p className="text-2xl font-black italic">614 UAH</p>
-                                        </div>
-                                        <div className="nr-stamp">
-                                            <div>ОЩАД 24/7</div>
-                                            <div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div>
-                                            <div>ЕЛ. ЧЕК</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button onClick={() => setView('receipt_menu')} className="back-btn !mt-6">Повернутись до списку</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {view === 'receipt_old' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція №324368" />
-                            <div className="nr-card m-6 shadow-xl">
-                                <div className="nr-header">Ощадбанк</div>
-                                <div className="nr-sub">Мій банк. Моя країна</div>
-                                <div className="nr-content">
-                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">На IBAN з картки</p>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата:</p><p className="nr-val">15.02.2026 18:22</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">ВИКОНАНО</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
-                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">324368994210</p></div>
-                                    </div>
-                                    <div className="nr-purpose">Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування (виписка №387001/18). За особу: Аврахов М.О. (3185200217)</div>
-                                    <div className="nr-footer">
-                                        <div><p className="nr-label">Списано з картки:</p><p className="text-2xl font-black italic">2 000,00 ₴</p></div>
-                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
-                        </div>
-                    )}
-
-                    {view === 'receipt_new' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція №324368" />
-                            <div className="nr-card m-6 shadow-xl">
-                                <div className="nr-header">Ощадбанк</div>
-                                <div className="nr-sub">Мій банк. Моя країна</div>
-                                <div className="nr-content">
-                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">На IBAN з картки</p>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата:</p><p className="nr-val">15.02.2026 18:22</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">ВИКОНАНО</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
-                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">324368994210</p></div>
-                                    </div>
-                                    <div className="nr-purpose">Сплата за реєстрацію в "Оберіг" даних про психіатричне лікування (виписка №387001/18). За особу: Аврахов М.О. (3185200217)</div>
-                                    <div className="nr-footer">
-                                        <div><p className="nr-label">Списано з картки:</p><p className="text-2xl font-black italic">2 000,00 ₴</p></div>
-                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
-                        </div>
-                    )}
-
-                    {view === 'receipt_admin' && (
-                        <div className="doc-overlay bg-white">
-                            <Header title="Квитанція адмінзбору" />
-                            <div className="nr-card m-6 shadow-xl">
-                                <div className="nr-header">Ощадбанк</div>
-                                <div className="nr-sub">Мій банк. Моя країна</div>
-                                <div className="nr-content">
-                                    <p className="text-center font-black uppercase text-[12px] border-b pb-2 mb-2">НА IBAN З КАРТКОВОГО РАХУНКУ</p>
-                                    <div className="nr-grid">
-                                        <div><p className="nr-label">Дата та час:</p><p className="nr-val">16.02.2026 09:38:38</p></div>
-                                        <div><p className="nr-label">Статус:</p><p className="nr-val text-green-800">Виконано успішно</p></div>
-                                        <div><p className="nr-label">Через:</p><p className="nr-val">Мобільний банкінг (Дія.Gateway)</p></div>
-                                        <div><p className="nr-label">Посилання:</p><p className="nr-val">33066791101</p></div>
-                                        <div><p className="nr-label">Платник:</p><p className="nr-val">АХРЕМЕНКО ТЕТЯНА ГЕННАДІЇВНА</p></div>
-                                        <div><p className="nr-label">Рахунок платника:</p><p className="nr-val">4790 **** **** 0852</p></div>
-                                        <div><p className="nr-label">Банк платника:</p><p className="nr-val">АТ "Ощадбанк" (Дніпропетровська філія)</p></div>
-                                        <div><p className="nr-label">Рахунок отримувача:</p><p className="nr-val text-[9px]">UA8282017200000000260008440196</p></div>
-                                        <div><p className="nr-label">Отримувач:</p><p className="nr-val text-[9px]">МИНИСТЕРСТВО ОБОРОНИ УКРАЇНИ (РЕЄСТР ВЛК)</p></div>
-                                        <div><p className="nr-label">ЄДРПОУ:</p><p className="nr-val">00034022</p></div>
-                                    </div>
-                                    <div className="nr-purpose">Призначення платежу: Адміністративний збір: за розклад та затворення документів регіональною комісією «20-ї РВЛК».</div>
-                                    <div className="nr-footer">
-                                        <div>
-                                            <p className="nr-label">Сума операції:</p><p className="text-sm font-black">2348,00 ₴</p>
-                                            <p className="nr-label">Комісія:</p><p className="text-sm font-black">232,00 ₴</p>
-                                            <p className="nr-label">Сума до списання:</p><p className="text-2xl font-black italic">2580,00 ₴</p>
-                                        </div>
-                                        <div className="nr-stamp"><div>ОЩАД 24/7</div><div style={{fontSize:'6px', borderTop:'1px solid #004a32', margin:'2px 0', width:'80%'}}>ДЛЯ ДОВІДОК</div><div>ЕЛ. ЧЕК</div></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onClick={() => setView('receipt_menu')} className="back-btn mx-6 !mt-0">Повернутись назад</button>
-                        </div>
-                    )}
-
-                    {view === 'health' && (
-                        <div className="doc-overlay">
-                            <Header title="Медична книга" />
-                            <div className="p-6 space-y-4 pb-20">
-                                {medicalRecords.map((m, i) => (
-                                    <div key={i} className="glass-card p-6 border-l-8 border-blue-600">
-                                        <div className="flex justify-between items-center mb-2 italic"><span className="text-[10px] font-black text-blue-600 uppercase">Запис {m.code}</span><span className="text-[10px] font-mono text-gray-400">{m.date}</span></div>
-                                        <p className="font-black text-sm uppercase italic mb-2 leading-tight">{m.diag}</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase">{m.org}</p>
-                                    </div>
-                                ))}
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
+                            </div><button onClick={() => setView('home')} className="gov-btn bg-white !text-black mt-6">НАЗАД</button></div>
                         </div>
                     )}
 
                     {view === 'decision' && (
-                        <div className="doc-overlay">
-                            <Header title="Рішення ГШ ЗСУ" />
-                            <div className="p-6">
-                                <div className="bg-blue-600 p-10 rounded-[45px] text-white shadow-2xl italic">
-                                    <h3 className="text-3xl font-black italic mb-8 uppercase tracking-tighter leading-none">Наказ ГШ ЗСУ</h3>
-                                    <p className="text-xl font-bold leading-relaxed mb-8 italic">Військовослужбовця <span className="underline decoration-2">{userData.name}</span> буде евакуйовано до КП «ДДКЛПД» ДОР» <span className="bg-white text-blue-600 px-3 py-1 rounded-xl mx-1 inline-block">{userData.evacuationDate} року</span>.</p>
-                                    <div className="mt-4 p-5 bg-white/10 rounded-3xl text-[9px] font-black text-center uppercase tracking-[0.2em] italic">Верифіковано системою "Оберіг"</div>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
+                        <div className="flex-1 bg-[#003366] text-white"><Header title="Наказ ГШ ЗСУ" />
+                            <div className="p-6 space-y-6"><div className="bg-white/10 p-6 rounded-3xl border border-white/20">
+                                <h3 className="text-2xl font-black italic uppercase">Евакуація</h3>
+                                <p className="mt-6 text-lg">Військовослужбовця <span className="font-black">{userData.name}</span> призначено на переміщення згідно наказу ГШ НГУ № 118/45- АВ.</p>
+                                <p className="mt-4 text-xl font-bold text-yellow-400 italic">Дата: 18.02.2026</p>
+                            </div><button onClick={() => setShowOrderPhoto(true)} className="gov-btn bg-white !text-black">ПЕРЕГЛЯНУТИ СКАН</button></div>
                         </div>
                     )}
 
                     {view === 'support' && (
-                        <div className="doc-overlay">
-                            <Header title="Служба підтримки" />
-                            <div className="p-6">
-                                <div className="glass-card p-8 space-y-6">
-                                    <p className="text-center text-lg font-bold">Для звернень у службу підтримки пишіть на email:</p>
-                                    <p className="text-center text-2xl font-black italic">edroberig@proton.me</p>
-                                </div>
-                                <button onClick={() => setView('home')} className="back-btn">Повернутись назад</button>
-                            </div>
+                        <div className="flex-1 bg-gray-50"><Header title="Підтримка" />
+                            <div className="p-6 text-center"><div className="bg-white p-8 rounded-3xl shadow-sm">
+                                <p className="text-gray-500 font-bold mb-4 uppercase">Email:</p>
+                                <p className="text-xl font-black text-[#003366]">edroberig@proton.me</p>
+                            </div><button onClick={() => setView('home')} className="gov-btn mt-6">НАЗАД</button></div>
                         </div>
                     )}
 
+                    {view === 'referral' && (
+                        <div className="flex-1 bg-white p-6"><Header title="Направлення" />
+                            <div className="border-4 border-double border-red-600 p-6 rounded-lg text-center mt-6">
+                                <h3 className="text-red-600 font-black text-2xl uppercase italic">Направлення №017</h3>
+                                <p className="mt-4 font-bold text-lg">{userData.name}</p>
+                                <p className="mt-4 font-black text-xl text-red-700 uppercase">КП «ДБКЛПД» ДОР</p>
+                            </div><button onClick={()=>setView('home')} className="gov-btn mt-8">ЗАКРИТИ</button></div>
+                    )}
+
+                    {view === 'vityag' && <div className="fullscreen-image-viewer" onClick={()=>setView('home')}><img src={userData.vityag}/><button className="gov-btn mt-4 w-64 bg-white !text-black">ЗАКРИТИ</button></div>}
+                    
+                    {view === 'ubd' && (
+                        <div className="flex-1 bg-[#002856] p-6 text-white"><Header title="УБД" />
+                            <div className="bg-gradient-to-br from-[#001d3d] to-[#003a6b] p-6 rounded-3xl border border-white/10 mt-6 shadow-2xl">
+                                <div className="flex gap-4"><div className="flex-1"><p className="text-[10px] opacity-60">ПІБ</p><p className="font-black text-lg">{userData.name}</p><p className="text-2xl font-black italic mt-4">{userData.ubdNum}</p></div>
+                                <img src={userData.photo} className="w-20 h-24 object-cover rounded-xl border-2 border-white/20" /></div>
+                            </div><button onClick={()=>setView('home')} className="gov-btn bg-white !text-black mt-10">НАЗАД</button></div>
+                    )}
+
                     {showQR && (
-                        <div className="qr-overlay" onClick={() => setShowQR(false)}>
-                            <div className="p-10 bg-white rounded-[50px] shadow-2xl flex flex-col items-center border border-gray-100"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} className="w-64 h-64" /></div>
-                            <h3 className="mt-8 text-2xl font-black italic uppercase text-center text-white">{userData.name}</h3>
-                            <p className="text-blue-400 font-black text-[10px] uppercase mt-2">Верифіковано: {time.toLocaleDateString()}</p>
+                        <div className="modal-overlay" onClick={() => setShowQR(false)}>
+                            <div className="bg-white p-6 rounded-[50px] shadow-2xl">
+                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} />
+                            </div>
+                            <p className="text-white font-black mt-6 text-xl text-center">{userData.name}</p>
+                            <p className="text-green-400 font-bold mt-2 uppercase">Верефіковано Оберіг</p>
                         </div>
                     )}
                 </div>
             );
         };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
