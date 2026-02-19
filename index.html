@@ -3,54 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ЄДР ОБЕРІГ — Особистий кабінет</title>
+    <title>ЄДР ОБЕРІГ — Державна інформаційна система</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800;900&display=swap');
         
         * { -webkit-tap-highlight-color: transparent; user-select: none; box-sizing: border-box; }
-        body, html { font-family: 'Inter', sans-serif; background: #0B1C2F; margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; color: #1e293b; }
+        body, html { 
+            font-family: 'Inter', sans-serif; 
+            background: #020617; 
+            margin: 0; padding: 0; 
+            height: 100%; width: 100%; 
+            overflow: hidden; 
+            color: #f8fafc; 
+        }
 
         .app-shell {
             width: 100%; max-width: 420px; height: 100dvh; margin: 0 auto;
-            background: #F0F3F8; display: flex; flex-direction: column; position: relative; overflow: hidden;
+            background: #0F172A; display: flex; flex-direction: column; position: relative; overflow: hidden;
+            border-left: 1px solid #1e293b; border-right: 1px solid #1e293b;
         }
 
-        .state-header { position: relative; background: #003366; padding: 38px 16px 30px 16px; z-index: 50; border-bottom: 2px solid #FFD700; }
-        .wave-container { position: absolute; bottom: 0; left: 0; width: 100%; line-height: 0; pointer-events: none; }
-        .wave-fill { fill: #FFD700; }
-        .state-header-content { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 60; }
-        .state-header-text { color: white; font-weight: 800; font-size: 8px; text-transform: uppercase; text-align: center; max-width: 210px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .state-header { 
+            background: #020617; 
+            padding: 10px 16px; 
+            border-bottom: 2px solid #D4AF37;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .state-header-text { 
+            text-align: center; font-size: 7px; font-weight: 800; 
+            letter-spacing: 0.05em; color: #cbd5e1; text-transform: uppercase;
+        }
 
-        .scroll-area { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
+        .scroll-area { overflow-y: auto; flex: 1; padding: 16px; padding-bottom: 40px; }
 
-        .nr-card { background: white; border: 1px solid #C0C8D2; border-radius: 4px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .nr-header { background: #003366; color: white; text-align: center; padding: 10px; font-weight: 900; font-size: 1.1rem; }
-        .nr-sub { background: #FDD835; color: #003366; text-align: center; font-weight: 800; font-size: 0.65rem; padding: 4px; }
-        .nr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background: #F5F7FA; border-bottom: 1px dashed #aaa; }
-        .nr-label { font-size: 0.6rem; font-weight: 700; color: #5f6b7a; text-transform: uppercase; }
-        .nr-val { font-weight: 700; font-size: 0.75rem; color: black; }
-        .nr-purpose { background: white; padding: 10px; font-size: 0.7rem; color: #333; line-height: 1.2; }
-        .nr-footer { padding: 12px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 1px solid #eee; }
-        .nr-stamp { width: 60px; height: 60px; border: 2px solid #003366; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 0.45rem; color: #003366; opacity: 0.7; transform: rotate(-10deg); }
+        .doc-card { 
+            background: #1E293B; 
+            border: 1px solid #334155; 
+            border-radius: 4px; 
+            padding: 16px; 
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .doc-card:active { background: #334155; transform: translateY(1px); }
+        .doc-card::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #334155;
+        }
+        .doc-card.accent-green::after { background: #10b981; }
+        .doc-card.accent-blue::after { background: #3b82f6; }
+        .doc-card.accent-gold::after { background: #D4AF37; }
+        .doc-card.accent-red::after { background: #ef4444; }
 
-        .screen-header { background: white; padding: 16px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(0,51,102,0.15); position: sticky; top: 0; z-index: 100; }
-        .screen-header h2 { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; color: #003366; }
+        .gov-btn { 
+            background: #D4AF37; color: #020617; 
+            padding: 16px; border-radius: 4px; 
+            font-weight: 900; font-size: 13px; 
+            text-transform: uppercase; text-align: center; width: 100%; 
+            letter-spacing: 0.05em; border: none;
+        }
+        .gov-btn-dark { background: #1E293B; color: #f8fafc; border: 1px solid #475569; }
 
-        .gov-btn { background: #003366; color: white; padding: 18px; border-radius: 30px; font-weight: 900; text-transform: uppercase; text-align: center; width: 100%; transition: 0.2s; }
-        .gov-btn:active { transform: scale(0.98); opacity: 0.9; }
+        .label-tiny { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .val-main { font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 15px; }
 
-        .marquee-container { background: #15803d; color: white; padding: 8px 0; font-weight: 900; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #FFD700; }
+        .modal-overlay { 
+            position: fixed; inset: 0; z-index: 5000; 
+            background: rgba(2, 6, 23, 0.95); 
+            backdrop-filter: blur(4px); 
+            display: flex; align-items: center; justify-content: center; padding: 20px; 
+        }
+        .modal-content {
+            background: #0F172A; border: 1px solid #D4AF37; border-radius: 4px;
+            width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; padding: 20px;
+        }
+        
+        .input-field { 
+            width: 100%; background: #020617; border: 1px solid #334155; 
+            padding: 14px; border-radius: 4px; font-weight: 600; color: white;
+            margin-bottom: 12px; font-family: 'Roboto Mono', monospace; font-size: 14px;
+        }
 
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #003366; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        .loader { border: 2px solid #334155; border-top: 2px solid #D4AF37; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .modal-overlay { position: fixed; inset: 0; z-index: 5000; background: rgba(0, 20, 40, 0.85); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        
-        .input-field { width: 100%; background: white; border: 1px solid #B0C0D0; padding: 16px; border-radius: 16px; font-weight: 600; margin-bottom: 12px; }
+        /* Стилі для реалістичного направлення */
+        .e-referral {
+            background: white; color: black; padding: 20px; border-radius: 2px; font-family: 'Inter', sans-serif;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .e-header { border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .e-title { font-weight: 900; text-transform: uppercase; font-size: 14px; }
+        .e-grid { display: grid; grid-template-columns: 1fr; gap: 10px; font-size: 11px; }
+        .e-label { font-weight: 800; color: #444; font-size: 9px; text-transform: uppercase; }
+        .e-val { font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 2px; }
+        .barcode { width: 100%; height: 50px; background: repeating-linear-gradient(90deg, black, black 2px, white 2px, white 5px); margin-top: 15px; }
+        .stamp-circle { width: 60px; height: 60px; border: 2px solid #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #2563eb; font-weight: 900; font-size: 7px; text-align: center; transform: rotate(-15deg); opacity: 0.7; margin-left: auto; }
     </style>
 </head>
 <body>
@@ -85,7 +136,9 @@
                 blood: "O(I) Rh+",
                 ubdNum: "№ 636331",
                 evacuationDate: "16.02.2026",
-                pos: "Електрозварник 1-ї майстерні ремонту артилерійського озброєння ремонтного взводу артилерійського озброєння роти з ремонту озброєння автотранспортного батальйону."
+                pos: "Електрозварник 1-ї майстерні ремонту артилерійського озброєння ремонтного взводу артилерійського озброєння роти з ремонту озброєння автотранспортного батальйону.",
+                raportImg: "https://i.postimg.cc/CKphrQ9P/photo-output.jpg",
+                waybillImg: "https://i.postimg.cc/fRmZdvk2/IMG-3788-Original.jpg"
             };
 
             const medicalRecords = [
@@ -108,321 +161,451 @@
             const handleLogin = (e) => {
                 e.preventDefault();
                 setLoading(true);
-                setTimeout(() => { 
-                    setAuthState('app'); 
-                    setLoading(false); 
-                    setShowMainPhoto(true);
-                }, 1000);
+                setTimeout(() => { setAuthState('app'); setLoading(false); setShowMainPhoto(true); }, 1000);
             };
 
-            const closeMainPhoto = () => {
-                setShowMainPhoto(false);
-                setShowUrgentModal(true);
-            };
+            const closeMainPhoto = () => { setShowMainPhoto(false); setShowUrgentModal(true); };
 
             const Header = ({ title }) => (
-                <div className="screen-header">
-                    <button onClick={() => setView('home')} className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <div className="flex items-center gap-4 bg-[#020617] p-4 border-b border-slate-800">
+                    <button onClick={() => setView('home')} className="text-slate-400">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
                     </button>
-                    <h2>{title}</h2>
+                    <span className="font-black text-xs uppercase tracking-widest">{title}</span>
+                </div>
+            );
+
+            const NotificationBody = () => (
+                <div className="text-slate-200">
+                    <p className="font-bold text-sm mb-4">Максим Олександрович,</p>
+                    <p className="text-xs leading-relaxed mb-4">Ставимо Вас до відома, що Ваш рапорт <span className="text-yellow-500 font-bold">№302742/26</span> було розглянуто та прийнято.</p>
+                    <p className="text-[10px] text-slate-400 font-black uppercase mb-2">Необхідні документи для стаціонару:</p>
+                    <ul className="text-xs space-y-1 font-bold list-disc pl-4 mb-4">
+                        <li>Евакуаційний лист</li>
+                        <li>Шляховий лист</li>
+                        <li>Медична характеристика</li>
+                        <li>Електронне направлення</li>
+                        <li>Військовий квиток</li>
+                        <li>Ідентифікаційний код</li>
+                    </ul>
+                    <div className="border-t border-slate-700 pt-3 text-[10px] font-black uppercase text-slate-400">Генштаб НГУ</div>
                 </div>
             );
 
             if (authState === 'welcome') {
                 return (
-                    <div className="app-shell flex flex-col items-center justify-center p-8 bg-[#E8ECF2]">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-24 mb-6" />
-                        <h1 className="text-4xl font-black italic tracking-tighter text-[#003366] mb-12">ОБЕРІГ</h1>
-                        <button onClick={handleLogin} className="gov-btn shadow-2xl">
-                            {loading ? <div className="loader mx-auto !border-t-white"></div> : "УВІЙТИ В КАБІНЕТ"}
+                    <div className="app-shell flex flex-col items-center justify-center p-8 bg-[#020617]">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-16 mb-8 opacity-80" />
+                        <div className="text-center mb-12">
+                            <h1 className="text-3xl font-black tracking-tighter text-white mb-2">ОБЕРІГ</h1>
+                            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Єдиний державний реєстр</p>
+                        </div>
+                        <button onClick={handleLogin} className="gov-btn">
+                            {loading ? <div className="loader mx-auto"></div> : "Авторизація"}
                         </button>
+                        <p className="mt-8 text-[8px] text-slate-600 font-bold uppercase">Система захищена ДССЗЗІ</p>
                     </div>
                 );
             }
 
             return (
                 <div className="app-shell">
-                    {/* Модальні вікна */}
                     {showMainPhoto && (
                         <div className="modal-overlay">
-                            <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="max-w-full max-h-[80vh] rounded-lg shadow-2xl" />
-                            <button onClick={closeMainPhoto} className="gov-btn mt-6 w-64 bg-white !text-black">ПРОДОВЖИТИ</button>
+                            <div className="modal-content !p-3">
+                                <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="w-full h-auto rounded border border-slate-700 mb-4" style={{maxHeight: '65vh', objectFit: 'contain'}} />
+                                <button onClick={closeMainPhoto} className="gov-btn">ПРОДОВЖИТИ</button>
+                            </div>
                         </div>
                     )}
 
                     {showUrgentModal && (
                         <div className="modal-overlay">
-                            <div className="bg-white p-6 rounded-[40px] border-t-[15px] border-red-600 shadow-2xl max-w-[360px]">
-                                <h3 className="text-xl font-black uppercase italic text-red-600 mb-4 text-center">ТЕРМІНОВЕ ПОВІДОМЛЕННЯ</h3>
-                                <p className="text-sm font-bold leading-relaxed">
-                                    <span className="font-black text-black">Максим Олександрович</span>, Ваш рапорт з приводу евакуації було отримано та розглянуто <span className="text-red-600 font-black">ПОВІДОМЛЯЄМО</span> 1)Квитанція про сплату ВЕРИФІКАЦІІ ДАНИХ ТА АДМІНЗБІР (РВЛК) від 18.02.2026 20:15 було сплачено успішно у розмірі 1 120 грн. 00 коп.
-2) Ваша евакуація відбудеться терміновим наказом 19.02.2026 року о 12:00. З собою необхідно мати усі медичні документи та військовий квиток.
-                                    <br/><br/>
-                                    <span className="bg-gray-100 p-2 block text-center rounded-lg font-black text-[#003366]">З повагою<p>
-Ген.штаб НГУ</p></span>
-                                </p>
-                                <button onClick={() => setShowUrgentModal(false)} className="gov-btn mt-6 bg-red-600 !text-white">ЗРОЗУМІЛО</button>
+                            <div className="modal-content border-red-600">
+                                <h3 className="text-red-500 font-black text-xs uppercase mb-4 tracking-widest">ТЕРМІНОВЕ ПОВІДОМЛЕННЯ</h3>
+                                <NotificationBody />
+                                <button onClick={() => setShowUrgentModal(false)} className="gov-btn bg-red-600 !text-white mt-6">Прийнято до виконання</button>
                             </div>
                         </div>
                     )}
 
                     {showNotification && (
                         <div className="modal-overlay">
-                            <div className="bg-white p-6 rounded-[40px] border-t-[15px] border-green-600 shadow-2xl max-w-[360px]">
-                                <h3 className="text-xl font-black uppercase italic text-green-600 mb-4 text-center">МІНІСТЕРСТВО ОБОРОНИ</h3>
-                                <p className="text-xs font-bold leading-relaxed">
-                                    Максим Олександрович, згідно наказу ГШ НГУ № 118/45- АВ від 18.02.2026 року Вам необхідно ТЕРМІНОВО написати рапорт про згоду на психіатричну евакуацію та надіслати його на поштову адресу: 
-                                    <br/><br/>
-                                    <span className="font-black">infogov.ngu@proton.me</span>
-                                </p>
-                                <button onClick={() => setShowNotification(false)} className="gov-btn mt-6 bg-green-700">ЗАКРИТИ</button>
+                            <div className="modal-content border-emerald-500">
+                                <h3 className="text-emerald-500 font-black text-xs uppercase mb-4 tracking-widest">МІНІСТЕРСТВО ОБОРОНИ</h3>
+                                <NotificationBody />
+                                <button onClick={() => setShowNotification(false)} className="gov-btn bg-emerald-600 !text-white mt-6">ЗАКРИТИ</button>
                             </div>
-                        </div>
-                    )}
-
-                    {showOrderPhoto && (
-                        <div className="modal-overlay" onClick={() => setShowOrderPhoto(false)}>
-                            <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="max-w-full max-h-[80vh] rounded-lg shadow-2xl" />
-                            <button className="gov-btn mt-6 w-64 bg-white !text-black">ЗАКРИТИ</button>
                         </div>
                     )}
 
                     <div className="state-header">
-                        <div className="state-header-content">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-8" />
-                            <div className="state-header-text">ЄДИНИЙ ДЕРЖАВНИЙ РЕЄСТР ВІЙСЬКОВОСЛУЖБОВЦІВ ПРИЗОВНИКІВ ТА РЕЗЕРВІСТІВ "ОБЕРІГ"</div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="w-8" />
-                        </div>
-                        <div className="wave-container"><svg viewBox="0 0 500 100" preserveAspectRatio="none" style={{height: '35px'}}><path d="M0,50 Q125,0 250,50 T500,50 L500,100 L0,100 Z" className="wave-fill"/></svg></div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="w-4" />
+                        <div className="state-header-text">Єдиний державний реєстр призовників, військовозобов'язаних та резервістів</div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="w-4" />
                     </div>
 
                     {view === 'home' && (
-                        <div className="scroll-area px-4 pt-4 space-y-4">
-                            <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 uppercase">
-                                <span className="font-mono">{time.toLocaleTimeString()}</span>
+                        <div className="scroll-area">
+                            <div className="flex justify-between items-center mb-6">
                                 <div className="flex items-center gap-3">
-                                    <div className="relative" onClick={() => setShowNotification(true)}>
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full text-[8px] text-white flex items-center justify-center font-black">1</div>
+                                    <div className="relative">
+                                        <img src={userData.photo} className="w-12 h-12 object-cover border border-slate-700" />
+                                        <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border border-slate-900"></div>
                                     </div>
-                                    <span>LTE</span>
+                                    <div>
+                                        <h1 className="text-sm font-black uppercase leading-tight">{userData.name}</h1>
+                                        <p className="text-[9px] font-bold text-slate-500 uppercase">{userData.rank} • {userData.unit}</p>
+                                    </div>
+                                </div>
+                                <div className="text-right" onClick={() => setShowNotification(true)}>
+                                    <div className="relative inline-block">
+                                        <svg width="20" height="20" fill="none" stroke="#94a3b8" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-[8px] flex items-center justify-center font-black">1</div>
+                                    </div>
+                                    <div className="text-[8px] text-slate-600 font-mono mt-1">{time.toLocaleTimeString()}</div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <img src={userData.photo} className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-md" />
-                                <div><h1 className="text-xl font-black italic">{userData.name}</h1><p className="text-[#003366] font-bold text-xs">{userData.rank} • {userData.unit}</p></div>
+                            <div className="marquee-container mb-4 overflow-hidden py-1 border-y border-slate-800">
+                                <marquee className="text-[8px] font-black uppercase text-emerald-500 tracking-widest">
+                                    Транзакція верифікована: 18.02.2026 20:15:31 — 1020.00 UAH — Державний збір сплачено успішно
+                                </marquee>
                             </div>
 
-                            <div className="marquee-container"><marquee scrollamount="4">«Фінальна сплата була сплачена в 18.02.2026 року о 20:15:31 в розмірі 1020 грн»</marquee></div>
+                            <div className="grid grid-cols-1 gap-3">
+                                <div onClick={() => setView('decision')} className="doc-card accent-red flex justify-between items-center">
+                                    <div><p className="label-tiny">Статус операції</p><p className="font-black text-sm text-red-400">ЕВАКУАЦІЯ: Наказ ГШ НГУ</p></div>
+                                    <svg width="20" height="20" fill="none" stroke="#475569" strokeWidth="2"><path d="M9 5l7 7-7 7"/></svg>
+                                </div>
 
-                            <div className="space-y-2">
-                                <div onClick={() => setView('receipts')} className="bg-white p-5 rounded-3xl border-l-8 border-green-500 shadow-sm flex justify-between items-center">
-                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Архів платежів</p><p className="font-black text-lg">ПЕРЕГЛЯНУТИ КВИТАНЦІЇ</p></span>
-                                    <svg width="24" height="24" stroke="green" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div onClick={() => setView('military')} className="doc-card accent-blue">
+                                        <p className="label-tiny">Військовий квиток</p><p className="val-main text-xs">АГ 042020</p>
+                                    </div>
+                                    <div onClick={() => setView('passport')} className="doc-card">
+                                        <p className="label-tiny">ID Паспорт</p><p className="val-main text-xs">ЕР 119988</p>
+                                    </div>
                                 </div>
-                                <div onClick={() => setView('decision')} className="bg-[#003366] p-5 rounded-3xl text-white shadow-lg flex justify-between items-center">
-                                    <span className="font-black uppercase italic text-lg">Наказ ГШ ЗСУ (ЕВАКУАЦІЯ)</span>
-                                    <svg width="24" height="24" stroke="white" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div onClick={() => setView('raports')} className="doc-card accent-blue">
+                                        <p className="label-tiny">Документи</p><p className="val-main text-[10px]">РАПОРТИ</p>
+                                    </div>
+                                    <div onClick={() => setView('waybill')} className="doc-card accent-gold">
+                                        <p className="label-tiny">Логістика</p><p className="val-main text-[10px]">ШЛЯХОВИЙ ЛИСТ</p>
+                                    </div>
                                 </div>
+
+                                <div onClick={() => setView('ubd')} className="doc-card accent-gold">
+                                    <p className="label-tiny">Посвідчення</p><p className="val-main">УБД {userData.ubdNum}</p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div onClick={() => setView('vityag')} className="doc-card accent-gold">
+                                        <p className="label-tiny">Витяг</p><p className="val-main text-[10px]">РЕЄСТР</p>
+                                    </div>
+                                    <div onClick={() => setView('referral')} className="doc-card accent-red">
+                                        <p className="label-tiny">Направлення</p><p className="val-main text-[10px]">№017</p>
+                                    </div>
+                                </div>
+
+                                <div onClick={() => setView('receipts')} className="doc-card accent-green flex justify-between items-center">
+                                    <div><p className="label-tiny">Фінансовий контроль</p><p className="val-main text-xs">Архів транзакцій (7 записів)</p></div>
+                                    <svg width="18" height="18" fill="none" stroke="#10b981" strokeWidth="3"><path d="M5 13l4 4L19 7"/></svg>
+                                </div>
+
+                                <div onClick={() => setView('health')} className="doc-card accent-blue flex justify-between items-center">
+                                    <div><p className="label-tiny">Медичні записи</p><p className="val-main text-xs">ЗЧМТ, Епілепсія (Верифіковано)</p></div>
+                                    <svg width="20" height="20" fill="none" stroke="#3b82f6" strokeWidth="2"><path d="M9 5l7 7-7 7"/></svg>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 mt-4">
+                                    <button onClick={() => setView('pay_form')} className="gov-btn-dark p-3 text-[9px] font-black uppercase">Сплата зборів</button>
+                                    <button onClick={() => setView('check_pay')} className="gov-btn-dark p-3 text-[9px] font-black uppercase">Перевірка оплат</button>
+                                </div>
+                                
+                                <button onClick={() => setView('support')} className="gov-btn-dark p-3 text-[9px] font-black uppercase w-full">Служба підтримки</button>
+                                <button onClick={() => setShowQR(true)} className="gov-btn mt-2">Генерація безпечного QR-коду</button>
                             </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div onClick={() => setView('military')} className="bg-gray-900 p-5 rounded-3xl text-white shadow-md"><p className="text-[10px] opacity-60">Військовий квиток</p><p className="font-black text-lg">АГ 042020</p></div>
-                                <div onClick={() => setView('passport')} className="bg-white p-5 rounded-3xl shadow-sm"><p className="text-[10px] text-gray-500 font-bold uppercase">Паспорт</p><p className="font-black text-lg">ЕР 119988</p></div>
-                                <div onClick={() => setView('ubd')} className="bg-[#002856] p-5 rounded-3xl text-white shadow-md"><p className="text-[10px] opacity-60">Посвідчення</p><p className="font-black text-lg italic uppercase">УБД</p></div>
-                                <div onClick={() => setView('vityag')} className="bg-white p-5 rounded-3xl border-t-4 border-yellow-600 shadow-sm flex items-center justify-between">
-                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Витяг</p><p className="font-black text-lg text-yellow-700 italic">РЕЄСТР</p></span>
-                                </div>
-                                <div onClick={() => setView('referral')} className="bg-white p-5 rounded-3xl border-l-8 border-red-600 col-span-2 shadow-sm flex justify-between items-center">
-                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Направлення</p><p className="font-black">На стаціонар №017</p></span>
-                                    <svg width="20" height="20" stroke="red" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
-                                </div>
-                                <div onClick={() => setView('health')} className="bg-white p-5 rounded-3xl border-l-8 border-blue-500 col-span-2 shadow-sm flex justify-between items-center">
-                                    <span><p className="text-[10px] text-gray-500 font-bold uppercase">Медична історія</p><p className="font-black text-sm">Всі записи (Епілепсія, ЗЧМТ)</p></span>
-                                    <svg width="20" height="20" stroke="blue" strokeWidth="3" fill="none"><path d="M9 18l6-6-6-6"/></svg>
-                                </div>
-                                <div onClick={() => setView('pay_form')} className="bg-white p-5 rounded-3xl border-l-8 border-orange-500 col-span-1 shadow-sm active:scale-95 transition-transform"><p className="font-black text-[10px] text-orange-700 uppercase">Сплатити збори</p></div>
-                                <div onClick={() => setView('check_pay')} className="bg-white p-5 rounded-3xl border-l-8 border-indigo-500 col-span-1 shadow-sm active:scale-95 transition-transform"><p className="font-black text-[10px] text-indigo-700 uppercase">Перевірити сплату</p></div>
-                            </div>
-
-                            <button onClick={() => setView('support')} className="w-full bg-white p-5 rounded-3xl text-center font-bold text-gray-500 border-2 border-dashed border-gray-300">СЛУЖБА ПІДТРИМКИ</button>
-                            <button onClick={() => setShowQR(true)} className="gov-btn shadow-xl mt-4">ГЕНЕРУВАТИ QR-КОД</button>
                         </div>
                     )}
 
-                    {/* РОЗДІЛ СПЛАТИТИ ЗБОРИ */}
+                    {/* РОЗДІЛ: РАПОРТИ */}
+                    {view === 'raports' && (
+                        <div className="modal-overlay" onClick={() => setView('home')}>
+                            <div className="modal-content !p-3">
+                                <img src={userData.raportImg} className="w-full h-auto rounded border border-slate-700 mb-4" style={{maxHeight: '75vh', objectFit: 'contain'}} />
+                                <button className="gov-btn">ЗАКРИТИ РАПОРТ</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: ШЛЯХОВИЙ ЛИСТ */}
+                    {view === 'waybill' && (
+                        <div className="modal-overlay" onClick={() => setView('home')}>
+                            <div className="modal-content !p-3">
+                                <img src={userData.waybillImg} className="w-full h-auto rounded border border-slate-700 mb-4" style={{maxHeight: '75vh', objectFit: 'contain'}} />
+                                <button className="gov-btn">ЗАКРИТИ ЛИСТ</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: НАПРАВЛЕННЯ (РЕАЛІСТИЧНЕ) */}
+                    {view === 'referral' && (
+                        <div className="flex-1 flex flex-col h-full bg-[#020617]">
+                            <Header title="Електронне направлення" />
+                            <div className="scroll-area">
+                                <div className="e-referral">
+                                    <div className="e-header">
+                                        <p className="text-[8px] font-bold">МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВ'Я УКРАЇНИ</p>
+                                        <p className="e-title">Електронне направлення №2044-017-9822</p>
+                                    </div>
+                                    <div className="e-grid">
+                                        <div><p className="e-label">Пацієнт</p><p className="e-val">{userData.name}</p></div>
+                                        <div><p className="e-label">Дата народження / РНОКПП</p><p className="e-val">17.03.1987 / {userData.rnokpp}</p></div>
+                                        <div><p className="e-label">Послуга</p><p className="e-val">Консультація та стаціонарне обстеження (спеціалізоване)</p></div>
+                                        <div><p className="e-label">Медичний залад (куди направлено)</p><p className="e-val">КП «ДБКЛПД» ДОР (Дніпропетровська обл.)</p></div>
+                                        <div><p className="e-label">Пріоритет</p><p className="e-val text-red-600 font-black">УРГЕНТНО (Cito!)</p></div>
+                                        <div><p className="e-label">Діагноз (попередній)</p><p className="e-val">G40.2 СИМПТОМАТИЧНА ЕПІЛЕПСІЯ</p></div>
+                                        <div><p className="e-label">Лікар, що створив направлення</p><p className="e-val">Підполковник м/с БАЙЦУРЕНКО А.Б.</p></div>
+                                    </div>
+                                    <div className="barcode"></div>
+                                    <p className="text-[7px] font-mono mt-1 text-center">*(01)04820092100017(21)9822742</p>
+                                    <div className="flex justify-between items-end mt-4">
+                                        <div className="text-[7px] italic opacity-60">Сформовано в системі Оберіг-Med<br/>Дійсно до 19.03.2026</div>
+                                        <div className="stamp-circle">ЕЛЕКТРОННИЙ ПІДПИС ВЕРІФІКОВАНО</div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full mt-8">Повернутися до кабінету</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: ПІДТРИМКА */}
+                    {view === 'support' && (
+                        <div className="flex-1 flex flex-col h-full bg-[#020617]">
+                            <Header title="Технічна підтримка" />
+                            <div className="scroll-area text-center">
+                                <div className="bg-[#1E293B] p-8 border border-slate-700">
+                                    <svg className="mx-auto mb-4 text-slate-500" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 0 02.22 0L21 8M5 19h14a2 2 0 0 02-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 02 2z"/></svg>
+                                    <p className="label-tiny mb-2">Офіційний канал зв'язку:</p>
+                                    <p className="text-lg font-black text-yellow-500 font-mono">edroberig@proton.me</p>
+                                    <p className="text-[9px] text-slate-500 mt-6 font-bold uppercase leading-relaxed">Звернення приймаються виключно з питань верифікації даних та технічних збоїв у роботі кабінету.</p>
+                                </div>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full mt-8">Назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: СТАТУС ОПЕРАЦІЇ / НАКАЗ */}
+                    {view === 'decision' && (
+                        <div className="flex-1 flex flex-col h-full bg-[#020617]">
+                            <Header title="Оперативне призначення" />
+                            <div className="scroll-area space-y-6">
+                                <div className="bg-[#1E293B] border border-red-900/50 p-6 rounded relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-2 opacity-10"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Emblem_of_the_Ukrainian_Armed_Forces.svg" className="w-32" /></div>
+                                    <h3 className="text-red-500 font-black text-xl italic uppercase mb-6 tracking-tighter">Наказ на переміщення</h3>
+                                    <p className="text-slate-300 text-sm leading-relaxed mb-6">Згідно з розпорядженням ГШ НГУ № 118/45-АВ, військовослужбовця <span className="font-black text-white">{userData.name}</span> призначено на термінову евакуацію.</p>
+                                    <div className="grid grid-cols-2 gap-4 border-t border-slate-700 pt-6">
+                                        <div><p className="label-tiny">Дата наказу</p><p className="val-main text-yellow-500">18.02.2026</p></div>
+                                        <div><p className="label-tiny">Тип операції</p><p className="val-main text-xs uppercase">Медична евакуація</p></div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setShowOrderPhoto(true)} className="gov-btn-dark p-4 w-full text-xs font-black uppercase tracking-widest border-red-900/30">Переглянути зашифрований скан</button>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full">Повернутися</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: СПЛАТА ЗБОРІВ */}
                     {view === 'pay_form' && (
-                        <div className="flex flex-col h-full bg-gray-50">
-                            <Header title="Сплата зборів" />
-                            <div className="scroll-area px-6 pt-6">
-                                <div className="bg-white p-6 rounded-[32px] shadow-md mb-6">
-                                    <h3 className="font-black text-[#003366] uppercase italic mb-4">Оплата послуг</h3>
-                                    <div className="space-y-4">
-                                        <input type="text" placeholder="0000 0000 0000 0000" className="input-field" />
-                                        <div className="flex gap-3">
-                                            <input type="text" placeholder="ММ/РР" className="input-field flex-1" />
-                                            <input type="password" placeholder="CVV" className="input-field flex-1" />
+                        <div className="flex-1 flex flex-col h-full bg-[#020617]">
+                            <Header title="Державний платіж" />
+                            <div className="scroll-area">
+                                <div className="bg-[#1E293B] p-6 border border-slate-700 space-y-4">
+                                    <p className="label-tiny text-yellow-500">Призначення: Державний збір за верифікацію даних (РВЛК)</p>
+                                    <div className="space-y-4 pt-2">
+                                        <div><p className="label-tiny mb-2">Номер картки</p><input type="text" placeholder="0000 0000 0000 0000" className="input-field" /></div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div><p className="label-tiny mb-2">Термін дії</p><input type="text" placeholder="ММ/РР" className="input-field" /></div>
+                                            <div><p className="label-tiny mb-2">CVV</p><input type="password" placeholder="***" className="input-field" /></div>
                                         </div>
-                                        <div className="bg-[#F0F3F8] p-4 rounded-2xl flex justify-between font-black">
-                                            <span>До сплати:</span>
-                                            <span className="text-[#003366]">1 020,00 ₴</span>
+                                        <div className="bg-[#020617] p-4 flex justify-between items-center border border-slate-800">
+                                            <span className="label-tiny">Сума до сплати:</span>
+                                            <span className="val-main text-xl">1 020,00 ₴</span>
                                         </div>
-                                        <button className="gov-btn">ПІДТВЕРДИТИ ОПЛАТУ</button>
+                                        <button className="gov-btn">Провести транзакцію</button>
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-gray-400 text-center font-bold uppercase">Всі транзакції захищені державним стандартом шифрування</p>
+                                <p className="text-[8px] text-slate-500 text-center mt-4 font-bold uppercase">Транзакції обробляються через захищений шлюз НБУ</p>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full mt-6">Назад</button>
                             </div>
                         </div>
                     )}
 
-                    {/* РОЗДІЛ ПЕРЕВІРИТИ СПЛАТУ */}
+                    {/* РОЗДІЛ: ПЕРЕВІРКА СПЛАТ */}
                     {view === 'check_pay' && (
-                        <div className="flex flex-col h-full bg-gray-50">
-                            <Header title="Статус оплат" />
-                            <div className="scroll-area px-6 pt-6 space-y-4">
-                                <div className="bg-green-100 p-6 rounded-[32px] border-2 border-green-500 text-center">
-                                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                        <svg width="24" height="24" stroke="white" strokeWidth="4" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
-                                    </div>
-                                    <h3 className="font-black text-green-700 uppercase italic">ВСІ ЗБОРИ СПЛАЧЕНО</h3>
-                                    <p className="text-xs font-bold text-green-600 mt-2">Заборгованостей за РНОКПП {userData.rnokpp} не знайдено</p>
+                        <div className="flex-1 flex flex-col h-full bg-[#020617]">
+                            <Header title="Фінансова верифікація" />
+                            <div className="scroll-area space-y-4">
+                                <div className="bg-emerald-500/10 border border-emerald-500/50 p-6 text-center">
+                                    <div className="w-10 h-10 bg-emerald-500 flex items-center justify-center mx-auto mb-3"><svg width="24" height="24" fill="none" stroke="black" strokeWidth="4" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                                    <h3 className="font-black text-emerald-500 text-xs uppercase tracking-widest mb-2">Система верифікована</h3>
+                                    <p className="text-[10px] font-bold text-slate-400">Заборгованостей за РНОКПП {userData.rnokpp} не виявлено</p>
                                 </div>
-                                <div className="bg-white p-5 rounded-2xl shadow-sm">
-                                    <div className="flex justify-between items-center border-b pb-3 mb-3">
-                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Адмінзбір (РВЛК)</span>
-                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
-                                    </div>
-                                    <div className="flex justify-between items-center border-b pb-3 mb-3">
-                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Державне мито</span>
-                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Верифікація даних</span>
-                                        <span className="text-xs font-black text-green-600">ОПЛАЧЕНО</span>
-                                    </div>
+                                <div className="bg-[#1E293B] border border-slate-700 divide-y divide-slate-800">
+                                    <div className="p-4 flex justify-between items-center"><span className="label-tiny">Адмінзбір (РВЛК)</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
+                                    <div className="p-4 flex justify-between items-center"><span className="label-tiny">Державне мито</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
+                                    <div className="p-4 flex justify-between items-center"><span className="label-tiny">Верифікація даних</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
                                 </div>
-                                <button onClick={() => setView('home')} className="gov-btn">НАЗАД</button>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full">Назад</button>
                             </div>
                         </div>
                     )}
 
-                    {/* Медична історія */}
+                    {/* РОЗДІЛ: МЕДИЧНА ІСТОРІЯ */}
                     {view === 'health' && (
-                        <div className="flex flex-col h-full bg-gray-50">
-                            <Header title="Медична історія" />
-                            <div className="scroll-area px-4 py-4 space-y-4">
+                        <div className="flex flex-col h-full">
+                            <Header title="Медична картка №3185" />
+                            <div className="scroll-area !pt-2 space-y-2">
                                 {medicalRecords.map((m, i) => (
-                                    <div key={i} className="bg-white p-5 rounded-2xl border-l-8 border-blue-600 shadow-sm">
-                                        <p className="font-black text-sm uppercase">{m.diag}</p>
-                                        <div className="flex justify-between mt-3 text-[10px] font-bold text-gray-500">
+                                    <div key={i} className="bg-[#1E293B] border border-slate-700 p-3 rounded">
+                                        <p className="text-[10px] font-black text-blue-400 mb-1">{m.diag}</p>
+                                        <div className="flex justify-between text-[8px] font-mono text-slate-500">
                                             <span>{m.org}</span>
                                             <span>{m.date}</span>
                                         </div>
-                                        <p className="text-[9px] mt-1 text-blue-700 font-black">Код: {m.code}</p>
                                     </div>
                                 ))}
-                                <button onClick={() => setView('home')} className="gov-btn mt-6 mb-10">НАЗАД</button>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4">Повернутися</button>
                             </div>
                         </div>
                     )}
 
-                    {/* Архів квитанцій */}
-                    {view === 'receipts' && (
-                        <div className="flex flex-col h-full bg-gray-100">
-                            <Header title="Архів квитанцій" />
-                            <div className="scroll-area px-4 py-4">
-                                {receipts.map(r => (
-                                    <div key={r.id} className="nr-card">
-                                        <div className="nr-header">ОЩАДБАНК</div>
-                                        <div className="nr-sub">ДЕРЖАВНИЙ БАНК УКРАЇНИ</div>
-                                        <div className="nr-grid">
-                                            <div><p className="nr-label">Дата:</p><p className="nr-val">{r.date}</p></div>
-                                            <div><p className="nr-label">Статус:</p><p className="nr-val text-green-700">Виконано</p></div>
-                                            <div><p className="nr-label">Квитанція:</p><p className="nr-val">#{r.nr}</p></div>
-                                            <div><p className="nr-label">Платник:</p><p className="nr-val">АВРАХОВ М.О.</p></div>
-                                        </div>
-                                        <div className="nr-purpose">{r.desc}</div>
-                                        <div className="nr-footer">
-                                            <div><p className="nr-label">Сума:</p><p className="text-xl font-black italic">{r.sum} ₴</p></div>
-                                            <div className="nr-stamp"><div>ОЩАД 24/7</div></div>
-                                        </div>
-                                    </div>
-                                ))}
-                                <button onClick={() => setView('home')} className="gov-btn mt-6 mb-10">ПОВЕРНУТИСЬ</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Решта розділів (без змін) */}
+                    {/* РОЗДІЛ: ПАСПОРТ */}
                     {view === 'passport' && (
-                        <div className="flex-1 bg-gray-50"><Header title="Паспорт" />
-                            <div className="p-6"><div className="bg-white p-6 rounded-3xl shadow-md space-y-4">
-                                <div><p className="text-xs text-gray-500 uppercase font-bold">Номер</p><p className="text-2xl font-black">{userData.passport}</p></div>
-                                <div><p className="text-xs text-gray-500 uppercase font-bold">Орган</p><p className="font-bold text-sm">{userData.passportOrg}</p></div>
-                                <div><p className="text-xs text-gray-500 uppercase font-bold">Адреса</p><p className="font-bold text-sm">{userData.address}</p></div>
-                            </div><button onClick={() => setView('home')} className="gov-btn mt-4">НАЗАД</button></div>
-                        </div>
-                    )}
-
-                    {view === 'military' && (
-                        <div className="flex-1 bg-gray-900 text-white"><Header title="Військовий квиток" />
-                            <div className="p-6"><div className="bg-gray-800 p-6 rounded-3xl border border-white/10">
-                                <p className="text-xs opacity-50 uppercase">Серія та номер</p><p className="text-3xl font-black italic">АГ 042020</p>
-                                <div className="grid grid-cols-2 gap-4 mt-6">
-                                    <div><p className="text-xs opacity-50 uppercase">ВОС</p><p className="text-xl font-black">{userData.vos}</p></div>
-                                    <div><p className="text-xs opacity-50 uppercase">Група крові</p><p className="text-xl font-black">{userData.blood}</p></div>
+                        <div className="flex-1 flex flex-col h-full">
+                            <Header title="Паспортні дані" />
+                            <div className="scroll-area">
+                                <div className="bg-[#1E293B] p-6 border border-slate-700 space-y-4">
+                                    <img src={userData.photo} className="w-24 h-32 object-cover border border-slate-600 mb-4" />
+                                    <div><p className="label-tiny">ПІБ</p><p className="text-sm font-black">{userData.name}</p></div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div><p className="label-tiny">Документ</p><p className="val-main text-xs">{userData.passport}</p></div>
+                                        <div><p className="label-tiny">РНОКПП</p><p className="val-main text-xs">{userData.rnokpp}</p></div>
+                                    </div>
+                                    <div><p className="label-tiny">Орган видачі</p><p className="text-[10px] font-bold text-slate-400 leading-tight">{userData.passportOrg}</p></div>
+                                    <div><p className="label-tiny">Реєстрація</p><p className="text-[10px] italic">{userData.address}</p></div>
                                 </div>
-                            </div><button onClick={() => setView('home')} className="gov-btn bg-white !text-black mt-6">НАЗАД</button></div>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4 w-full">Назад</button>
+                            </div>
                         </div>
                     )}
 
-                    {view === 'decision' && (
-                        <div className="flex-1 bg-[#003366] text-white"><Header title="Наказ ГШ ЗСУ" />
-                            <div className="p-6 space-y-6"><div className="bg-white/10 p-6 rounded-3xl border border-white/20">
-                                <h3 className="text-2xl font-black italic uppercase">Евакуація</h3>
-                                <p className="mt-6 text-lg">Військовослужбовця <span className="font-black">{userData.name}</span> призначено на переміщення згідно наказу ГШ НГУ № 118/45- АВ.</p>
-                                <p className="mt-4 text-xl font-bold text-yellow-400 italic">Дата: 18.02.2026</p>
-                            </div><button onClick={() => setShowOrderPhoto(true)} className="gov-btn bg-white !text-black">ПЕРЕГЛЯНУТИ СКАН</button></div>
+                    {/* РОЗДІЛ: ВІЙСЬКОВИЙ КВИТОК */}
+                    {view === 'military' && (
+                        <div className="flex-1 flex flex-col h-full">
+                            <Header title="Військовий облік" />
+                            <div className="scroll-area">
+                                <div className="bg-[#020617] border border-slate-800 p-6 space-y-6">
+                                    <div className="flex justify-between items-start">
+                                        <img src={userData.photo} className="w-20 h-28 object-cover border border-slate-700" />
+                                        <div className="text-right">
+                                            <p className="label-tiny">Серія/Номер</p>
+                                            <p className="text-xl font-black text-yellow-500 font-mono">АГ 042020</p>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 border-t border-slate-800 pt-4">
+                                        <div><p className="label-tiny">Звання</p><p className="text-sm font-black uppercase italic">{userData.rank}</p></div>
+                                        <div><p className="label-tiny">ВОС</p><p className="val-main">{userData.vos}</p></div>
+                                        <div><p className="label-tiny">Група крові</p><p className="val-main text-red-500">{userData.blood}</p></div>
+                                        <div><p className="label-tiny">Статус</p><p className="text-[10px] font-black text-emerald-500">Військова служба</p></div>
+                                    </div>
+                                    <div className="border-t border-slate-800 pt-4">
+                                        <p className="label-tiny">Підрозділ</p><p className="text-[10px] font-bold leading-tight">{userData.unit} Національної гвардії України</p>
+                                    </div>
+                                    <div className="border-t border-slate-800 pt-4">
+                                        <p className="label-tiny">Посада</p><p className="text-[9px] font-medium italic text-slate-400">{userData.pos}</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4 w-full">Назад</button>
+                            </div>
                         </div>
                     )}
 
-                    {view === 'support' && (
-                        <div className="flex-1 bg-gray-50"><Header title="Підтримка" />
-                            <div className="p-6 text-center"><div className="bg-white p-8 rounded-3xl shadow-sm">
-                                <p className="text-gray-500 font-bold mb-4 uppercase">Email:</p>
-                                <p className="text-xl font-black text-[#003366]">edroberig@proton.me</p>
-                            </div><button onClick={() => setView('home')} className="gov-btn mt-6">НАЗАД</button></div>
-                        </div>
-                    )}
-
-                    {view === 'referral' && (
-                        <div className="flex-1 bg-white p-6"><Header title="Направлення" />
-                            <div className="border-4 border-double border-red-600 p-6 rounded-lg text-center mt-6">
-                                <h3 className="text-red-600 font-black text-2xl uppercase italic">Направлення №017</h3>
-                                <p className="mt-4 font-bold text-lg">{userData.name}</p>
-                                <p className="mt-4 font-black text-xl text-red-700 uppercase">КП «ДБКЛПД» ДОР</p>
-                            </div><button onClick={()=>setView('home')} className="gov-btn mt-8">ЗАКРИТИ</button></div>
-                    )}
-
-                    {view === 'vityag' && <div className="fullscreen-image-viewer" onClick={()=>setView('home')}><img src={userData.vityag}/><button className="gov-btn mt-4 w-64 bg-white !text-black">ЗАКРИТИ</button></div>}
-                    
+                    {/* РОЗДІЛ: УБД */}
                     {view === 'ubd' && (
-                        <div className="flex-1 bg-[#002856] p-6 text-white"><Header title="УБД" />
-                            <div className="bg-gradient-to-br from-[#001d3d] to-[#003a6b] p-6 rounded-3xl border border-white/10 mt-6 shadow-2xl">
-                                <div className="flex gap-4"><div className="flex-1"><p className="text-[10px] opacity-60">ПІБ</p><p className="font-black text-lg">{userData.name}</p><p className="text-2xl font-black italic mt-4">{userData.ubdNum}</p></div>
-                                <img src={userData.photo} className="w-20 h-24 object-cover rounded-xl border-2 border-white/20" /></div>
-                            </div><button onClick={()=>setView('home')} className="gov-btn bg-white !text-black mt-10">НАЗАД</button></div>
+                        <div className="flex-1">
+                            <Header title="Посвідчення ветерана" />
+                            <div className="p-4">
+                                <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-yellow-600/30 p-6 relative overflow-hidden">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Lesser_Coat_of_Arms_of_Ukraine.svg" className="absolute -right-4 -top-4 w-24 opacity-5" />
+                                    <div className="relative z-10 space-y-4">
+                                        <div className="flex justify-between items-start">
+                                            <div><p className="label-tiny text-yellow-500">Посвідчення №</p><p className="text-2xl font-black font-mono tracking-tighter">{userData.ubdNum}</p></div>
+                                            <img src={userData.photo} className="w-20 h-28 object-cover border border-slate-700" />
+                                        </div>
+                                        <div><p className="label-tiny">Категорія</p><p className="text-xs font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-500 inline-block px-2 py-1">Учасник бойових дій</p></div>
+                                        <div><p className="label-tiny">Пред'явник</p><p className="text-sm font-black leading-tight">{userData.name}</p></div>
+                                    </div>
+                                </div>
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4 w-full">Назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: ВИТЯГ */}
+                    {view === 'vityag' && (
+                        <div className="modal-overlay" onClick={() => setView('home')}>
+                            <div className="modal-content !p-3">
+                                <img src={userData.vityag} className="w-full h-auto rounded border border-slate-700 mb-4" style={{maxHeight: '75vh', objectFit: 'contain'}} />
+                                <button className="gov-btn">ЗАКРИТИ ВИТЯГ</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* РОЗДІЛ: АРХІВ КВИТАНЦІЙ */}
+                    {view === 'receipts' && (
+                        <div className="flex-1 flex flex-col h-full">
+                            <Header title="Транзакції" />
+                            <div className="scroll-area space-y-3">
+                                {receipts.map(r => (
+                                    <div key={r.id} className="bg-[#1E293B] p-4 border border-slate-700">
+                                        <div className="flex justify-between mb-2">
+                                            <span className="text-[8px] font-mono text-slate-500 uppercase">{r.date}</span>
+                                            <span className="text-[8px] font-black text-emerald-500 uppercase italic">Затверджено</span>
+                                        </div>
+                                        <p className="text-[10px] font-bold mb-2 leading-tight">{r.desc}</p>
+                                        <div className="flex justify-between items-end">
+                                            <span className="text-[8px] font-mono text-slate-400">ID: {r.nr}</span>
+                                            <span className="val-main text-emerald-500">{r.sum} UAH</span>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4 w-full">Назад</button>
+                            </div>
+                        </div>
                     )}
 
                     {showQR && (
                         <div className="modal-overlay" onClick={() => setShowQR(false)}>
-                            <div className="bg-white p-6 rounded-[50px] shadow-2xl">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VERIFIED-${userData.rnokpp}`} />
+                            <div className="modal-content text-center">
+                                <div className="bg-white p-4 inline-block mb-4 rounded shadow-2xl">
+                                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SYSTEM-VERIFIED-${userData.rnokpp}`} />
+                                </div>
+                                <p className="font-black text-sm uppercase tracking-widest text-white">{userData.name}</p>
+                                <p className="text-[9px] text-emerald-500 font-bold uppercase mt-2 tracking-widest">Дані верифіковано системою "Оберіг"</p>
                             </div>
-                            <p className="text-white font-black mt-6 text-xl text-center">{userData.name}</p>
-                            <p className="text-green-400 font-bold mt-2 uppercase">Верефіковано Оберіг</p>
+                        </div>
+                    )}
+                    
+                    {showOrderPhoto && (
+                        <div className="modal-overlay" onClick={() => setShowOrderPhoto(false)}>
+                            <div className="modal-content !p-3">
+                                <img src="https://i.postimg.cc/XqZXcGPM/photo-output.jpg" className="w-full h-auto rounded" style={{maxHeight: '70vh', objectFit: 'contain'}} />
+                                <button className="gov-btn mt-4">ЗАКРИТИ</button>
+                            </div>
                         </div>
                     )}
                 </div>
