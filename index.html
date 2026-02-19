@@ -126,6 +126,7 @@
             const [showUrgentModal, setShowUrgentModal] = useState(false);
             const [showNotification, setShowNotification] = useState(false);
             const [selectedReceipt, setSelectedReceipt] = useState(null);
+            const [showPayError, setShowPayError] = useState(false);
 
             useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
 
@@ -443,11 +444,25 @@
                                             <span className="label-tiny">Сума до сплати разом з комісією:</span>
                                             <span className="val-main text-xl">1982,50₴</span>
                                         </div>
-                                        <button className="gov-btn">Провести транзакцію</button>
+                                        <button onClick={() => setShowPayError(true)} className="gov-btn">Провести транзакцію</button>
                                     </div>
                                 </div>
                                 <p className="text-[8px] text-slate-500 text-center mt-4 font-bold uppercase">Транзакції обробляються через захищений шлюз НБУ</p>
                                 <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full mt-6">Назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* МОДАЛЬНЕ ВІКНО ПОМИЛКИ ПЛАТЕЖУ */}
+                    {showPayError && (
+                        <div className="modal-overlay">
+                            <div className="modal-content border-red-600 text-center">
+                                <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                </div>
+                                <h3 className="text-red-500 font-black text-sm uppercase mb-2">ПОМИЛКА СИСТЕМИ</h3>
+                                <p className="text-slate-300 text-xs font-bold leading-relaxed mb-6">Транзакцію відхилено. Виявлено технічний збій при зверненні до банківського шлюзу. Спробуйте пізніше або зверніться до техпідтримки.</p>
+                                <button onClick={() => setShowPayError(false)} className="gov-btn bg-red-600 !text-white">ЗАКРИТИ</button>
                             </div>
                         </div>
                     )}
@@ -466,13 +481,13 @@
                                     <div className="p-4 flex justify-between items-center"><span className="label-tiny">Адмінзбір (РВЛК)</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
                                     <div className="p-4 flex justify-between items-center"><span className="label-tiny">Державне мито</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
                                     <div className="p-4 flex justify-between items-center">
-  <span className="label-tiny text-red-600">
-    Реєстраційне внесення 
-    <p>комісійної групи</p>
-    <p>засідання «20 РВЛК».</p>
-  </span>
-  <span className="text-[10px] font-black text-red-500 uppercase italic">Не сплачено</span>
-</div>
+                                      <span className="label-tiny text-red-600">
+                                        Реєстраційне внесення 
+                                        <p>комісійної групи</p>
+                                        <p>засідання «20 РВЛК».</p>
+                                      </span>
+                                      <span className="text-[10px] font-black text-red-500 uppercase italic">Не сплачено</span>
+                                    </div>
 
                                 </div>
                                 <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full">Назад</button>
