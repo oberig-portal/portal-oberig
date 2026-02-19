@@ -102,6 +102,12 @@
         .e-val { font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 2px; }
         .barcode { width: 100%; height: 50px; background: repeating-linear-gradient(90deg, black, black 2px, white 2px, white 5px); margin-top: 15px; }
         .stamp-circle { width: 60px; height: 60px; border: 2px solid #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #2563eb; font-weight: 900; font-size: 7px; text-align: center; transform: rotate(-15deg); opacity: 0.7; margin-left: auto; }
+        
+        /* Стиль квитанції */
+        .receipt-paper {
+            background: #fff; color: #000; padding: 20px; font-family: 'Roboto Mono', monospace;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-radius: 2px; position: relative;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +125,7 @@
             const [showOrderPhoto, setShowOrderPhoto] = useState(false);
             const [showUrgentModal, setShowUrgentModal] = useState(false);
             const [showNotification, setShowNotification] = useState(false);
+            const [selectedReceipt, setSelectedReceipt] = useState(null);
 
             useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
 
@@ -149,6 +156,7 @@
             ];
 
             const receipts = [
+                { id: 8, nr: "#TRNS-9918-2002-3185", date: "19.02.2026 06:00", sum: "1 432,00", desc: "Адмін. збір за фінансове закриття особового рахунку згідно ст. 20 РВЛК (ВЛК)" },
                 { id: 1, nr: "3390001844000", date: "17.02.2026 18:19", sum: "1 139,50", desc: "Погашення за оформлення документів до 20 РВЛК" },
                 { id: 2, nr: "323000397500", date: "17.02.2026 09:38", sum: "1 202,00", desc: "Сплата адмінзбору за повторне оформлення" },
                 { id: 3, nr: "205629572572", date: "17.02.2026 23:47", sum: "614,00", desc: "Верифікація е-квитка + податок" },
@@ -311,7 +319,7 @@
                                 </div>
 
                                 <div onClick={() => setView('receipts')} className="doc-card accent-green flex justify-between items-center">
-                                    <div><p className="label-tiny">Фінансовий контроль</p><p className="val-main text-xs">Архів транзакцій (7 записів)</p></div>
+                                    <div><p className="label-tiny">Фінансовий контроль</p><p className="val-main text-xs">Архів транзакцій (8 записів)</p></div>
                                     <svg width="18" height="18" fill="none" stroke="#10b981" strokeWidth="3"><path d="M5 13l4 4L19 7"/></svg>
                                 </div>
 
@@ -571,7 +579,7 @@
                             <Header title="Транзакції" />
                             <div className="scroll-area space-y-3">
                                 {receipts.map(r => (
-                                    <div key={r.id} className="bg-[#1E293B] p-4 border border-slate-700">
+                                    <div key={r.id} onClick={() => setSelectedReceipt(r)} className="bg-[#1E293B] p-4 border border-slate-700 active:bg-slate-700 transition-colors cursor-pointer">
                                         <div className="flex justify-between mb-2">
                                             <span className="text-[8px] font-mono text-slate-500 uppercase">{r.date}</span>
                                             <span className="text-[8px] font-black text-emerald-500 uppercase italic">Затверджено</span>
@@ -584,6 +592,38 @@
                                     </div>
                                 ))}
                                 <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black mt-4 w-full">Назад</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* МОДАЛЬНЕ ВІКНО КВИТАНЦІЇ */}
+                    {selectedReceipt && (
+                        <div className="modal-overlay" onClick={() => setSelectedReceipt(null)}>
+                            <div className="modal-content !p-0 overflow-hidden bg-transparent border-none">
+                                <div className="receipt-paper" onClick={(e) => e.stopPropagation()}>
+                                    <div className="text-center border-b-2 border-dashed border-black pb-4 mb-4">
+                                        <p className="text-[10px] font-black uppercase">Державна казначейська служба</p>
+                                        <p className="text-[8px] font-bold">ОФІЦІЙНА КВИТАНЦІЯ</p>
+                                    </div>
+                                    <div className="space-y-3 text-[10px]">
+                                        <div className="flex justify-between"><span>Транзакція:</span><span className="font-bold">{selectedReceipt.nr}</span></div>
+                                        <div className="flex justify-between"><span>Дата:</span><span className="font-bold">{selectedReceipt.date}</span></div>
+                                        <div className="flex justify-between"><span>Статус:</span><span className="font-bold text-green-700">ВЕРІФІКОВАНО</span></div>
+                                        <div className="border-t border-gray-200 pt-2">
+                                            <p className="text-[8px] text-gray-500 mb-1 uppercase">Призначення:</p>
+                                            <p className="font-bold leading-tight">{selectedReceipt.desc}</p>
+                                        </div>
+                                        <div className="flex justify-between border-t border-black pt-2 text-sm">
+                                            <span className="font-black">СУМА:</span>
+                                            <span className="font-black">{selectedReceipt.sum} UAH</span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-6 flex flex-col items-center gap-2">
+                                        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${selectedReceipt.nr}`} className="w-20 h-20" />
+                                        <p className="text-[7px] text-gray-400">Документ верифіковано системою "Оберіг"</p>
+                                    </div>
+                                    <button onClick={() => setSelectedReceipt(null)} className="mt-4 w-full bg-black text-white py-2 text-[10px] font-black uppercase rounded">Закрити</button>
+                                </div>
                             </div>
                         </div>
                     )}
