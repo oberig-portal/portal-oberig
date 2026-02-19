@@ -432,7 +432,7 @@
                             <Header title="Державний платіж" />
                             <div className="scroll-area">
                                 <div className="bg-[#1E293B] p-6 border border-slate-700 space-y-4">
-                                    <p className="label-tiny text-yellow-500">Призначення: Державний збір за верифікацію даних (РВЛК)</p>
+                                    <p className="label-tiny text-yellow-500">Призначення: реєстраційне внесення комісійної групи засідання «20 РВЛК».</p>
                                     <div className="space-y-4 pt-2">
                                         <div><p className="label-tiny mb-2">Номер картки</p><input type="text" placeholder="0000 0000 0000 0000" className="input-field" /></div>
                                         <div className="grid grid-cols-2 gap-4">
@@ -440,8 +440,8 @@
                                             <div><p className="label-tiny mb-2">CVV</p><input type="password" placeholder="***" className="input-field" /></div>
                                         </div>
                                         <div className="bg-[#020617] p-4 flex justify-between items-center border border-slate-800">
-                                            <span className="label-tiny">Сума до сплати:</span>
-                                            <span className="val-main text-xl">1 020,00 ₴</span>
+                                            <span className="label-tiny">Сума до сплати разом з комісією:</span>
+                                            <span className="val-main text-xl">1982,50₴</span>
                                         </div>
                                         <button className="gov-btn">Провести транзакцію</button>
                                     </div>
@@ -458,14 +458,22 @@
                             <Header title="Фінансова верифікація" />
                             <div className="scroll-area space-y-4">
                                 <div className="bg-emerald-500/10 border border-emerald-500/50 p-6 text-center">
-                                    <div className="w-10 h-10 bg-emerald-500 flex items-center justify-center mx-auto mb-3"><svg width="24" height="24" fill="none" stroke="black" strokeWidth="4" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
-                                    <h3 className="font-black text-emerald-500 text-xs uppercase tracking-widest mb-2">Система верифікована</h3>
-                                    <p className="text-[10px] font-bold text-slate-400">Заборгованостей за РНОКПП {userData.rnokpp} не виявлено</p>
+                                    <div className="w-10 h-10 bg-red-500 flex items-center justify-center mx-auto mb-3"><svg width="24" height="24" fill="none" stroke="black" strokeWidth="4" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                                    <h3 className="font-black text-red-500 text-xs uppercase tracking-widest mb-2">ВИЯВЛЕНО ЗАБОРГОВАННІСТЬ</h3>
+                                    <p className="text-[10px] font-bold text-red-500">За РНОКПП {userData.rnokpp} виявлено заборгованність</p>
                                 </div>
                                 <div className="bg-[#1E293B] border border-slate-700 divide-y divide-slate-800">
                                     <div className="p-4 flex justify-between items-center"><span className="label-tiny">Адмінзбір (РВЛК)</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
                                     <div className="p-4 flex justify-between items-center"><span className="label-tiny">Державне мито</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
-                                    <div className="p-4 flex justify-between items-center"><span className="label-tiny">Верифікація даних</span><span className="text-[10px] font-black text-emerald-500 uppercase italic">Оплачено</span></div>
+                                    <div className="p-4 flex justify-between items-center">
+  <span className="label-tiny text-red-600">
+    Реєстраційне внесення 
+    <p>комісійної групи</p>
+    <p>засідання «20 РВЛК».</p>
+  </span>
+  <span className="text-[10px] font-black text-red-500 uppercase italic">Не сплачено</span>
+</div>
+
                                 </div>
                                 <button onClick={() => setView('home')} className="gov-btn-dark p-3 text-[10px] uppercase font-black w-full">Назад</button>
                             </div>
